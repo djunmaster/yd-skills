@@ -1,0 +1,50 @@
+{
+  "eyebrow": "FIELD NOTES / RAG",
+  "headline": "把资料，变成有据可查的回答。",
+  "summary": "先检索相关证据，再让模型组织回答。",
+  "takeaway": "模型看到的是筛选后的上下文。",
+  "sections": [
+    {
+      "id": "ingest",
+      "title": "资料入库",
+      "qualifier": "内容更新时",
+      "explanation": "保留资料来源与权限，并建立可检索的索引。",
+      "nodes": [
+        {"id": "source", "title": "资料来源", "caption": "PDF · 网页 · Markdown"},
+        {"id": "chunks", "title": "解析与切块", "caption": "保留来源与权限"},
+        {"id": "embedding", "title": "文本向量化", "caption": "文本 → 向量", "tool": "OpenAI"},
+        {"id": "index", "title": "向量索引", "caption": "向量 + 原文 + 元数据", "tool": "Qdrant"}
+      ]
+    },
+    {
+      "id": "answer",
+      "title": "在线问答",
+      "qualifier": "每次提问时",
+      "explanation": "在权限范围内查找片段，组装上下文后生成回答。",
+      "nodes": [
+        {"id": "question", "title": "用户问题", "caption": "自然语言输入"},
+        {"id": "query", "title": "问题向量化", "caption": "与文档使用同一嵌入模型", "tool": "OpenAI"},
+        {"id": "retrieve", "title": "检索与重排", "caption": "权限过滤 · Top-k · 重排"},
+        {"id": "context", "title": "上下文组装", "caption": "问题 + 相关片段 + 来源"},
+        {"id": "generate", "title": "基于证据生成", "caption": "模型据上下文组织回答", "tool": "OpenAI"},
+        {"id": "result", "title": "答案与引用", "caption": "证据不足时明确说明"}
+      ]
+    }
+  ],
+  "connections": [
+    {"from": "source", "to": "chunks", "kind": "main"},
+    {"from": "chunks", "to": "embedding", "kind": "main"},
+    {"from": "embedding", "to": "index", "kind": "main"},
+    {"from": "question", "to": "query", "kind": "main"},
+    {"from": "query", "to": "retrieve", "kind": "main"},
+    {"from": "index", "to": "retrieve", "kind": "evidence", "label": "相关片段"},
+    {"from": "retrieve", "to": "context", "kind": "main"},
+    {"from": "context", "to": "generate", "kind": "main"},
+    {"from": "generate", "to": "result", "kind": "main"}
+  ],
+  "footer": "人工评估检索命中、答案依据与引用，再调整切块、检索和提示词。OpenAI 与 Qdrant 为示例选型。",
+  "logo_references": [
+    {"name": "OpenAI", "file": "assets/logos/openai.png"},
+    {"name": "Qdrant", "file": "assets/logos/qdrant.png"}
+  ]
+}
