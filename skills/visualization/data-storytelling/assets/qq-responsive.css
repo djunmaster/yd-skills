@@ -1,0 +1,97 @@
+
+/* Component-name-agnostic mobile safety net.
+   Structural guarantees are expressed against CSS Grid/Flex behaviour and
+   generic attribute hooks rather than a fixed class vocabulary, so generating
+   models may invent component names freely for any recording type. */
+*, *::before, *::after { box-sizing: border-box; }
+html { width: 100%; min-width: 0; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { width: 100%; min-width: 0; margin: 0; overflow-wrap: break-word; }
+main, header, footer, nav, section, article, aside, figure, div, ul, ol, li, dl, dd, details { min-width: 0; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; height: auto; }
+pre, code, kbd, samp { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote, figcaption { overflow-wrap: anywhere; }
+input, textarea, select, button { max-width: 100%; font: inherit; }
+/* Any table gets a scroll container by intent or by generic hook. */
+.table-scroll, .table-wrap, .matrix-wrap, [data-table-scroll], [data-scroll-x] {
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.table-scroll > table, .table-wrap > table, .matrix-wrap > table,
+[data-table-scroll] > table, [data-scroll-x] > table { margin: 0; }
+/* Numbered step rows: keep body copy out of the counter track. */
+.step-item, [data-step-item] { grid-template-columns: 32px minmax(0, 1fr) !important; }
+.step-item::before, [data-step-item]::before { grid-column: 1 !important; grid-row: 1 !important; }
+.step-item > :empty, [data-step-item] > :empty { display: none !important; }
+.step-item > *, [data-step-item] > * { grid-column: 2 !important; min-width: 0 !important; }
+.data-value, .metric-value, [data-value] { max-width: 100%; font-variant-numeric: tabular-nums; }
+/* A single surviving child of ANY grid spans the full row. Applied to every
+   element that declares a grid, so unknown component names are covered too. */
+[class*="grid"] > :only-child,
+[class*="board"] > :only-child,
+[class*="cluster"] > :only-child,
+[class*="row"] > :only-child,
+[class*="split"] > :only-child,
+[class*="cols"] > :only-child,
+[class*="columns"] > :only-child,
+[class*="layout"] > :only-child,
+[class*="panel"] > :only-child,
+[data-grid] > :only-child,
+[data-cols] > :only-child {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+}
+@media (max-width: 600px) {
+  body { font-size: 14.5px !important; line-height: 1.62 !important; }
+  :where(body > main, body > .report-shell, body > .report, body > .container, body > [data-shell]) {
+    width: calc(100% - 40px) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+  }
+  h1 { font-size: 29px !important; line-height: 1.22 !important; letter-spacing: 0 !important; }
+  h2 { font-size: 22px !important; line-height: 1.3 !important; letter-spacing: 0 !important; }
+  h3 { font-size: 16px !important; line-height: 1.42 !important; letter-spacing: 0 !important; }
+  /* Generic collapse: every multi-column grid becomes single column unless it
+     explicitly opts into staying paired (data-keep-columns) or is a table. */
+  [class*="grid"]:not([data-keep-columns]),
+  [class*="board"]:not([data-keep-columns]),
+  [class*="split"]:not([data-keep-columns]),
+  [class*="cols"]:not([data-keep-columns]),
+  [class*="columns"]:not([data-keep-columns]),
+  [class*="layout"]:not([data-keep-columns]),
+  [data-grid]:not([data-keep-columns]) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  /* Compact numeric clusters may stay two-up, but a trailing odd card must
+     span both columns so no empty half-row is left on narrow screens. */
+  [data-keep-columns] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  [data-keep-columns] > :last-child:nth-child(odd) { grid-column: 1 / -1 !important; }
+  [data-span-all], [data-value-kind="formula"], [data-value-kind="range"] { grid-column: 1 / -1 !important; }
+  /* Horizontal flows become vertical. */
+  [class*="flow"], [class*="chain"], [class*="timeline"] { flex-direction: column !important; }
+  [class*="arrow"] { transform: rotate(90deg); min-height: 16px !important; }
+  table { font-size: 12.5px; }
+  th, td { padding: 9px 8px !important; }
+  nav { max-width: 100%; }
+  nav[data-scrollable] { overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+  button, summary, [role="button"] { min-width: 44px; min-height: 44px; }
+  nav a { display: inline-flex; min-width: 44px; min-height: 44px; padding: 6px 10px !important; align-items: center; justify-content: center; font-size: 12.5px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+
+body > :first-child { margin-top: 0 !important; }
+:where(body, body > main, [class*="shell"], [class*="container"]) > :where(
+  [class*="hero"], [class*="cover"], [data-hero]
+):first-child {
+  min-height: auto !important;
+  max-height: none !important;
+  margin-top: 0 !important;
+  padding-top: min(40px, 8vw) !important;
+}
+@media (max-width: 600px) {
+  :where(body, body > main, [class*="shell"], [class*="container"]) > :where(
+    [class*="hero"], [class*="cover"], [data-hero]
+  ):first-child { padding-top: 20px !important; }
+}
+

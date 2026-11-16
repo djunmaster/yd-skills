@@ -1,6 +1,6 @@
 # yd-skills
 
-三种面向内容表达的图像 Skill：**把知识讲清楚、把技术流程梳理完整、把文章主题做成封面。**
+四种面向内容表达的 Skill：**把知识讲清楚、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页。**
 
 [作品集](#作品集) · [怎么调用](#怎么调用) · [技能说明](#技能说明)
 
@@ -70,9 +70,30 @@
 
 [Skill 说明与更多样图](skills/illustration/yd-editorial-art-illustrations/README.md) · [执行规则](skills/illustration/yd-editorial-art-illustrations/SKILL.md)
 
+### 图文叙事整理
+
+把一段文字、一份记录或一场分享的转写，整理成“图 + 文”的讲解结构：一句主结论、一张主线总览、每个独立关系单独一张 SVG、逐项配图的判断表与执行清单。只需说“帮我整理这段内容”。
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="skills/visualization/data-storytelling/examples/showcase/fig-pipeline.png" alt="两个渠道的记录汇入采集，依次经过清洗、口径统一、发布的主线图" width="100%" />
+      <p><strong>主线总览</strong> · 一张图只回答“主线是什么”</p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="skills/visualization/data-storytelling/examples/showcase/fig-quality-gate.png" alt="质量门把记录分成进入候选池与退回补录两条去向" width="100%" />
+      <p><strong>分叉判断</strong> · 两条箭头指向两个去向，图注写明边界</p>
+    </td>
+  </tr>
+</table>
+
+图按“一个关系一张”拆分，交付前逐图做几何审计（节点间距、连线落点、标签避让、最小字号）和整页覆盖核对。示例页中的团队、渠道与数值均为虚构，只用于说明排版方式。
+
+[Skill 说明](skills/visualization/data-storytelling/SKILL.md) · [深色示例页](skills/visualization/data-storytelling/examples/demo-dark.html) · [浅色示例页](skills/visualization/data-storytelling/examples/demo-light.html)
+
 ## 怎么调用
 
-启用技能后，在文章封面或配图任务中只需提供主题或正文。每个 Skill 默认沿用自己的固定视觉风格，并根据内容选择构图；技术图解固定使用暖白底、炭黑文字、靛蓝主色、灰蓝紫辅助与少量陶土橙。无需重复描述画风、配色或布局。也可用 `$skill-name` 显式指定 Skill。以下展示纯文字输入示例。
+启用技能后，在文章封面、配图或内容整理任务中只需提供主题或正文。每个 Skill 默认沿用自己的固定视觉风格，并根据内容选择构图；技术图解固定使用暖白底、炭黑文字、靛蓝主色、灰蓝紫辅助与少量陶土橙；图文叙事默认输出深色技术讲解页，需要浅色分享页时说一句即可。无需重复描述画风、配色或布局。也可用 `$skill-name` 显式指定 Skill。以下展示纯文字输入示例。
 
 **讲清一个知识点**
 
@@ -92,6 +113,16 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 整理后的知识应该能在需要的时候重新找到，而不只是分类归档。
 ```
 
+**整理成图文讲解页**
+
+```text
+帮我整理这段内容
+
+我们的答疑记录散在群里和表单里，字段口径不一致，新人接手时经常找不到出处。
+先按渠道收齐原始记录，再做去重和脱敏，然后把同名字段对齐到同一含义，
+最后发布成可检索、可引用、能定期刷新的知识看板。
+```
+
 生成图片里的中文、专有名称和技术关系都需要人工核对。这里展示的是实际样图，不代表每次生成都会得到相同结果。
 
 ## 技能说明
@@ -101,5 +132,6 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 | `yd-clear-article-illustrations` | 白底手绘知识图解 | [SKILL.md](skills/illustration/yd-clear-article-illustrations/SKILL.md) |
 | `yd-editorial-tech-illustrations` | 杂志式、章节式与泳道式技术图解 | [SKILL.md](skills/illustration/yd-editorial-tech-illustrations/SKILL.md) |
 | `yd-editorial-art-illustrations` | 纸感文章封面与正文插画 | [SKILL.md](skills/illustration/yd-editorial-art-illustrations/SKILL.md) |
+| `data-storytelling` | 图文一体的深色/浅色讲解页 | [SKILL.md](skills/visualization/data-storytelling/SKILL.md) |
 
 结构参考：[Anthropic Skills](https://github.com/anthropics/skills) · [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills)

@@ -1,0 +1,305 @@
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">示例页 · 内容全部虚构</div>
+    <h1>答疑记录：<br>怎样变成可复用的知识看板</h1>
+    <p class="deck">这是 <strong>data-storytelling</strong> 的输出示例，用来说明“一图一关系 + 逐项图解 + 证据边界”的排版方式。页面里的团队、渠道、字段和数值均为<strong>虚构示意</strong>，不代表任何真实业务或真实指标。</p>
+    <nav class="chips" aria-label="示例章节导航">
+      <a class="chip" href="#demo-pipeline">主线总览</a><a class="chip" href="#demo-alignment">字段对齐</a><a class="chip" href="#demo-quality-gate">质量门</a><a class="chip" href="#demo-versions">版本对应</a><a class="chip" href="#demo-decision">判断示例</a><a class="chip" href="#demo-action">执行示例</a>
+    </nav>
+  </header>
+
+  <section class="story-section" id="overview" data-required-visuals="demo-pipeline">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">先看主线：原始记录怎样变成看板</h2></div>
+      <div class="case-index">OVERVIEW</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-pipeline" data-visual-title="答疑记录的四步处理主线" data-visual-type="单一主线流程图" data-visual-relation="两个渠道的原始记录汇入采集，依次经过清洗、口径统一、发布，形成可复用的知识看板" data-visual-source="虚构示例，仅用于说明排版方式">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 252" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoPipelineTitle demoPipelineDesc">
+            <title id="demoPipelineTitle">从两个渠道的原始记录到知识看板的四步处理主线</title>
+            <desc id="demoPipelineDesc">课程答疑群记录与课后表单记录分别接入采集节点，依次经过清洗、口径统一、发布，形成可复用的知识看板。本图只说明处理主线，不表示任一渠道记录可直接发布。</desc>
+            <defs>
+              <marker id="demoArrowOne" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <text x="28" y="32" class="s-subtitle">原始输入</text>
+            <text x="952" y="32" class="s-subtitle" text-anchor="end">统一产物</text>
+            <g data-node="demo-group-source">
+              <rect x="28" y="56" width="200" height="64" rx="13" class="s-box blue"/>
+              <text x="44" y="82" class="s-label">课程答疑群记录</text>
+              <text x="44" y="106" class="s-small">提问 · 追问 · 讲师回复</text>
+            </g>
+            <g data-node="demo-form-source">
+              <rect x="28" y="140" width="200" height="64" rx="13" class="s-box orange"/>
+              <text x="44" y="166" class="s-label">课后表单记录</text>
+              <text x="44" y="190" class="s-small">问题 · 选项 · 提交时间</text>
+            </g>
+            <rect x="272" y="56" width="430" height="148" rx="20" class="s-box dark"/>
+            <text x="487" y="84" class="s-title" text-anchor="middle">四步处理主线</text>
+            <g data-node="demo-collect">
+              <rect x="288" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="300" y="126" class="s-tiny">01</text>
+              <text x="330" y="170" class="s-label s-step" text-anchor="middle">采集</text>
+            </g>
+            <g data-node="demo-clean">
+              <rect x="392" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="404" y="126" class="s-tiny">02</text>
+              <text x="434" y="170" class="s-label s-step" text-anchor="middle">清洗</text>
+            </g>
+            <g data-node="demo-normalize">
+              <rect x="496" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="508" y="126" class="s-tiny">03</text>
+              <text x="538" y="170" class="s-label s-step" text-anchor="middle">口径统一</text>
+            </g>
+            <g data-node="demo-publish">
+              <rect x="600" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="612" y="126" class="s-tiny">04</text>
+              <text x="642" y="170" class="s-label s-step" text-anchor="middle">发布</text>
+            </g>
+            <g data-node="demo-board">
+              <rect x="744" y="100" width="196" height="88" rx="15" class="s-box green"/>
+              <text x="842" y="136" class="s-label s-emphasis" text-anchor="middle">知识看板</text>
+              <text x="842" y="162" class="s-small" text-anchor="middle">可检索 · 可引用 · 可刷新</text>
+            </g>
+            <path data-link="demo-group-to-collect" data-from="demo-group-source" data-to="demo-collect" d="M228 88H252V120H288" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-form-to-collect" data-from="demo-form-source" data-to="demo-collect" d="M228 172H252V160H288" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-collect-to-clean" data-from="demo-collect" data-to="demo-clean" d="M372 144H392" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-clean-to-normalize" data-from="demo-clean" data-to="demo-normalize" d="M476 144H496" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-normalize-to-publish" data-from="demo-normalize" data-to="demo-publish" d="M580 144H600" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-publish-to-board" data-from="demo-publish" data-to="demo-board" d="M684 144H744" class="s-line" marker-end="url(#demoArrowOne)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption">两个渠道分别接入“采集”，再依次经过清洗、口径统一、发布。<strong>这张图只回答“主线是什么”</strong>；字段怎样对齐、不合格记录怎样退回，分别在后两张图展开。</figcaption>
+      </div>
+    </figure>
+    <div class="logic-strip" aria-label="示例阅读顺序">
+      <div class="logic-step"><span class="logic-num">01</span><strong>先定渠道</strong><span>明确记录来自哪里</span></div>
+      <div class="logic-step"><span class="logic-num">02</span><strong>再对齐字段</strong><span>不同输入落到同一字段</span></div>
+      <div class="logic-step"><span class="logic-num">03</span><strong>然后设质量门</strong><span>缺字段就退回补录</span></div>
+      <div class="logic-step"><span class="logic-num">04</span><strong>最后记版本</strong><span>数据、模型、评估一起留痕</span></div>
+    </div>
+    <div class="caution"><strong>注意：</strong>示例中的步骤名称和字段都是虚构的教学示意。整理真实材料时，渠道、字段和质量标准必须来自原文或你的业务定义，不能沿用本页内容。</div>
+  </section>
+
+  <section class="story-section" id="alignment" data-required-visuals="demo-alignment demo-quality-gate">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">两条独立关系：字段对齐与质量退回</h2></div>
+      <div class="case-index">DETAIL</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-alignment" data-visual-title="三种输入对齐到同一组字段" data-visual-type="多源字段映射图" data-visual-relation="答疑群、表单、邮件三种记录各自携带不同字段，按同名映射汇入一条统一记录" data-visual-source="虚构示例，仅用于说明排版方式">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 312" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoAlignTitle demoAlignDesc">
+            <title id="demoAlignTitle">三种渠道记录对齐到统一记录的字段映射</title>
+            <desc id="demoAlignDesc">答疑群记录提供提问与讲师回复，课后表单提供问题与选项，邮件往来提供补充说明，三条连线分别接到统一记录左边界，统一记录含提问人、时间、主题、结论四个字段。字段名相同不代表含义相同，映射关系需人工核对。</desc>
+            <defs>
+              <marker id="demoArrowTwo" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <text x="28" y="32" class="s-subtitle">原始记录</text>
+            <text x="952" y="32" class="s-subtitle" text-anchor="end">统一记录</text>
+            <g data-node="demo-chat">
+              <rect x="28" y="44" width="220" height="68" rx="13" class="s-box blue"/>
+              <text x="44" y="70" class="s-label">答疑群记录</text>
+              <text x="44" y="96" class="s-small">提问 · 追问 · 讲师回复</text>
+            </g>
+            <g data-node="demo-form">
+              <rect x="28" y="132" width="220" height="68" rx="13" class="s-box"/>
+              <text x="44" y="158" class="s-label">课后表单</text>
+              <text x="44" y="184" class="s-small">问题 · 选项 · 提交时间</text>
+            </g>
+            <g data-node="demo-mail">
+              <rect x="28" y="220" width="220" height="68" rx="13" class="s-box orange"/>
+              <text x="44" y="246" class="s-label">邮件往来</text>
+              <text x="44" y="272" class="s-small">补充说明 · 附件结论</text>
+            </g>
+            <g data-node="demo-unified">
+              <rect x="560" y="124" width="300" height="160" rx="15" class="s-box green"/>
+              <text x="576" y="152" class="s-label s-emphasis">统一记录</text>
+              <text x="576" y="180" class="s-small">提问人 <tspan class="s-green" font-weight="700">已核对</tspan></text>
+              <text x="576" y="204" class="s-small">时间 <tspan class="s-green" font-weight="700">已换算时区</tspan></text>
+              <text x="576" y="228" class="s-small">主题 <tspan class="s-green" font-weight="700">取自原文</tspan></text>
+              <text x="576" y="252" class="s-small">结论 <tspan class="s-green" font-weight="700">标注出处</tspan></text>
+            </g>
+            <path data-link="demo-chat-to-unified" data-from="demo-chat" data-to="demo-unified" d="M248 78H404V152H560" class="s-line" marker-end="url(#demoArrowTwo)"/>
+            <path data-link="demo-form-to-unified" data-from="demo-form" data-to="demo-unified" d="M248 168H560" class="s-line" marker-end="url(#demoArrowTwo)"/>
+            <path data-link="demo-mail-to-unified" data-from="demo-mail" data-to="demo-unified" d="M248 254H440V228H560" class="s-line" marker-end="url(#demoArrowTwo)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>对齐的是字段含义，不是字段名称。</strong>三条连线分别接到统一记录边界，读者能看出每种输入贡献了什么。示例字段为虚构，真实项目需按业务定义逐项核对。</figcaption>
+      </div>
+    </figure>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-quality-gate" data-visual-title="质量门：齐全才进候选，缺字段就退回" data-visual-type="判定与退回路意图" data-visual-relation="统一记录经质量门按必填字段判定，齐全的记录进入候选池，缺字段的记录退回原渠道补录" data-visual-source="虚构示例，仅用于说明排版方式">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoGateTitle demoGateDesc">
+            <title id="demoGateTitle">质量门把记录分为进入候选池与退回补录两种去向</title>
+            <desc id="demoGateDesc">统一记录接到质量门，质量门按必填字段判定：字段齐全的记录进入候选池，仍需在后续做准确性与授权核对；缺字段的记录退回原渠道补录，并记下缺失字段名。候选池不等于已可发布。</desc>
+            <defs>
+              <marker id="demoArrowThree" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+              <marker id="demoArrowThreeOrange" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#f0955c"/>
+              </marker>
+            </defs>
+            <g data-node="demo-gate-input">
+              <rect x="28" y="88" width="220" height="72" rx="13" class="s-box"/>
+              <text x="44" y="114" class="s-label">待判定记录</text>
+              <text x="44" y="140" class="s-small">四个必填字段</text>
+            </g>
+            <g data-node="demo-gate">
+              <rect x="380" y="88" width="200" height="72" rx="13" class="s-box blue"/>
+              <text x="396" y="114" class="s-label">质量门</text>
+              <text x="396" y="140" class="s-small">必填字段是否齐全</text>
+            </g>
+            <g data-node="demo-gate-pass">
+              <rect x="720" y="36" width="232" height="64" rx="13" class="s-box green"/>
+              <text x="736" y="62" class="s-label">进入候选池</text>
+              <text x="736" y="86" class="s-small">仍需准确性与授权核对</text>
+            </g>
+            <g data-node="demo-gate-return">
+              <rect x="720" y="140" width="232" height="64" rx="13" class="s-box orange"/>
+              <text x="736" y="166" class="s-label">退回原渠道补录</text>
+              <text x="736" y="190" class="s-small">记下缺失字段与退回原因</text>
+            </g>
+            <path data-link="demo-input-to-gate" data-from="demo-gate-input" data-to="demo-gate" d="M248 124H380" class="s-line" marker-end="url(#demoArrowThree)"/>
+            <path data-link="demo-gate-to-pass" data-from="demo-gate" data-to="demo-gate-pass" d="M580 112H650V68H720" class="s-line" marker-end="url(#demoArrowThree)"/>
+            <path data-link="demo-gate-to-return" data-from="demo-gate" data-to="demo-gate-return" d="M580 136H680V172H720" class="s-line orange" marker-end="url(#demoArrowThreeOrange)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>两条箭头分别指向两个不同去向。</strong>“进入候选池”只表示字段齐全，不表示内容已正确或已获授权；“退回”必须留下缺失字段名，否则无法核对下一轮是否真的补上。</figcaption>
+      </div>
+    </figure>
+    <div class="takeaway"><span class="takeaway-label">为什么拆成两张图</span><p>字段对齐回答“输入怎样变成同一条记录”，质量门回答“不合格的记录去哪里”。两者是不同关系，放在一张图里读者必须自己分辨箭头含义，因此拆开各画一张。</p></div>
+  </section>
+
+  <section class="story-section" id="iteration" data-required-visuals="demo-versions">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">版本对应：一次改动要能追溯到结果</h2></div>
+      <div class="case-index">VERSION</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-versions" data-visual-title="数据版本、模型版本与评估结果的对应" data-visual-type="版本轨迹图" data-visual-relation="每个数据版本对应一次模型训练与一份固定评估结果，三者一起记录才能解释结果变化" data-visual-source="虚构示例，仅用于说明排版方式">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoVersionTitle demoVersionDesc">
+            <title id="demoVersionTitle">数据版本、模型版本与评估结果三者的对应关系</title>
+            <desc id="demoVersionDesc">数据版本 v3 对应模型版本 m5，模型版本 m5 对应评估结果记录，三者一起构成一次可追溯的迭代。示例版本号与字段为虚构，不代表真实指标。</desc>
+            <defs>
+              <marker id="demoArrowFour" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <g data-node="demo-data-version">
+              <rect x="28" y="64" width="260" height="112" rx="14" class="s-box blue"/>
+              <text x="44" y="92" class="s-label">数据版本 v3</text>
+              <text x="44" y="118" class="s-small">变更：补录缺字段记录</text>
+              <text x="44" y="142" class="s-small">保留：字段定义与来源</text>
+            </g>
+            <g data-node="demo-model-version">
+              <rect x="360" y="64" width="260" height="112" rx="14" class="s-box"/>
+              <text x="376" y="92" class="s-label">模型版本 m5</text>
+              <text x="376" y="118" class="s-small">输入：仅用 v3 训练集</text>
+              <text x="376" y="142" class="s-small">固定测试集不参与训练</text>
+            </g>
+            <g data-node="demo-eval-version">
+              <rect x="692" y="64" width="260" height="112" rx="14" class="s-box green"/>
+              <text x="708" y="92" class="s-label">评估结果</text>
+              <text x="708" y="118" class="s-small">同一测试集、同一口径</text>
+              <text x="708" y="142" class="s-small">失败样本按类型归档</text>
+            </g>
+            <path data-link="demo-data-to-model" data-from="demo-data-version" data-to="demo-model-version" d="M288 120H360" class="s-line" marker-end="url(#demoArrowFour)"/>
+            <path data-link="demo-model-to-eval" data-from="demo-model-version" data-to="demo-eval-version" d="M620 120H692" class="s-line" marker-end="url(#demoArrowFour)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>三项一起记录，才说清“这次到底变好了没有”。</strong>只记模型版本而不知道用了哪份数据、哪套评估口径，结果无法复现。示例版本号与字段均为虚构。</figcaption>
+      </div>
+    </figure>
+    <div class="evidence"><strong>证据边界：</strong>本页所有版本号、字段名和渠道名称都是教学示意，没有真实数据来源；引用本页作为模板时，请替换为自己的材料，并保留“示意”标注直到有真实证据。</div>
+  </section>
+
+  <section class="story-section" id="decision-action" data-required-visuals="demo-decision demo-action">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">判断与执行也要图解</h2></div>
+      <div class="case-index">CHECKLIST</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-decision" data-visual-title="判断示例：先查覆盖空位，再决定补什么" data-visual-type="问题定位与动作选择图" data-visual-relation="按主题统计覆盖情况，找出没有记录的空位，再针对该空位定向补充" data-visual-source="虚构示例，仅用于说明排版方式">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoDecisionTitle demoDecisionDesc">
+            <title id="demoDecisionTitle">从覆盖检查到定向补充的判断路径</title>
+            <desc id="demoDecisionDesc">先按主题检查现有记录覆盖情况，再定位完全没有记录的空位，最后只针对该空位定向补充。补充内容必须标注来源，不能由模型自行编造。</desc>
+            <defs>
+              <marker id="demoArrowFive" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <g data-node="demo-coverage-check">
+              <rect x="28" y="88" width="220" height="72" rx="13" class="s-box"/>
+              <text x="44" y="114" class="s-label">按主题查覆盖</text>
+              <text x="44" y="140" class="s-small">哪些主题已有记录</text>
+            </g>
+            <g data-node="demo-gap-found">
+              <rect x="380" y="88" width="200" height="72" rx="13" class="s-box orange"/>
+              <text x="396" y="114" class="s-label">定位空位</text>
+              <text x="396" y="140" class="s-small">完全没有记录的主题</text>
+            </g>
+            <g data-node="demo-target-fill">
+              <rect x="700" y="88" width="252" height="72" rx="13" class="s-box green"/>
+              <text x="716" y="114" class="s-label">定向补充该主题</text>
+              <text x="716" y="140" class="s-small">标注来源，不自行编造</text>
+            </g>
+            <path data-link="demo-check-to-gap" data-from="demo-coverage-check" data-to="demo-gap-found" d="M248 124H380" class="s-line" marker-end="url(#demoArrowFive)"/>
+            <path data-link="demo-gap-to-fill" data-from="demo-gap-found" data-to="demo-target-fill" d="M580 124H700" class="s-line" marker-end="url(#demoArrowFive)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>先看清缺什么，再决定补什么。</strong>这条判断链说明动作的选择依据；示例主题为虚构，真实项目需要先有可核对的覆盖统计。</figcaption>
+      </div>
+    </figure>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-action" data-visual-title="执行示例：一条记录处理前后的字段变化" data-visual-type="前后对照图" data-visual-relation="同一条记录在处理前只有零散文本，处理后得到四个已核对字段与出处" data-visual-source="虚构示例，仅用于说明排版方式">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 260" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoActionTitle demoActionDesc">
+            <title id="demoActionTitle">同一条记录处理前后的字段变化</title>
+            <desc id="demoActionDesc">处理前是一条只有零散文本的记录 R-07，经过四步处理后得到同一编号 R-07 的四个已核对字段与出处。前后使用同一记录编号，表示这是同一条记录的变化，不是两条记录。</desc>
+            <defs>
+              <marker id="demoArrowSix" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <g data-node="demo-before">
+              <rect x="28" y="48" width="300" height="164" rx="14" class="s-box"/>
+              <text x="44" y="76" class="s-label">处理前 · R-07</text>
+              <text x="44" y="104" class="s-small">原文：一整段聊天文本</text>
+              <text x="44" y="128" class="s-small">提问人 未标注</text>
+              <text x="44" y="152" class="s-small">时间 未换算时区</text>
+              <text x="44" y="176" class="s-small">结论 混在多楼回复里</text>
+            </g>
+            <g data-node="demo-transform">
+              <rect x="392" y="88" width="200" height="84" rx="13" class="s-box blue"/>
+              <text x="408" y="116" class="s-label">四步处理</text>
+              <text x="408" y="142" class="s-small">采集 · 清洗 · 统一 · 发布</text>
+            </g>
+            <g data-node="demo-after">
+              <rect x="652" y="48" width="300" height="164" rx="14" class="s-box green"/>
+              <text x="668" y="76" class="s-label">处理后 · R-07</text>
+              <text x="668" y="104" class="s-small">提问人 已补齐</text>
+              <text x="668" y="128" class="s-small">时间 已换算时区</text>
+              <text x="668" y="152" class="s-small">主题 取自原始提问</text>
+              <text x="668" y="176" class="s-small">结论 附出处链接</text>
+            </g>
+            <path data-link="demo-before-to-transform" data-from="demo-before" data-to="demo-transform" d="M328 130H392" class="s-line" marker-end="url(#demoArrowSix)"/>
+            <path data-link="demo-transform-to-after" data-from="demo-transform" data-to="demo-after" d="M592 130H652" class="s-line" marker-end="url(#demoArrowSix)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>执行动作的产物要能看出具体变化。</strong>前后共用编号 R-07，说明是同一条记录；每个字段的变化都可核对，而不是只写“已清洗”。记录内容与字段均为虚构示例。</figcaption>
+      </div>
+    </figure>
+    <div class="takeaway"><span class="takeaway-label">可直接复用的写法</span><p>判断项画“看见什么缺口 → 为什么选这个动作”，执行项画“拿到什么输入 → 改了什么 → 留下什么产物”。<strong>编号卡、图标和纯文字矩阵不能替代这两类图。</strong></p></div>
+  </section>
+
+  <footer class="footer"><p class="small">data-storytelling 输出示例 · 内容全部虚构，仅用于说明图文排版方式 · 生成日期 2026-11-16</p></footer>
+</div>

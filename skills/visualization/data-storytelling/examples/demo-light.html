@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>data-storytelling 浅色示例</title>
+<link rel="icon" href="data:,">
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light dark}
+:root{
+  --page-bg:#f4f7fa;--card-bg:#ffffff;--soft:#eef4f8;
+  --text:#1c2b3a;--muted:#4c6076;
+  --accent:#0e7490;--accent-soft:#e1f1f6;--on-accent:#ffffff;
+  --border:#d9e2ec;--bad:#b23a30;--bad-soft:#faeceb;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,sans-serif;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --page-bg:#101a23;--card-bg:#152230;--soft:#1b2b3a;
+    --text:#e8eef4;--muted:#a9bacb;
+    --accent:#4cc3e0;--accent-soft:#14313f;--on-accent:#06222c;
+    --border:#2c3d4d;--bad:#f08c7d;--bad-soft:#3a2320;
+  }
+}
+html,body{background-color:var(--page-bg)}
+body{font-family:var(--font);color:var(--text);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:30px 18px 64px}
+p{margin:8px 0;font-size:15px}
+small,.small{font-size:13px;color:var(--muted)}
+strong{font-weight:700}
+strong.hl{color:var(--accent)}
+a{color:var(--accent)}
+
+header.top{padding:6px 0 4px}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.16em;color:var(--accent)}
+h1{font-size:clamp(26px,5.4vw,34px);line-height:1.32;letter-spacing:.01em;margin:10px 0 10px;font-weight:800}
+.lead{color:var(--muted);font-size:15px;max-width:660px}
+
+.part{margin:46px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:12px}
+.part .no{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--accent);white-space:nowrap}
+.part h2{font-size:21px;font-weight:800}
+
+.mod{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:22px 22px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,42,67,.05)}
+.mod h3{font-size:18px;font-weight:800;line-height:1.4;border-left:4px solid var(--accent);padding-left:11px;margin-bottom:12px}
+.mod.slim{background:var(--accent-soft)}
+
+.note{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:11px 14px;margin:14px 0 2px}
+.note .tag{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent);margin-bottom:3px}
+.note p{font-size:13.5px;margin:0;color:var(--text)}
+
+.quote{border-left:3px solid var(--accent);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:15px}
+.quote .who{display:block;margin-top:6px;font-size:12.5px;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--border);background:var(--soft);border-radius:999px;padding:4px 13px;font-size:13px;font-weight:600}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:14px}
+.card h4{font-size:15px;margin-bottom:6px}
+.numb{display:inline-flex;width:24px;height:24px;border-radius:8px;background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:800;align-items:center;justify-content:center;margin-right:8px;vertical-align:-4px}
+
+figure{margin:16px 0 0}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+.tick{list-style:none;margin:6px 0}
+.tick li{position:relative;padding-left:18px;margin:6px 0;font-size:14.5px}
+.tick li::before{content:"";position:absolute;left:2px;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* 时间线 */
+.tl{margin:14px 0 4px}
+.tnode{position:relative;padding:0 0 18px 24px;margin-left:7px;border-left:2px solid var(--border)}
+.tnode:last-child{padding-bottom:4px}
+.tnode::before{content:"";position:absolute;left:-8px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.tnode .ty{font-size:12.5px;font-weight:800;letter-spacing:.05em;color:var(--accent)}
+.tnode p{font-size:14.5px;margin:2px 0 0}
+.tnode .sub{font-size:13px;color:var(--muted)}
+
+/* 流程 / 步骤 */
+.steps{display:grid;gap:24px}
+.steps.c5{grid-template-columns:repeat(5,1fr)}
+.steps.c3{grid-template-columns:repeat(3,1fr)}
+.fstep{position:relative;background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:13px 10px;text-align:center}
+.fstep .fnum{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:12px;font-weight:800;align-items:center;justify-content:center;margin-bottom:6px}
+.fstep b{display:block;font-size:14px}
+.fstep span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+@media (min-width:641px){
+  .steps .fstep:not(:last-child)::after{content:"→";position:absolute;left:calc(100% + 5px);top:50%;transform:translateY(-50%);color:var(--accent);font-weight:800;font-size:15px}
+}
+@media (max-width:640px){
+  .steps.c5,.steps.c3{grid-template-columns:1fr;gap:22px}
+  .steps .fstep:not(:last-child)::after{content:"↓";position:absolute;left:50%;top:calc(100% + 1px);transform:translateX(-50%);color:var(--accent);font-weight:800;font-size:14px}
+}
+
+/* 原则网格 */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin-top:14px}
+.pcard{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:13px 14px}
+.pcard .idx{font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--accent)}
+.pcard b{display:block;font-size:15px;margin:2px 0 4px}
+.pcard span{display:block;font-size:13px;color:var(--muted);line-height:1.6}
+
+/* 对比 */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wpanel{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:14px}
+.ptag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;border-radius:6px;padding:2px 9px;margin-bottom:8px}
+.ptag.ok{background:var(--accent-soft);color:var(--accent)}
+.ptag.warn{background:var(--bad-soft);color:var(--bad)}
+.statline{font-size:14px;margin-top:8px}
+.statline .big{font-size:22px;font-weight:800;color:var(--accent)}
+
+.wrow{display:flex;gap:14px;align-items:stretch;margin-top:14px}
+.bottle{flex:0 0 46px;align-self:center}
+
+/* 交互演示 */
+.demo{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:14px}
+.demo-head{font-size:13px;font-weight:700;margin-bottom:10px}
+.drow{display:flex;align-items:center;gap:10px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin-bottom:8px;flex-wrap:wrap}
+.dname{font-weight:700;font-size:13.5px;min-width:52px}
+.dval{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--accent-soft);color:var(--accent);padding:2px 9px;border-radius:6px;font-size:13.5px;font-weight:700}
+.dtag{margin-left:auto;font-size:11.5px;color:var(--muted);border:1px dashed var(--border);border-radius:6px;padding:1px 8px}
+.demo-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.demo-q{font-size:13.5px}
+.demo-q code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:13px}
+.btn{background:var(--accent);color:var(--on-accent);border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn:hover{filter:brightness(1.07)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#demoResult{margin-top:12px;padding:10px 13px;border-radius:9px;font-size:13.5px;font-weight:600}
+.demo.bad #demoResult{background:var(--bad-soft);color:var(--bad)}
+.demo.ok #demoResult{background:var(--accent-soft);color:var(--accent)}
+
+/* 场景卡 */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px}
+.scard{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:13px}
+.sicon{width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.sicon svg{width:22px;height:22px}
+.scard b{display:block;font-size:14.5px}
+.scard span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* 行动清单 */
+ol.act{list-style:none;counter-reset:a;margin-top:14px}
+ol.act li{counter-increment:a;position:relative;padding:12px 14px 12px 54px;background:var(--soft);border:1px solid var(--border);border-radius:12px;margin-bottom:10px}
+ol.act li::before{content:counter(a);position:absolute;left:14px;top:15px;width:26px;height:26px;border-radius:8px;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+ol.act b{display:block;font-size:14.5px}
+ol.act span{display:block;font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.6}
+
+/* 误区与正解 */
+.dd{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.ddh{font-size:13px;font-weight:800;margin-bottom:4px}
+.xh{color:var(--bad)}.ch{color:var(--accent)}
+.xlist,.clist{list-style:none}
+.xlist li,.clist li{position:relative;padding-left:22px;margin:7px 0;font-size:14px}
+.xlist li::before{content:"✕";position:absolute;left:0;top:0;color:var(--bad);font-weight:800;font-size:13px}
+.clist li::before{content:"✓";position:absolute;left:0;top:0;color:var(--accent);font-weight:800;font-size:13px}
+
+/* 奖补指标 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.stat{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:15px 14px}
+.stat .v{font-size:29px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat b{display:block;font-size:13.5px;margin-top:6px}
+.stat span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+
+/* 红线 */
+.rl .ricon{width:34px;height:34px;border-radius:10px;background:var(--bad-soft);color:var(--bad);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.rl .ricon svg{width:20px;height:20px}
+.rl b{display:block;font-size:14.5px}
+.rl span{display:block;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.6}
+.redline-end{margin-top:14px;font-weight:700;color:var(--bad);font-size:15px}
+
+.take{margin-top:12px;font-size:15px}
+
+@media (max-width:640px){
+  .wrap{padding:22px 14px 56px}
+  .mod{padding:18px 15px 17px}
+  .g2,.duo,.dd,.stats{grid-template-columns:1fr}
+  .wrow{flex-direction:column;align-items:center}
+  .wrow .wpanel{width:100%}
+  .bottle{flex-basis:auto}
+}
+
+
+</style>
+<style>
+/* 原分享页 scn 场景列表组件（按原样式映射到本页设计变量） */
+.scn{display:flex;gap:12px;padding:11px 4px;border-top:1px dashed var(--border);align-items:flex-start}
+.scn:first-child{border-top:0;padding-top:2px}
+.scn-num{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.scn-body{flex:1}
+.scn-body b{font-size:14.5px}
+.scn-tag{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;margin-left:8px;vertical-align:2px}
+.scn-tag.ok{background:var(--accent-soft);color:var(--accent)}
+.scn-tag.acc{background:var(--accent-soft);color:var(--accent)}
+.scn-body p{margin:2px 0 0;font-size:13px;color:var(--muted);line-height:1.7}
+
+</style>
+<style>
+
+/* Component-name-agnostic mobile safety net.
+   Structural guarantees are expressed against CSS Grid/Flex behaviour and
+   generic attribute hooks rather than a fixed class vocabulary, so generating
+   models may invent component names freely for any recording type. */
+*, *::before, *::after { box-sizing: border-box; }
+html { width: 100%; min-width: 0; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { width: 100%; min-width: 0; margin: 0; overflow-wrap: break-word; }
+main, header, footer, nav, section, article, aside, figure, div, ul, ol, li, dl, dd, details { min-width: 0; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; height: auto; }
+pre, code, kbd, samp { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote, figcaption { overflow-wrap: anywhere; }
+input, textarea, select, button { max-width: 100%; font: inherit; }
+/* Any table gets a scroll container by intent or by generic hook. */
+.table-scroll, .table-wrap, .matrix-wrap, [data-table-scroll], [data-scroll-x] {
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.table-scroll > table, .table-wrap > table, .matrix-wrap > table,
+[data-table-scroll] > table, [data-scroll-x] > table { margin: 0; }
+/* Numbered step rows: keep body copy out of the counter track. */
+.step-item, [data-step-item] { grid-template-columns: 32px minmax(0, 1fr) !important; }
+.step-item::before, [data-step-item]::before { grid-column: 1 !important; grid-row: 1 !important; }
+.step-item > :empty, [data-step-item] > :empty { display: none !important; }
+.step-item > *, [data-step-item] > * { grid-column: 2 !important; min-width: 0 !important; }
+.data-value, .metric-value, [data-value] { max-width: 100%; font-variant-numeric: tabular-nums; }
+/* A single surviving child of ANY grid spans the full row. Applied to every
+   element that declares a grid, so unknown component names are covered too. */
+[class*="grid"] > :only-child,
+[class*="board"] > :only-child,
+[class*="cluster"] > :only-child,
+[class*="row"] > :only-child,
+[class*="split"] > :only-child,
+[class*="cols"] > :only-child,
+[class*="columns"] > :only-child,
+[class*="layout"] > :only-child,
+[class*="panel"] > :only-child,
+[data-grid] > :only-child,
+[data-cols] > :only-child {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+}
+@media (max-width: 600px) {
+  body { font-size: 14.5px !important; line-height: 1.62 !important; }
+  :where(body > main, body > .report-shell, body > .report, body > .container, body > [data-shell]) {
+    width: calc(100% - 40px) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+  }
+  h1 { font-size: 29px !important; line-height: 1.22 !important; letter-spacing: 0 !important; }
+  h2 { font-size: 22px !important; line-height: 1.3 !important; letter-spacing: 0 !important; }
+  h3 { font-size: 16px !important; line-height: 1.42 !important; letter-spacing: 0 !important; }
+  /* Generic collapse: every multi-column grid becomes single column unless it
+     explicitly opts into staying paired (data-keep-columns) or is a table. */
+  [class*="grid"]:not([data-keep-columns]),
+  [class*="board"]:not([data-keep-columns]),
+  [class*="split"]:not([data-keep-columns]),
+  [class*="cols"]:not([data-keep-columns]),
+  [class*="columns"]:not([data-keep-columns]),
+  [class*="layout"]:not([data-keep-columns]),
+  [data-grid]:not([data-keep-columns]) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  /* Compact numeric clusters may stay two-up, but a trailing odd card must
+     span both columns so no empty half-row is left on narrow screens. */
+  [data-keep-columns] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  [data-keep-columns] > :last-child:nth-child(odd) { grid-column: 1 / -1 !important; }
+  [data-span-all], [data-value-kind="formula"], [data-value-kind="range"] { grid-column: 1 / -1 !important; }
+  /* Horizontal flows become vertical. */
+  [class*="flow"], [class*="chain"], [class*="timeline"] { flex-direction: column !important; }
+  [class*="arrow"] { transform: rotate(90deg); min-height: 16px !important; }
+  table { font-size: 12.5px; }
+  th, td { padding: 9px 8px !important; }
+  nav { max-width: 100%; }
+  nav[data-scrollable] { overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+  button, summary, [role="button"] { min-width: 44px; min-height: 44px; }
+  nav a { display: inline-flex; min-width: 44px; min-height: 44px; padding: 6px 10px !important; align-items: center; justify-content: center; font-size: 12.5px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+
+body > :first-child { margin-top: 0 !important; }
+:where(body, body > main, [class*="shell"], [class*="container"]) > :where(
+  [class*="hero"], [class*="cover"], [data-hero]
+):first-child {
+  min-height: auto !important;
+  max-height: none !important;
+  margin-top: 0 !important;
+  padding-top: min(40px, 8vw) !important;
+}
+@media (max-width: 600px) {
+  :where(body, body > main, [class*="shell"], [class*="container"]) > :where(
+    [class*="hero"], [class*="cover"], [data-hero]
+  ):first-child { padding-top: 20px !important; }
+}
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">示例页 · 内容全部虚构</div>
+    <h1>答疑记录：怎样变成可复用的知识看板</h1>
+    <p class="lead">这是浅色分享页版的输出示例，用同一份虚构材料演示时间线、步骤、要点卡与对照卡的排法。团队、渠道与字段均为<strong>虚构示意</strong>。</p>
+    <div class="chips">
+      <span class="chip">主线</span><span class="chip">四步处理</span><span class="chip">判断</span><span class="chip">执行清单</span>
+    </div>
+  </header>
+
+  <section class="part"><span class="no">PART 1</span><h2>先有记录，才有看板</h2></section>
+
+  <section class="mod">
+    <h3>一句话主线：看板的质量，由记录质量决定</h3>
+    <p>这份材料反复讲同一件事：工具和说法一直在变，真正沉淀下来的主线是记录本身。<strong class="hl">先把记录整理干净，再谈检索与展示。</strong></p>
+    <div class="tl">
+      <div class="tnode">
+        <div class="ty">第一阶段 · 只存原文</div>
+        <p>聊天记录原样保存，需要时靠人工翻找。</p>
+        <p class="sub">找不到等于没有。</p>
+      </div>
+      <div class="tnode">
+        <div class="ty">第二阶段 · 加字段</div>
+        <p>给每条记录补提问人、时间和主题，可以按条件筛选。</p>
+        <p class="sub">字段口径要先统一。</p>
+      </div>
+      <div class="tnode">
+        <div class="ty">第三阶段 · 可引用</div>
+        <p>结论附出处，回答能追溯到原始记录，随文件变化定期刷新。</p>
+        <p class="sub">这一步才叫知识看板。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mod">
+    <h3>四步处理：每一步都要合规与脱敏</h3>
+    <div class="g2">
+      <div class="card"><h4><span class="numb">1</span>采集</h4><p class="small">按渠道收齐原始记录，来源与权限可查。</p></div>
+      <div class="card"><h4><span class="numb">2</span>清洗</h4><p class="small">去重、补齐、去掉敏感项，并记录规则。</p></div>
+      <div class="card"><h4><span class="numb">3</span>口径统一</h4><p class="small">同名字段对齐同一含义，避免各说各话。</p></div>
+      <div class="card"><h4><span class="numb">4</span>发布</h4><p class="small">可检索、可引用、可按周期刷新。</p></div>
+    </div>
+    <p class="small">四步顺序不能颠倒：先发布再补字段，读者会把不完整记录当成结论。</p>
+  </section>
+
+  <section class="part"><span class="no">PART 2</span><h2>怎么选做法</h2></section>
+
+  <section class="mod">
+    <div class="duo">
+      <div class="wpanel">
+        <span class="ptag ok">适合先做检索看板</span>
+        <ul class="tick">
+          <li>内容经常变化，需要引用出处</li>
+          <li>问题分散，难以积累稳定的输入输出对</li>
+          <li>需要按权限控制可见范围</li>
+        </ul>
+      </div>
+      <div class="wpanel">
+        <span class="ptag warn">再考虑训练模型</span>
+        <ul class="tick">
+          <li>任务边界稳定、示例可长期积累</li>
+          <li>格式与表达要求固定，检索基线达不到</li>
+          <li>已有可核对的评估集与失败类型</li>
+        </ul>
+      </div>
+    </div>
+    <p class="small">判断依据是“任务是否稳定、示例是否可积累、基线是否不够用”，不是“数据量大不大”。</p>
+  </section>
+
+  <section class="mod slim">
+    <h3>执行清单：拿到材料后先做这五件事</h3>
+    <ol class="act">
+      <li><b>定渠道与字段</b><span>写清每条记录来自哪里、必须有哪些字段。</span></li>
+      <li><b>建质量门</b><span>缺必填字段就退回，并记下缺失项与退回原因。</span></li>
+      <li><b>标证据边界</b><span>区分原文陈述、业务简化规则和已独立核验事实。</span></li>
+      <li><b>记版本</b><span>数据、处理脚本、评估口径与失败类型一起留痕。</span></li>
+      <li><b>逐项配图</b><span>每个独立关系单独画一张图，不用一张总图代替全部解释。</span></li>
+    </ol>
+  </section>
+
+  <p class="small" style="margin-top:14px">data-storytelling 浅色示例 · 内容全部虚构 · 生成日期 2026-11-16</p>
+</div>
+
+</body>
+</html>
