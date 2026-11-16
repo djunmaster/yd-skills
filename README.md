@@ -8,6 +8,38 @@
 | --- | --- | --- |
 | [illustration](skills/illustration/) | [yd-clear-article-illustrations](skills/illustration/yd-clear-article-illustrations/) | 白底黑线、橙蓝点缀的清爽手绘知识图解。 |
 | [illustration](skills/illustration/) | [yd-editorial-tech-illustrations](skills/illustration/yd-editorial-tech-illustrations/) | 暖白底、靛蓝主色、陶土橙强调的编辑式技术图解。 |
+| [illustration](skills/illustration/) | [yd-editorial-art-illustrations](skills/illustration/yd-editorial-art-illustrations/) | 暖米白纸感、深海军蓝与朱红的艺术文章封面和正文配图；主图与小图案随内容变化。 |
+
+## YD 纸感艺术文章配图
+
+为自媒体文章、学习笔记和知识内容制作有书刊气质的封面及正文插画。沿用暖米白纸面、深海军蓝结构色、少量朱红、精细印刷线稿与宋体视觉；根据文章主题重新选择主体和辅助图案，并一起安排文字。
+
+**保持配色和图文气质，灵活更换图案。** 书页、胶片、索引卡、波形、仪器或其他相关物件均可使用，叠层网格、曲面和圆环只是可选元素。这个 Skill 与下面强调流程完整性的「编辑式技术图解」分别维护。
+
+| 项目 | 说明 |
+| --- | --- |
+| 输入 | 文章主题或正文、一句话核心观点、标题与少量辅助文字、用途及比例。未给标题时可先拟标题。 |
+| 流程 | 提炼主旨 → 选择图形隐喻 → 安排文字与构图 → 引用主参考生成 → 核对文字、图意与风格。 |
+| 输出 | 实际生成的图片、设计说明、使用的提示词及需要继续修改的地方。 |
+
+### 图片示例
+
+以下为此前实际生成的 PNG 原图，尺寸均为 **1024 × 1536**。第一张是已选定的风格基准；第二张是更换主体和小图案的探索样张，不替换基准。
+
+| 风格基准：把灵感，变成方法 | 图案变化：一条灵感，四种表达 |
+| --- | --- |
+| ![暖米白、深海军蓝和朱红的艺术封面](skills/illustration/yd-editorial-art-illustrations/references/style-anchor.png) | ![使用刊页、胶片、索引卡与音频波形的内容复用封面](skills/illustration/yd-editorial-art-illustrations/assets/examples/content-repurposing.png) |
+
+### 调用示例
+
+```text
+使用 $yd-editorial-art-illustrations，为文章《把阅读变成自己的知识》做一张封面。
+核心观点：阅读后需要主动回忆、建立关联并形成自己的表达。
+沿用暖米白纸感、深海军蓝和少量朱红，主图尝试书页与索引标记的组合。
+标题和图案一起设计，不照搬参考图的叠层曲面与神经网络。比例 2:3。
+```
+
+完整说明、正文内页样张和安装方式见 [Skill 介绍](skills/illustration/yd-editorial-art-illustrations/README.md)；执行规则见 [SKILL.md](skills/illustration/yd-editorial-art-illustrations/SKILL.md)。
 
 ## YD 清晰文章配图
 
