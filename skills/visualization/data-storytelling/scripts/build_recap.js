@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { applyVizMinWidth } = require("./lib/viz_min_width");
 
 const skillDir = path.resolve(__dirname, "..");
 const assets = path.join(skillDir, "assets");
@@ -11,7 +12,7 @@ function read(file) {
 }
 
 function build(bodyFile, outputFile, title, theme) {
-  const body = read(bodyFile).replace(/<figure\b[^>]*>/g, (openingTag) => {
+  const body = applyVizMinWidth(read(bodyFile)).replace(/<figure\b[^>]*>/g, (openingTag) => {
     const visualId = openingTag.match(/\sdata-visual-id="([a-z0-9-]+)"/);
     if (!visualId || /\sid\s*=/.test(openingTag)) return openingTag;
     return openingTag.replace(/>$/, ` id="${visualId[1]}">`);

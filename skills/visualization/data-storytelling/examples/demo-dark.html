@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>data-storytelling 输出示例：图文排版方式</title>
+<title>data-storytelling 深色示例</title>
 <link rel="icon" href="data:,">
 <style>
 /* Dark technical storytelling. Palette sampled from the supplied reference images. */
@@ -257,11 +257,13 @@ figure:target {
 }
 
 .viz-scroll > svg {
-  min-width: 820px;
+  /* 整图缩到 viewBox 以下会让标称字号一起缩水，因此下限取 max(默认, --viz-min-w)。
+     --viz-min-w 写在 figure.viz 或 .viz-scroll 上，值等于该图 viewBox 宽度。 */
+  min-width: max(820px, var(--viz-min-w, 0px));
 }
 
 .viz-scroll.compact > svg {
-  min-width: 680px;
+  min-width: max(680px, var(--viz-min-w, 0px));
 }
 
 svg {
@@ -918,11 +920,11 @@ svg text {
   }
 
   .viz-scroll > svg {
-    min-width: 960px;
+    min-width: max(960px, var(--viz-min-w, 0px));
   }
 
   .grammar-card .viz-scroll > svg {
-    min-width: 480px;
+    min-width: max(480px, var(--viz-min-w, 0px));
   }
 }
 
@@ -955,7 +957,7 @@ svg text {
       <div class="section-title-wrap"><h2 class="section-title">先看主线：原始记录怎样变成看板</h2></div>
       <div class="case-index">OVERVIEW</div>
     </div>
-    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-pipeline" data-visual-title="答疑记录的四步处理主线" data-visual-type="单一主线流程图" data-visual-relation="两个渠道的原始记录汇入采集，依次经过清洗、口径统一、发布，形成可复用的知识看板" data-visual-source="虚构示例，仅用于说明排版方式" id="demo-pipeline">
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-pipeline" data-visual-title="答疑记录的四步处理主线" data-visual-type="单一主线流程图" data-visual-relation="两个渠道的原始记录汇入采集，依次经过清洗、口径统一、发布，形成可复用的知识看板" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-pipeline">
       <div class="viz-card">
         <div class="viz-scroll">
           <svg viewBox="0 0 980 252" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoPipelineTitle demoPipelineDesc">
@@ -1030,7 +1032,7 @@ svg text {
       <div class="section-title-wrap"><h2 class="section-title">两条独立关系：字段对齐与质量退回</h2></div>
       <div class="case-index">DETAIL</div>
     </div>
-    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-alignment" data-visual-title="三种输入对齐到同一组字段" data-visual-type="多源字段映射图" data-visual-relation="答疑群、表单、邮件三种记录各自携带不同字段，按同名映射汇入一条统一记录" data-visual-source="虚构示例，仅用于说明排版方式" id="demo-alignment">
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-alignment" data-visual-title="三种输入对齐到同一组字段" data-visual-type="多源字段映射图" data-visual-relation="答疑群、表单、邮件三种记录各自携带不同字段，按同名映射汇入一条统一记录" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-alignment">
       <div class="viz-card">
         <div class="viz-scroll">
           <svg viewBox="0 0 980 312" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoAlignTitle demoAlignDesc">
@@ -1074,7 +1076,7 @@ svg text {
         <figcaption class="viz-caption"><strong>对齐的是字段含义，不是字段名称。</strong>三条连线分别接到统一记录边界，读者能看出每种输入贡献了什么。示例字段为虚构，真实项目需按业务定义逐项核对。</figcaption>
       </div>
     </figure>
-    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-quality-gate" data-visual-title="质量门：齐全才进候选，缺字段就退回" data-visual-type="判定与退回路意图" data-visual-relation="统一记录经质量门按必填字段判定，齐全的记录进入候选池，缺字段的记录退回原渠道补录" data-visual-source="虚构示例，仅用于说明排版方式" id="demo-quality-gate">
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-quality-gate" data-visual-title="质量门：齐全才进候选，缺字段就退回" data-visual-type="判定与退回路意图" data-visual-relation="统一记录经质量门按必填字段判定，齐全的记录进入候选池，缺字段的记录退回原渠道补录" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-quality-gate">
       <div class="viz-card">
         <div class="viz-scroll">
           <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoGateTitle demoGateDesc">
@@ -1124,7 +1126,7 @@ svg text {
       <div class="section-title-wrap"><h2 class="section-title">版本对应：一次改动要能追溯到结果</h2></div>
       <div class="case-index">VERSION</div>
     </div>
-    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-versions" data-visual-title="数据版本、模型版本与评估结果的对应" data-visual-type="版本轨迹图" data-visual-relation="每个数据版本对应一次模型训练与一份固定评估结果，三者一起记录才能解释结果变化" data-visual-source="虚构示例，仅用于说明排版方式" id="demo-versions">
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-versions" data-visual-title="数据版本、模型版本与评估结果的对应" data-visual-type="版本轨迹图" data-visual-relation="每个数据版本对应一次模型训练与一份固定评估结果，三者一起记录才能解释结果变化" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-versions">
       <div class="viz-card">
         <div class="viz-scroll">
           <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoVersionTitle demoVersionDesc">
@@ -1168,7 +1170,7 @@ svg text {
       <div class="section-title-wrap"><h2 class="section-title">判断与执行也要图解</h2></div>
       <div class="case-index">CHECKLIST</div>
     </div>
-    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-decision" data-visual-title="判断示例：先查覆盖空位，再决定补什么" data-visual-type="问题定位与动作选择图" data-visual-relation="按主题统计覆盖情况，找出没有记录的空位，再针对该空位定向补充" data-visual-source="虚构示例，仅用于说明排版方式" id="demo-decision">
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-decision" data-visual-title="判断示例：先查覆盖空位，再决定补什么" data-visual-type="问题定位与动作选择图" data-visual-relation="按主题统计覆盖情况，找出没有记录的空位，再针对该空位定向补充" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-decision">
       <div class="viz-card">
         <div class="viz-scroll">
           <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoDecisionTitle demoDecisionDesc">
@@ -1201,7 +1203,7 @@ svg text {
         <figcaption class="viz-caption"><strong>先看清缺什么，再决定补什么。</strong>这条判断链说明动作的选择依据；示例主题为虚构，真实项目需要先有可核对的覆盖统计。</figcaption>
       </div>
     </figure>
-    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-action" data-visual-title="执行示例：一条记录处理前后的字段变化" data-visual-type="前后对照图" data-visual-relation="同一条记录在处理前只有零散文本，处理后得到四个已核对字段与出处" data-visual-source="虚构示例，仅用于说明排版方式" id="demo-action">
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-action" data-visual-title="执行示例：一条记录处理前后的字段变化" data-visual-type="前后对照图" data-visual-relation="同一条记录在处理前只有零散文本，处理后得到四个已核对字段与出处" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-action">
       <div class="viz-card">
         <div class="viz-scroll">
           <svg viewBox="0 0 980 260" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoActionTitle demoActionDesc">

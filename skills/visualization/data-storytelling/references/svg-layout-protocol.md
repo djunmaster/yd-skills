@@ -72,6 +72,14 @@
 
 坐标优先使用 4 的倍数；长文本拆成两行或移到图注，不要把节点撑到相邻区域。
 
+整图缩放同样会破坏这些数值。窄屏下把 SVG 缩到 viewBox 以下时，字号、线宽和净距会按同一比例缩水：标称 14px 的标签在 0.98 倍下只有 13.7px，审计会报 `FIGURE_SHRUNK`。因此每张图都要按自己的 viewBox 宽度声明下限：
+
+```html
+<figure class="viz" style="--viz-min-w: 980px" data-visual-id="…" data-layout-contract="v1">
+```
+
+`scripts/build_recap.js` 与 `scripts/assemble_story.js` 会按每张图的 viewBox 宽度自动写入这个变量；手写页面时补上同名声明。窄屏靠横向滚动而不是缩小整图，并且必须给出可见的滑动提示，否则报 `SWIPE_HINT_MISSING`。
+
 ## 视觉权重
 
 几何不碰撞不等于读者能看懂。每张图必须有一个视觉焦点，并用线宽、字号、字重和对比度建立主次：
@@ -150,6 +158,8 @@ python scripts/audit_svg_layout.py output.html --channel msedge --strict `
 - 连线交叉与平行线过近
 - 标签压线、贴节点
 - 元素超出 viewBox 或安全边距
+- 整图渲染宽度小于 viewBox（`FIGURE_SHRUNK`）
+- 需要横向滚动的图缺少可见滑动提示（`SWIPE_HINT_MISSING`）
 - 浏览器控制台和页面脚本错误
 
 `--strict` 必须通过，且语义和可读性审核通过后才可交付。旧图的基础扫描也必须通过；若只有 `SKIP` 没有有效扫描结果，视为未完成，不得声称布局已验证。明确披露的规则待补可以保留，但不能声称已完成该规则验证或据此作出实际判级。
@@ -172,6 +182,8 @@ python scripts/audit_svg_layout.py output.html --channel msedge --strict `
 | `LINK_FROM_UNKNOWN` / `LINK_TO_UNKNOWN` | 修正节点引用，不用空白位置或说明文字代替目标 |
 | `LINK_LABEL_TOO_CLOSE` | 标签上/下移 8–12px |
 | `VIEWBOX_OVERFLOW` | 扩展 viewBox 或收回安全区 |
+| `FIGURE_SHRUNK` | 给该图声明 `--viz-min-w: <viewBox 宽度>px`，不要靠缩小整图适配窄屏 |
+| `SWIPE_HINT_MISSING` | 在 `.viz-scroll` 或外层 `.viz-card` 上补可见滑动提示 |
 | `TEXT_PATH_OVERLAP` | 把文字移出路径通道，或改道路径 |
 | `TEXT_LINE_OVERLAP` | 把文字移出直线通道，或缩短直线 |
 | `TEXT_LABEL_TOUCHES_STROKE` | 增加文字与描边之间的留白 |

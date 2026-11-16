@@ -249,11 +249,13 @@ figure:target {
 }
 
 .viz-scroll > svg {
-  min-width: 820px;
+  /* 整图缩到 viewBox 以下会让标称字号一起缩水，因此下限取 max(默认, --viz-min-w)。
+     --viz-min-w 写在 figure.viz 或 .viz-scroll 上，值等于该图 viewBox 宽度。 */
+  min-width: max(820px, var(--viz-min-w, 0px));
 }
 
 .viz-scroll.compact > svg {
-  min-width: 680px;
+  min-width: max(680px, var(--viz-min-w, 0px));
 }
 
 svg {
@@ -910,11 +912,11 @@ svg text {
   }
 
   .viz-scroll > svg {
-    min-width: 960px;
+    min-width: max(960px, var(--viz-min-w, 0px));
   }
 
   .grammar-card .viz-scroll > svg {
-    min-width: 480px;
+    min-width: max(480px, var(--viz-min-w, 0px));
   }
 }
 

@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { applyVizMinWidth } = require("./lib/viz_min_width");
 
 function fail(message) {
   console.error(message);
@@ -60,5 +61,5 @@ if (extras.length) {
 }
 
 fs.mkdirSync(path.dirname(outputFile), { recursive: true });
-fs.writeFileSync(outputFile, assembled, "utf8");
+fs.writeFileSync(outputFile, applyVizMinWidth(assembled), "utf8");
 console.log(`Assembled ${used.size} figures into ${outputFile}`);

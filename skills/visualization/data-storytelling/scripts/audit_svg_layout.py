@@ -394,6 +394,20 @@ LAYOUT_JS = r"""
       return;
     }
 
+    // 整图被缩小会让所有文字按同一比例缩水：标称 14px 的标签在 0.98 倍下只有 13.7px。
+    // 这是 TEXT_TOO_SMALL 的根因，因此单独报告，提示改容器而不是逐个调字号。
+    const renderedWidth = svg.getBoundingClientRect().width;
+    const figureScale = renderedWidth / viewBox.width;
+    if (figureScale < 0.995) {
+      addViolation(
+        "error",
+        "FIGURE_SHRUNK",
+        `图“${figureId}”整图渲染为 viewBox 的 ${round(figureScale * 100)}%（${round(renderedWidth)}px / ${round(viewBox.width)}px），文字与线宽同比缩水。`,
+        { figure: figureId, viewBoxWidth: round(viewBox.width), renderedWidth: round(renderedWidth), scale: round(figureScale * 1000) / 1000 },
+        "给 figure.viz 设置 --viz-min-w: <viewBox 宽度>px，让窄屏改为横向滚动而不是缩小整图。"
+      );
+    }
+
     const nodeEls = [...figure.querySelectorAll("[data-node]")];
     const nodes = [];
     const nodeIds = new Set();
@@ -774,6 +788,27 @@ LAYOUT_JS = r"""
       fix: "把宽图放入 .viz-scroll；不要扩大页面根容器。",
     });
   }
+  // 窄屏不缩小整图，改为横向滚动；因此凡是能横向滚动的图，必须给出可见的滑动提示。
+  // 提示可以挂在 .viz-scroll 上，也可以挂在外层 .viz-card / .grammar-card 上。
+  const pseudoHint = (el) => {
+    const content = getComputedStyle(el, "::before").content || "";
+    const hint = content.replace(/^["']|["']$/g, "").trim();
+    return hint && hint !== "none" && hint !== "normal" ? hint : "";
+  };
+  document.querySelectorAll("figure.viz .viz-scroll").forEach((scrollEl) => {
+    // 只有一两像素的溢出不会真正影响阅读，也不要求提示；明显需要滚动时才检查。
+    const overflow = scrollEl.scrollWidth - scrollEl.clientWidth;
+    if (overflow <= Math.max(24, scrollEl.clientWidth * 0.08)) return;
+    const carriers = [scrollEl, scrollEl.closest(".viz-card"), scrollEl.closest(".grammar-card")];
+    if (carriers.some((el) => el && pseudoHint(el))) return;
+    const figure = scrollEl.closest("figure.viz");
+    pageViolations.push({
+      severity: "error",
+      code: "SWIPE_HINT_MISSING",
+      message: `${figure?.dataset?.visualId || "figure"} 需要横向滚动 ${round(overflow)}px（${scrollEl.scrollWidth}px > ${scrollEl.clientWidth}px），但没有可见的滑动提示。`,
+      fix: "为 .viz-scroll 或外层 .viz-card 添加 ::before 文案，例如“左右滑动查看完整图示”。",
+    });
+  });
   document.querySelectorAll("figure.viz").forEach((figure) => {
     const figureRect = figure.getBoundingClientRect();
     const scrollRect = figure.querySelector(".viz-scroll")?.getBoundingClientRect();
