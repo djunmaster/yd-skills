@@ -1,6 +1,6 @@
 # yd-skills
 
-五种面向内容表达与知识沉淀的 Skill：**把知识讲清楚、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页、把网页好文深度归档到个人知识库。**
+六种面向内容表达与知识沉淀的 Skill：**把专业知识讲明白、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页、把网页好文深度归档到个人知识库。**
 
 [作品集](#作品集) · [怎么调用](#怎么调用) · [技能说明](#技能说明)
 
@@ -103,9 +103,21 @@
 
 [Skill 说明](skills/knowledge/knowledge-base-archiver/SKILL.md) · [使用与配置指南](skills/knowledge/knowledge-base-archiver/README.md)
 
+### 读者优先的清晰表达
+
+把专业、抽象或绕口的内容改写成目标读者一次就能读懂的表达，但不降低专业准确性：事实、数字、条件和例外都保留，术语集中放进「新概念提示」，抽象处补充明确标注的真实或假设案例。适合业务分析、技术文档、产品需求、财务材料和管理汇报。
+
+| 原始表达 | 优化后 |
+| --- | --- |
+| 通过实体现金池归集成员单位账户资金，实现集团资金集中管理及内部资金调剂，提升资金使用效率。 | 集团可以按事先约定的时间，把子公司账户里暂时不用的钱转到指定账户集中管理；子公司资金紧张时，再按制度安排调拨。账户授权、资金用途和监管要求仍需满足。 |
+
+共 12 个跨领域的前后对照案例，覆盖银行财务、API、制造、物流、医疗、合同、网络安全、统计、产品、采购、管理汇报和客户服务。
+
+[Skill 说明](skills/writing/reader-first-clarity/SKILL.md) · [使用说明](skills/writing/reader-first-clarity/README.md) · [12 个前后对照案例](skills/writing/reader-first-clarity/examples/00-test-matrix.md)
+
 ## 怎么调用
 
-启用技能后，在文章封面、配图或内容整理任务中只需提供主题或正文。每个 Skill 默认沿用自己的固定视觉风格，并根据内容选择构图；技术图解固定使用暖白底、炭黑文字、靛蓝主色、灰蓝紫辅助与少量陶土橙；图文叙事默认输出深色技术讲解页，需要浅色分享页时说一句即可。无需重复描述画风、配色或布局。也可用 `$skill-name` 显式指定 Skill。以下展示纯文字输入示例。
+启用技能后，在文章封面、配图、内容整理或专业内容改写任务中只需提供主题或正文。每个 Skill 默认沿用自己的固定视觉风格，并根据内容选择构图；技术图解固定使用暖白底、炭黑文字、靛蓝主色、灰蓝紫辅助与少量陶土橙；图文叙事默认输出深色技术讲解页，需要浅色分享页时说一句即可。无需重复描述画风、配色或布局。也可用 `$skill-name` 显式指定 Skill。以下展示纯文字输入示例。
 
 **讲清一个知识点**
 
@@ -135,6 +147,17 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 最后发布成可检索、可引用、能定期刷新的知识看板。
 ```
 
+**把专业内容讲明白**
+
+```text
+请按 reader-first-clarity 处理下面这段内容。读者是没有财务背景的业务同事：
+保留所有金额、条件和时间要求，专业名词集中放到「新概念提示」里解释，
+抽象的地方补一个明确标注为假设的例子。
+
+集团通过实体现金池按日归集成员单位账户资金，实现资金集中管理与内部调剂，
+提升整体资金使用效率。
+```
+
 生成图片里的中文、专有名称和技术关系都需要人工核对。这里展示的是实际样图，不代表每次生成都会得到相同结果。
 
 ## 技能说明
@@ -145,5 +168,7 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 | `yd-editorial-tech-illustrations` | 杂志式、章节式与泳道式技术图解 | [SKILL.md](skills/illustration/yd-editorial-tech-illustrations/SKILL.md) |
 | `yd-editorial-art-illustrations` | 纸感文章封面与正文插画 | [SKILL.md](skills/illustration/yd-editorial-art-illustrations/SKILL.md) |
 | `data-storytelling` | 图文一体的深色/浅色讲解页 | [SKILL.md](skills/visualization/data-storytelling/SKILL.md) |
+| `knowledge-base-archiver` | 网页好文去噪翻译并归档到个人知识库 | [SKILL.md](skills/knowledge/knowledge-base-archiver/SKILL.md) |
+| `reader-first-clarity` | 专业内容的通俗改写、术语解释与逻辑审查 | [SKILL.md](skills/writing/reader-first-clarity/SKILL.md) |
 
 结构参考：[Anthropic Skills](https://github.com/anthropics/skills) · [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills)

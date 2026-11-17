@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reader-First Clarity"
+  short_description: "不降低专业准确性，把专业内容改写成目标读者一次就能读懂的表达"
+  default_prompt: "使用 $reader-first-clarity 处理以下内容：先识别读者和用途，再重排理解顺序；正文用普通语言讲清主体、动作、对象、目的和结果，专业术语集中放进「新概念提示」解释，抽象处补充明确标注的真实或假设案例，最后检查事实、条件、例外与逻辑是否完整。不要为了通俗而删掉限制或改变原意。"
