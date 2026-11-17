@@ -1,0 +1,13 @@
+{
+  "token": "github_pat_xxxxxxxx",
+  "owner": "<你的 GitHub 用户名>",
+  "repo": "<知识库仓库名>",
+  "branch": "master",
+  "note": "fine-grained PAT，只需该仓库 Contents: Read and write",
+  "imgbed": {
+    "base": "https://<你的图床域名>",
+    "authCode": "",
+    "folderPrefix": "knowledge-base",
+    "note": "CloudFlare-ImgBed。authCode 留空表示实例未设上传码。"
+  }
+}

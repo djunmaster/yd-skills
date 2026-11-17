@@ -1,6 +1,6 @@
 # yd-skills
 
-四种面向内容表达的 Skill：**把知识讲清楚、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页。**
+五种面向内容表达与知识沉淀的 Skill：**把知识讲清楚、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页、把网页好文深度归档到个人知识库。**
 
 [作品集](#作品集) · [怎么调用](#怎么调用) · [技能说明](#技能说明)
 
@@ -90,6 +90,18 @@
 图按“一个关系一张”拆分，交付前逐图做几何审计（节点间距、连线落点、标签避让、最小字号）和整页覆盖核对。示例页中的团队、渠道与数值均为虚构，只用于说明排版方式。
 
 [Skill 说明](skills/visualization/data-storytelling/SKILL.md) · [深色示例页](skills/visualization/data-storytelling/examples/demo-dark.html) · [浅色示例页](skills/visualization/data-storytelling/examples/demo-light.html)
+
+### 知识库深度归档
+
+把正在浏览的网页好文、技术教程完整读全，剔除广告噪音，按专业领域惯例规范翻译成中文，正文配图自动转存至自建图床，并原子归档至 GitHub 个人知识库仓库及维护 README 索引表。
+
+- **深度去噪与完整抓取**：支持虚拟滚动长论坛（如 Discourse/linux.do）、长文与代码段，保留关键回复、版本纠偏与原帖出处，剔除寒暄噪音。
+- **正文配图转存自建图床**：正文关键步骤配图自动并行上传至自建 CloudFlare-ImgBed 图床，替换链接并生成文末原图地址附录，防止外链失效与防盗链。
+- **专业领域规范翻译**：英文教程按领域通行术语翻译入库，代码、命令行、报错与圈内通用词（如 Agent、Prompt、Token）原样保留。
+- **双锁安全门禁**：整理后强制展示全文草稿停步等待确认；提交脚本强制校验 iHaveUserConsent: true 凭据，未经明确许可绝不触发远端写入。
+- **单 Commit 原子提交**：通过 Git Tree 接口实现文档入库与 README 索引倒序追加一次性原子提交与校验。
+
+[Skill 说明](skills/knowledge/knowledge-base-archiver/SKILL.md) · [使用与配置指南](skills/knowledge/knowledge-base-archiver/README.md)
 
 ## 怎么调用
 
