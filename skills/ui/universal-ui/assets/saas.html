@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>订阅分析 · Universal UI</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="blocks.css">
+  <script defer src="demo.js"></script>
+</head>
+<body>
+  <main class="sample" data-template="saas">
+    <header class="heading">
+      <div><h1>订阅分析</h1><p class="meta">本地演示 · 未接入支付网关</p></div>
+      <button class="control" type="button" data-theme-toggle>深色预览</button>
+    </header>
+
+    <aside class="notice" aria-label="逾期账单">
+      <div><strong>1 张账单已逾期</strong><p class="meta">青岚零售 · ¥4,800 · 到期 11 月 12 日</p></div>
+      <button class="control" type="button" data-collect>标记待催收</button>
+    </aside>
+
+    <dl class="metrics billing-metrics" aria-label="本月收款摘要">
+      <div><dt>已收款</dt><dd>¥19,200</dd><dd class="metric-note">2 张账单</dd></div>
+      <div><dt>待收款</dt><dd>¥4,800</dd><dd class="metric-note">1 张账单</dd></div>
+      <div class="progress-metric"><dt><label for="collection-progress">收款进度</label></dt><dd><progress id="collection-progress" value="80" max="100"></progress></dd><dd class="metric-note">80% · 已收 / 已开票</dd></div>
+    </dl>
+
+    <section class="panel" aria-labelledby="invoices-title">
+      <header class="panel-head"><h2 id="invoices-title">账单列表</h2><span class="meta">11 月 · 3 张账单</span></header>
+      <div class="table-scroll" role="region" aria-label="账单记录，可横向滚动" tabindex="0">
+        <table class="records" aria-labelledby="invoices-title">
+          <thead><tr><th scope="col">客户</th><th scope="col">账单号</th><th scope="col">状态</th><th scope="col" class="number">金额</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">知行科技</th><td>INV-1108</td><td><span class="badge" data-tone="success">已付款</span></td><td class="number">¥12,000</td></tr>
+            <tr><th scope="row">青岚零售</th><td>INV-1105</td><td><span class="badge" data-tone="danger" data-overdue>已逾期</span></td><td class="number">¥4,800</td></tr>
+            <tr><th scope="row">远洋物流</th><td>INV-1102</td><td><span class="badge" data-tone="success">已付款</span></td><td class="number">¥7,200</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="record-foot meta" role="status" aria-atomic="true" data-status>账单金额与收款状态均为示例。</p>
+    </section>
+  </main>
+</body>
+</html>
