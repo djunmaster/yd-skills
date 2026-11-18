@@ -1,6 +1,6 @@
 # yd-skills
 
-六种面向内容表达与知识沉淀的 Skill：**把专业知识讲明白、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页、把网页好文深度归档到个人知识库。**
+八种面向内容表达、知识沉淀与界面设计的 Skill：**把专业知识讲明白、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页、把网页好文深度归档到个人知识库、把界面需求变成可复用且符合个人偏好的设计。**
 
 [作品集](#作品集) · [怎么调用](#怎么调用) · [技能说明](#技能说明)
 
@@ -115,6 +115,39 @@
 
 [Skill 说明](skills/writing/reader-first-clarity/SKILL.md) · [使用说明](skills/writing/reader-first-clarity/README.md) · [12 个前后对照案例](skills/writing/reader-first-clarity/examples/00-test-matrix.md)
 
+### Universal UI 界面设计
+
+把界面需求先转成信息架构，再从 36 个页面布局方案和 56 个克制风格中选出可实施方案。五个整页模板可只取局部组件：收入分析、服务监控、模型网关、客户管理和订阅分析；新工具则按任务推导布局，保留目标项目的导航、技术栈和真实数据。
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="skills/ui/universal-ui/assets/layout-atlas.png" alt="AI Agent 工作台的稳定三列、紧凑双列和命令台三个布局方案" width="100%" />
+      <p><strong>Layout Atlas</strong> · 12 类页面 × 稳妥 / 紧凑 / 个性三方案</p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="skills/ui/universal-ui/assets/style-atlas.png" alt="Neutral、Quiet、Technical、Data 等 56 个克制风格样张" width="100%" />
+      <p><strong>Style Atlas</strong> · 56 个克制的字体、密度与色彩样张</p>
+    </td>
+  </tr>
+</table>
+
+所有模板离线可用，并按浅色、深色、1440 / 1024 / 390px 做溢出、对比度、焦点和可访问名称审计。
+
+[Skill 说明](skills/ui/universal-ui/SKILL.md) · [使用说明](skills/ui/universal-ui/README.md) · [Layout Atlas](skills/ui/universal-ui/assets/layout-atlas.html) · [Style Atlas](skills/ui/universal-ui/assets/style-atlas.html)
+
+### UI 偏好账本
+
+把一次界面选择沉淀成个人规则，同时区分长期偏好和当前项目偏好。个人 Profile 是全集，包含归纳规则与项目使用记录；项目偏好只写入当前项目，不污染全局规则。
+
+| 说法 | 归属 |
+| --- | --- |
+| “我以后都不喜欢卡片墙和过度留白。” | 全局规则候选 |
+| “这个项目是品牌要求必须用紫色。” | 当前项目偏好 |
+| “这次为了演示先临时夸张一点。” | 不沉淀 |
+
+[Skill 说明](skills/ui/ui-preference-ledger/SKILL.md) · [使用说明](skills/ui/ui-preference-ledger/README.md) · [Profile 规则](skills/ui/ui-preference-ledger/references/profile-schema.md)
+
 ## 怎么调用
 
 启用技能后，在文章封面、配图、内容整理或专业内容改写任务中只需提供主题或正文。每个 Skill 默认沿用自己的固定视觉风格，并根据内容选择构图；技术图解固定使用暖白底、炭黑文字、靛蓝主色、灰蓝紫辅助与少量陶土橙；图文叙事默认输出深色技术讲解页，需要浅色分享页时说一句即可。无需重复描述画风、配色或布局。也可用 `$skill-name` 显式指定 Skill。以下展示纯文字输入示例。
@@ -158,6 +191,22 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 提升整体资金使用效率。
 ```
 
+**设计一个新工具界面**
+
+```text
+使用 $universal-ui。做一个本地优先的 AI Agent 工作台：
+左侧是任务列表，中央是消息与执行轨迹，右侧按需打开文件详情。
+先给我三个布局方案，再实现我选择的那一个。
+```
+
+**沉淀一次界面偏好**
+
+```text
+使用 $ui-preference-ledger 记录这次选择：
+Agent 工作台用稳定三列，左侧导航窄一点，中央消息区最大。
+我以后都不喜欢卡片墙和过度留白。
+```
+
 生成图片里的中文、专有名称和技术关系都需要人工核对。这里展示的是实际样图，不代表每次生成都会得到相同结果。
 
 ## 技能说明
@@ -170,5 +219,7 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 | `data-storytelling` | 图文一体的深色/浅色讲解页 | [SKILL.md](skills/visualization/data-storytelling/SKILL.md) |
 | `knowledge-base-archiver` | 网页好文去噪翻译并归档到个人知识库 | [SKILL.md](skills/knowledge/knowledge-base-archiver/SKILL.md) |
 | `reader-first-clarity` | 专业内容的通俗改写、术语解释与逻辑审查 | [SKILL.md](skills/writing/reader-first-clarity/SKILL.md) |
+| `universal-ui` | 可复用组件、新工具布局与克制风格方案 | [SKILL.md](skills/ui/universal-ui/SKILL.md) |
+| `ui-preference-ledger` | 记录、归纳和维护个人与项目 UI 偏好 | [SKILL.md](skills/ui/ui-preference-ledger/SKILL.md) |
 
 结构参考：[Anthropic Skills](https://github.com/anthropics/skills) · [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills)
