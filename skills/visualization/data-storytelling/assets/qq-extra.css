@@ -1,0 +1,10 @@
+/* 原分享页 scn 场景列表组件（按原样式映射到本页设计变量） */
+.scn{display:flex;gap:12px;padding:11px 4px;border-top:1px dashed var(--border);align-items:flex-start}
+.scn:first-child{border-top:0;padding-top:2px}
+.scn-num{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.scn-body{flex:1}
+.scn-body b{font-size:14.5px}
+.scn-tag{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;margin-left:8px;vertical-align:2px}
+.scn-tag.ok{background:var(--accent-soft);color:var(--accent)}
+.scn-tag.acc{background:var(--accent-soft);color:var(--accent)}
+.scn-body p{margin:2px 0 0;font-size:13px;color:var(--muted);line-height:1.7}

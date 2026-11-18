@@ -1,0 +1,4 @@
+interface:
+  display_name: "YD 编辑式技术图解"
+  short_description: "自动沿用固定配色、字体与版式的中文技术流程和架构图解"
+  default_prompt: "使用 $yd-editorial-tech-illustrations，把这段内容生成与固定母版一致、文字清晰且流程完整的中文技术图解。"

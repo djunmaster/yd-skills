@@ -1,0 +1,1252 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>data-storytelling 深色示例</title>
+<link rel="icon" href="data:,">
+<style>
+/* Dark technical storytelling. Palette sampled from the supplied reference images. */
+:root {
+  color-scheme: dark;
+  --page-bg: #0f1218;
+  --story-bg: #171c25;
+  --panel-bg: #1d2432;
+  --panel-2: #242c40;
+  --panel-3: #2a3242;
+  --text: #e6eaf1;
+  --muted: #98a3b3;
+  --blue: #7d97f5;
+  --blue-soft: #a3b5f8;
+  --blue-deep: #384367;
+  --green: #51cf66;
+  --orange: #f0955c;
+  --danger: #f28b82;
+  --border: #2a3242;
+  --border-strong: #384367;
+  --stroke-primary: #d9e2f5;
+  --stroke-secondary: #a3b5f8;
+  --radius: 20px;
+  --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--page-bg);
+  scroll-padding-top: 24px;
+}
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  margin: 10px 0;
+}
+
+figure {
+  margin: 0;
+}
+
+strong {
+  color: #f4f7ff;
+  font-weight: 800;
+}
+
+em {
+  color: var(--blue-soft);
+  font-style: normal;
+}
+
+.wrap {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 46px 0 84px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 42px 38px;
+  background: var(--story-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -90px;
+  top: -130px;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(125, 151, 245, 0.13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 54px rgba(125, 151, 245, 0.035),
+    0 0 0 108px rgba(125, 151, 245, 0.018);
+  pointer-events: none;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--blue);
+}
+
+h1 {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 14px 0 12px;
+  font-size: clamp(34px, 5.3vw, 58px);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+
+.deck {
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.72;
+}
+
+.chips {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.chip {
+  padding: 5px 12px;
+  color: var(--blue-soft);
+  background: rgba(125, 151, 245, 0.09);
+  border: 1px solid var(--blue-deep);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a {
+  color: var(--blue-soft);
+  text-underline-offset: 3px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--blue-soft);
+  outline-offset: 4px;
+}
+
+figure:target {
+  outline: 2px solid var(--blue-soft);
+  outline-offset: 4px;
+}
+
+.story-section {
+  margin-top: 24px;
+  padding: 32px 34px 34px;
+  background: var(--story-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 8px;
+}
+
+.section-title-wrap {
+  min-width: 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: clamp(22px, 2.8vw, 30px);
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.section-title::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 30px;
+  background: var(--blue);
+  border-radius: 2px;
+}
+
+.case-index {
+  flex: 0 0 auto;
+  padding-top: 2px;
+  color: var(--blue-deep);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.leadline {
+  max-width: 980px;
+  margin: 6px 0 22px;
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+.leadline strong {
+  color: #f4f7ff;
+  font-weight: 800;
+}
+
+.viz-card {
+  margin: 0;
+  padding: 22px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 16px;
+}
+
+.viz {
+  margin: 20px 0 0;
+}
+
+.viz-card.compact {
+  padding: 16px;
+}
+
+.viz-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-deep) transparent;
+}
+
+.viz-scroll > svg {
+  /* 整图缩到 viewBox 以下会让标称字号一起缩水，因此下限取 max(默认, --viz-min-w)。
+     --viz-min-w 写在 figure.viz 或 .viz-scroll 上，值等于该图 viewBox 宽度。 */
+  min-width: max(820px, var(--viz-min-w, 0px));
+}
+
+.viz-scroll.compact > svg {
+  min-width: max(680px, var(--viz-min-w, 0px));
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font);
+}
+
+svg text {
+  font-family: var(--font);
+}
+
+.s-title {
+  fill: #f4f7ff;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.s-subtitle {
+  fill: #b7c7ff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.s-label {
+  fill: #f4f7ff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.s-small {
+  fill: #b8c3d3;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.s-tiny {
+  fill: #aeb9c9;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.s-emphasis {
+  fill: #f4f7ff;
+  font-weight: 800;
+}
+
+.s-step {
+  fill: #f4f7ff;
+  font-weight: 800;
+}
+
+.s-note {
+  fill: #c7d1e1;
+  font-weight: 600;
+}
+
+.s-caution {
+  fill: #ffb27d;
+  font-weight: 800;
+}
+
+.s-blue {
+  fill: #a3b5f8;
+}
+
+.s-green {
+  fill: #51cf66;
+}
+
+.s-orange {
+  fill: #f0955c;
+}
+
+.s-red {
+  fill: #f28b82;
+}
+
+.s-line {
+  fill: none;
+  stroke: var(--stroke-secondary);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.s-line.thin {
+  stroke-width: 2;
+}
+
+.s-line.dash {
+  stroke-dasharray: 6 7;
+}
+
+.s-line.green {
+  stroke: #51cf66;
+}
+
+.s-line.orange {
+  stroke: #f0955c;
+}
+
+.s-line.red {
+  stroke: #f28b82;
+}
+
+.s-box {
+  fill: #242c40;
+  stroke: #384367;
+  stroke-width: 2;
+}
+
+.s-box.dark {
+  fill: #1d2432;
+}
+
+.s-box.blue {
+  fill: rgba(125, 151, 245, 0.13);
+  stroke: #7d97f5;
+  stroke-width: 2.4;
+}
+
+.s-box.green {
+  fill: rgba(81, 207, 102, 0.08);
+  stroke: #51cf66;
+  stroke-width: 2.4;
+}
+
+.s-box.orange {
+  fill: rgba(240, 149, 92, 0.08);
+  stroke: #f0955c;
+  stroke-width: 2.4;
+}
+
+.s-box.red {
+  fill: rgba(242, 139, 130, 0.08);
+  stroke: #f28b82;
+  stroke-width: 2.4;
+}
+
+.s-dot {
+  fill: #7d97f5;
+}
+
+.s-dot.green {
+  fill: #51cf66;
+}
+
+.s-dot.orange {
+  fill: #f0955c;
+}
+
+.s-dot.red {
+  fill: #f28b82;
+}
+
+.viz-caption {
+  margin: 14px 4px 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.kv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.kv {
+  padding: 15px 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.kv .k {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--blue-soft);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.kv p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.kv strong {
+  color: var(--text);
+}
+
+.takeaway {
+  margin-top: 18px;
+  padding: 15px 18px;
+  background: var(--panel-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 13px;
+}
+
+.takeaway-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.takeaway p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+.takeaway strong {
+  color: #f4f7ff;
+  font-weight: 800;
+}
+
+.note {
+  margin-top: 18px;
+  padding: 15px 18px;
+  color: var(--muted);
+  background: rgba(125, 151, 245, 0.055);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 12px 12px 0;
+  font-size: 14px;
+}
+
+.note strong {
+  color: var(--blue-soft);
+}
+
+.caution {
+  margin-top: 16px;
+  padding: 14px 18px;
+  color: #d7deeb;
+  background: rgba(240, 149, 92, 0.09);
+  border: 1.5px solid rgba(240, 149, 92, 0.58);
+  border-left: 4px solid var(--orange);
+  border-radius: 0 12px 12px 0;
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.caution b,
+.caution strong {
+  color: #ffb27d;
+}
+
+.logic-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.logic-step {
+  position: relative;
+  min-width: 0;
+  padding: 14px 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 13px;
+}
+
+.logic-step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: -17px;
+  z-index: 1;
+  color: var(--blue-soft);
+  font-size: 22px;
+  font-weight: 800;
+  transform: translateY(-50%);
+}
+
+.logic-num {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--blue-soft);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.logic-step strong {
+  display: block;
+  color: #f4f7ff;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.logic-step span:last-child {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.evidence {
+  margin-top: 16px;
+  padding: 16px 18px;
+  color: var(--muted);
+  background: var(--panel-bg);
+  border: 1px dashed var(--border-strong);
+  border-radius: 13px;
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.evidence b {
+  color: var(--orange);
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.compare-card {
+  padding: 17px 18px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.compare-card h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.compare-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.compare-card .tag {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 9px;
+  color: var(--blue-soft);
+  background: rgba(125, 151, 245, 0.1);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.grammar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.grammar-card {
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+}
+
+.grammar-card h4 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.grammar-card p,
+.grammar-card figcaption {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.grammar-card .viz-scroll > svg {
+  min-width: 480px;
+}
+
+.grammar-break,
+.grammar-wide {
+  grid-column: 1 / -1;
+}
+
+.grammar-break {
+  margin-top: 16px;
+}
+
+.grammar-break h3 {
+  margin: 0;
+  color: #f4f7ff;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.grammar-break p {
+  margin: 8px 0 0;
+  color: #b8c3d3;
+}
+
+.reading-rules {
+  padding: 24px;
+}
+
+.reading-list {
+  display: grid;
+  gap: 20px;
+  margin: 20px 0 0;
+  padding-left: 24px;
+}
+
+.reading-list li {
+  padding-left: 4px;
+}
+
+.reading-list li::marker {
+  color: var(--blue-soft);
+  font-weight: 800;
+}
+
+.reading-list strong,
+.reading-list span {
+  display: block;
+}
+
+.reading-list span {
+  margin-top: 4px;
+  color: #b8c3d3;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.grade-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.grade-card {
+  min-width: 0;
+  padding: 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+}
+
+.grade-card strong,
+.grade-card span {
+  display: block;
+}
+
+.grade-card strong {
+  font-size: 18px;
+}
+
+.grade-card span {
+  margin-top: 4px;
+  color: #b8c3d3;
+  font-size: 14px;
+}
+
+.grade-one strong {
+  color: var(--blue-soft);
+}
+
+.grade-two strong {
+  color: var(--orange);
+}
+
+.grade-three strong {
+  color: var(--danger);
+}
+
+.grammar-card[data-visual-id="grammar-distribution"] .viz-scroll > svg {
+  min-width: 520px;
+}
+
+.grammar-wide.caution {
+  margin-top: 0;
+}
+
+.action-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: action;
+}
+
+.action-list li {
+  counter-increment: action;
+  position: relative;
+  min-height: 84px;
+  padding: 16px 16px 16px 56px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.action-list li::before {
+  content: counter(action, decimal-leading-zero);
+  position: absolute;
+  left: 15px;
+  top: 17px;
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.action-list b {
+  display: block;
+  font-size: 15px;
+}
+
+.action-list span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.legend-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.legend-dot.green {
+  background: var(--green);
+}
+
+.legend-dot.orange {
+  background: var(--orange);
+}
+
+.legend-dot.dashed {
+  background: transparent;
+  border: 1px dashed var(--blue-soft);
+}
+
+.footer {
+  padding: 22px 4px 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 840px) {
+  .wrap {
+    width: min(100% - 28px, 1180px);
+    padding-top: 20px;
+  }
+
+  .hero,
+  .story-section {
+    padding: 24px 20px;
+  }
+
+  .kv-grid,
+  .compare-grid,
+  .grammar-grid,
+  .action-list,
+  .logic-strip,
+  .grade-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grammar-card .viz-scroll::before {
+    content: "左右滑动查看完整图示 →";
+    display: block;
+    margin-bottom: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .viz-scroll.focus-right {
+    direction: rtl;
+  }
+
+  .viz-scroll.focus-right > svg,
+  .viz-scroll.focus-right::before {
+    direction: ltr;
+  }
+
+  .section-head {
+    display: block;
+  }
+
+  .case-index {
+    display: block;
+    margin-bottom: 4px;
+    padding-top: 0;
+  }
+
+  .viz-card {
+    padding: 12px;
+  }
+
+  .viz-card::before {
+    content: "左右滑动查看完整图示";
+    display: block;
+    margin: 0 0 9px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .logic-step:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  .logic-step:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .viz-scroll > svg {
+    min-width: max(960px, var(--viz-min-w, 0px));
+  }
+
+  .grammar-card .viz-scroll > svg {
+    min-width: max(480px, var(--viz-min-w, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">示例页 · 内容全部虚构</div>
+    <h1>答疑记录：<br>怎样变成可复用的知识看板</h1>
+    <p class="deck">这是 <strong>data-storytelling</strong> 的输出示例，用来说明“一图一关系 + 逐项图解 + 证据边界”的排版方式。页面里的团队、渠道、字段和数值均为<strong>虚构示意</strong>，不代表任何真实业务或真实指标。</p>
+    <nav class="chips" aria-label="示例章节导航">
+      <a class="chip" href="#demo-pipeline">主线总览</a><a class="chip" href="#demo-alignment">字段对齐</a><a class="chip" href="#demo-quality-gate">质量门</a><a class="chip" href="#demo-versions">版本对应</a><a class="chip" href="#demo-decision">判断示例</a><a class="chip" href="#demo-action">执行示例</a>
+    </nav>
+  </header>
+
+  <section class="story-section" id="overview" data-required-visuals="demo-pipeline">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">先看主线：原始记录怎样变成看板</h2></div>
+      <div class="case-index">OVERVIEW</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-pipeline" data-visual-title="答疑记录的四步处理主线" data-visual-type="单一主线流程图" data-visual-relation="两个渠道的原始记录汇入采集，依次经过清洗、口径统一、发布，形成可复用的知识看板" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-pipeline">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 252" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoPipelineTitle demoPipelineDesc">
+            <title id="demoPipelineTitle">从两个渠道的原始记录到知识看板的四步处理主线</title>
+            <desc id="demoPipelineDesc">课程答疑群记录与课后表单记录分别接入采集节点，依次经过清洗、口径统一、发布，形成可复用的知识看板。本图只说明处理主线，不表示任一渠道记录可直接发布。</desc>
+            <defs>
+              <marker id="demoArrowOne" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <text x="28" y="32" class="s-subtitle">原始输入</text>
+            <text x="952" y="32" class="s-subtitle" text-anchor="end">统一产物</text>
+            <g data-node="demo-group-source">
+              <rect x="28" y="56" width="200" height="64" rx="13" class="s-box blue"/>
+              <text x="44" y="82" class="s-label">课程答疑群记录</text>
+              <text x="44" y="106" class="s-small">提问 · 追问 · 讲师回复</text>
+            </g>
+            <g data-node="demo-form-source">
+              <rect x="28" y="140" width="200" height="64" rx="13" class="s-box orange"/>
+              <text x="44" y="166" class="s-label">课后表单记录</text>
+              <text x="44" y="190" class="s-small">问题 · 选项 · 提交时间</text>
+            </g>
+            <rect x="272" y="56" width="430" height="148" rx="20" class="s-box dark"/>
+            <text x="487" y="84" class="s-title" text-anchor="middle">四步处理主线</text>
+            <g data-node="demo-collect">
+              <rect x="288" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="300" y="126" class="s-tiny">01</text>
+              <text x="330" y="170" class="s-label s-step" text-anchor="middle">采集</text>
+            </g>
+            <g data-node="demo-clean">
+              <rect x="392" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="404" y="126" class="s-tiny">02</text>
+              <text x="434" y="170" class="s-label s-step" text-anchor="middle">清洗</text>
+            </g>
+            <g data-node="demo-normalize">
+              <rect x="496" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="508" y="126" class="s-tiny">03</text>
+              <text x="538" y="170" class="s-label s-step" text-anchor="middle">口径统一</text>
+            </g>
+            <g data-node="demo-publish">
+              <rect x="600" y="100" width="84" height="88" rx="13" class="s-box"/>
+              <text x="612" y="126" class="s-tiny">04</text>
+              <text x="642" y="170" class="s-label s-step" text-anchor="middle">发布</text>
+            </g>
+            <g data-node="demo-board">
+              <rect x="744" y="100" width="196" height="88" rx="15" class="s-box green"/>
+              <text x="842" y="136" class="s-label s-emphasis" text-anchor="middle">知识看板</text>
+              <text x="842" y="162" class="s-small" text-anchor="middle">可检索 · 可引用 · 可刷新</text>
+            </g>
+            <path data-link="demo-group-to-collect" data-from="demo-group-source" data-to="demo-collect" d="M228 88H252V120H288" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-form-to-collect" data-from="demo-form-source" data-to="demo-collect" d="M228 172H252V160H288" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-collect-to-clean" data-from="demo-collect" data-to="demo-clean" d="M372 144H392" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-clean-to-normalize" data-from="demo-clean" data-to="demo-normalize" d="M476 144H496" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-normalize-to-publish" data-from="demo-normalize" data-to="demo-publish" d="M580 144H600" class="s-line" marker-end="url(#demoArrowOne)"/>
+            <path data-link="demo-publish-to-board" data-from="demo-publish" data-to="demo-board" d="M684 144H744" class="s-line" marker-end="url(#demoArrowOne)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption">两个渠道分别接入“采集”，再依次经过清洗、口径统一、发布。<strong>这张图只回答“主线是什么”</strong>；字段怎样对齐、不合格记录怎样退回，分别在后两张图展开。</figcaption>
+      </div>
+    </figure>
+    <div class="logic-strip" aria-label="示例阅读顺序">
+      <div class="logic-step"><span class="logic-num">01</span><strong>先定渠道</strong><span>明确记录来自哪里</span></div>
+      <div class="logic-step"><span class="logic-num">02</span><strong>再对齐字段</strong><span>不同输入落到同一字段</span></div>
+      <div class="logic-step"><span class="logic-num">03</span><strong>然后设质量门</strong><span>缺字段就退回补录</span></div>
+      <div class="logic-step"><span class="logic-num">04</span><strong>最后记版本</strong><span>数据、模型、评估一起留痕</span></div>
+    </div>
+    <div class="caution"><strong>注意：</strong>示例中的步骤名称和字段都是虚构的教学示意。整理真实材料时，渠道、字段和质量标准必须来自原文或你的业务定义，不能沿用本页内容。</div>
+  </section>
+
+  <section class="story-section" id="alignment" data-required-visuals="demo-alignment demo-quality-gate">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">两条独立关系：字段对齐与质量退回</h2></div>
+      <div class="case-index">DETAIL</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-alignment" data-visual-title="三种输入对齐到同一组字段" data-visual-type="多源字段映射图" data-visual-relation="答疑群、表单、邮件三种记录各自携带不同字段，按同名映射汇入一条统一记录" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-alignment">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 312" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoAlignTitle demoAlignDesc">
+            <title id="demoAlignTitle">三种渠道记录对齐到统一记录的字段映射</title>
+            <desc id="demoAlignDesc">答疑群记录提供提问与讲师回复，课后表单提供问题与选项，邮件往来提供补充说明，三条连线分别接到统一记录左边界，统一记录含提问人、时间、主题、结论四个字段。字段名相同不代表含义相同，映射关系需人工核对。</desc>
+            <defs>
+              <marker id="demoArrowTwo" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <text x="28" y="32" class="s-subtitle">原始记录</text>
+            <text x="952" y="32" class="s-subtitle" text-anchor="end">统一记录</text>
+            <g data-node="demo-chat">
+              <rect x="28" y="44" width="220" height="68" rx="13" class="s-box blue"/>
+              <text x="44" y="70" class="s-label">答疑群记录</text>
+              <text x="44" y="96" class="s-small">提问 · 追问 · 讲师回复</text>
+            </g>
+            <g data-node="demo-form">
+              <rect x="28" y="132" width="220" height="68" rx="13" class="s-box"/>
+              <text x="44" y="158" class="s-label">课后表单</text>
+              <text x="44" y="184" class="s-small">问题 · 选项 · 提交时间</text>
+            </g>
+            <g data-node="demo-mail">
+              <rect x="28" y="220" width="220" height="68" rx="13" class="s-box orange"/>
+              <text x="44" y="246" class="s-label">邮件往来</text>
+              <text x="44" y="272" class="s-small">补充说明 · 附件结论</text>
+            </g>
+            <g data-node="demo-unified">
+              <rect x="560" y="124" width="300" height="160" rx="15" class="s-box green"/>
+              <text x="576" y="152" class="s-label s-emphasis">统一记录</text>
+              <text x="576" y="180" class="s-small">提问人 <tspan class="s-green" font-weight="700">已核对</tspan></text>
+              <text x="576" y="204" class="s-small">时间 <tspan class="s-green" font-weight="700">已换算时区</tspan></text>
+              <text x="576" y="228" class="s-small">主题 <tspan class="s-green" font-weight="700">取自原文</tspan></text>
+              <text x="576" y="252" class="s-small">结论 <tspan class="s-green" font-weight="700">标注出处</tspan></text>
+            </g>
+            <path data-link="demo-chat-to-unified" data-from="demo-chat" data-to="demo-unified" d="M248 78H404V152H560" class="s-line" marker-end="url(#demoArrowTwo)"/>
+            <path data-link="demo-form-to-unified" data-from="demo-form" data-to="demo-unified" d="M248 168H560" class="s-line" marker-end="url(#demoArrowTwo)"/>
+            <path data-link="demo-mail-to-unified" data-from="demo-mail" data-to="demo-unified" d="M248 254H440V228H560" class="s-line" marker-end="url(#demoArrowTwo)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>对齐的是字段含义，不是字段名称。</strong>三条连线分别接到统一记录边界，读者能看出每种输入贡献了什么。示例字段为虚构，真实项目需按业务定义逐项核对。</figcaption>
+      </div>
+    </figure>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-quality-gate" data-visual-title="质量门：齐全才进候选，缺字段就退回" data-visual-type="判定与退回路意图" data-visual-relation="统一记录经质量门按必填字段判定，齐全的记录进入候选池，缺字段的记录退回原渠道补录" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-quality-gate">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoGateTitle demoGateDesc">
+            <title id="demoGateTitle">质量门把记录分为进入候选池与退回补录两种去向</title>
+            <desc id="demoGateDesc">统一记录接到质量门，质量门按必填字段判定：字段齐全的记录进入候选池，仍需在后续做准确性与授权核对；缺字段的记录退回原渠道补录，并记下缺失字段名。候选池不等于已可发布。</desc>
+            <defs>
+              <marker id="demoArrowThree" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+              <marker id="demoArrowThreeOrange" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#f0955c"/>
+              </marker>
+            </defs>
+            <g data-node="demo-gate-input">
+              <rect x="28" y="88" width="220" height="72" rx="13" class="s-box"/>
+              <text x="44" y="114" class="s-label">待判定记录</text>
+              <text x="44" y="140" class="s-small">四个必填字段</text>
+            </g>
+            <g data-node="demo-gate">
+              <rect x="380" y="88" width="200" height="72" rx="13" class="s-box blue"/>
+              <text x="396" y="114" class="s-label">质量门</text>
+              <text x="396" y="140" class="s-small">必填字段是否齐全</text>
+            </g>
+            <g data-node="demo-gate-pass">
+              <rect x="720" y="36" width="232" height="64" rx="13" class="s-box green"/>
+              <text x="736" y="62" class="s-label">进入候选池</text>
+              <text x="736" y="86" class="s-small">仍需准确性与授权核对</text>
+            </g>
+            <g data-node="demo-gate-return">
+              <rect x="720" y="140" width="232" height="64" rx="13" class="s-box orange"/>
+              <text x="736" y="166" class="s-label">退回原渠道补录</text>
+              <text x="736" y="190" class="s-small">记下缺失字段与退回原因</text>
+            </g>
+            <path data-link="demo-input-to-gate" data-from="demo-gate-input" data-to="demo-gate" d="M248 124H380" class="s-line" marker-end="url(#demoArrowThree)"/>
+            <path data-link="demo-gate-to-pass" data-from="demo-gate" data-to="demo-gate-pass" d="M580 112H650V68H720" class="s-line" marker-end="url(#demoArrowThree)"/>
+            <path data-link="demo-gate-to-return" data-from="demo-gate" data-to="demo-gate-return" d="M580 136H680V172H720" class="s-line orange" marker-end="url(#demoArrowThreeOrange)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>两条箭头分别指向两个不同去向。</strong>“进入候选池”只表示字段齐全，不表示内容已正确或已获授权；“退回”必须留下缺失字段名，否则无法核对下一轮是否真的补上。</figcaption>
+      </div>
+    </figure>
+    <div class="takeaway"><span class="takeaway-label">为什么拆成两张图</span><p>字段对齐回答“输入怎样变成同一条记录”，质量门回答“不合格的记录去哪里”。两者是不同关系，放在一张图里读者必须自己分辨箭头含义，因此拆开各画一张。</p></div>
+  </section>
+
+  <section class="story-section" id="iteration" data-required-visuals="demo-versions">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">版本对应：一次改动要能追溯到结果</h2></div>
+      <div class="case-index">VERSION</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-versions" data-visual-title="数据版本、模型版本与评估结果的对应" data-visual-type="版本轨迹图" data-visual-relation="每个数据版本对应一次模型训练与一份固定评估结果，三者一起记录才能解释结果变化" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-versions">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoVersionTitle demoVersionDesc">
+            <title id="demoVersionTitle">数据版本、模型版本与评估结果三者的对应关系</title>
+            <desc id="demoVersionDesc">数据版本 v3 对应模型版本 m5，模型版本 m5 对应评估结果记录，三者一起构成一次可追溯的迭代。示例版本号与字段为虚构，不代表真实指标。</desc>
+            <defs>
+              <marker id="demoArrowFour" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <g data-node="demo-data-version">
+              <rect x="28" y="64" width="260" height="112" rx="14" class="s-box blue"/>
+              <text x="44" y="92" class="s-label">数据版本 v3</text>
+              <text x="44" y="118" class="s-small">变更：补录缺字段记录</text>
+              <text x="44" y="142" class="s-small">保留：字段定义与来源</text>
+            </g>
+            <g data-node="demo-model-version">
+              <rect x="360" y="64" width="260" height="112" rx="14" class="s-box"/>
+              <text x="376" y="92" class="s-label">模型版本 m5</text>
+              <text x="376" y="118" class="s-small">输入：仅用 v3 训练集</text>
+              <text x="376" y="142" class="s-small">固定测试集不参与训练</text>
+            </g>
+            <g data-node="demo-eval-version">
+              <rect x="692" y="64" width="260" height="112" rx="14" class="s-box green"/>
+              <text x="708" y="92" class="s-label">评估结果</text>
+              <text x="708" y="118" class="s-small">同一测试集、同一口径</text>
+              <text x="708" y="142" class="s-small">失败样本按类型归档</text>
+            </g>
+            <path data-link="demo-data-to-model" data-from="demo-data-version" data-to="demo-model-version" d="M288 120H360" class="s-line" marker-end="url(#demoArrowFour)"/>
+            <path data-link="demo-model-to-eval" data-from="demo-model-version" data-to="demo-eval-version" d="M620 120H692" class="s-line" marker-end="url(#demoArrowFour)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>三项一起记录，才说清“这次到底变好了没有”。</strong>只记模型版本而不知道用了哪份数据、哪套评估口径，结果无法复现。示例版本号与字段均为虚构。</figcaption>
+      </div>
+    </figure>
+    <div class="evidence"><strong>证据边界：</strong>本页所有版本号、字段名和渠道名称都是教学示意，没有真实数据来源；引用本页作为模板时，请替换为自己的材料，并保留“示意”标注直到有真实证据。</div>
+  </section>
+
+  <section class="story-section" id="decision-action" data-required-visuals="demo-decision demo-action">
+    <div class="section-head">
+      <div class="section-title-wrap"><h2 class="section-title">判断与执行也要图解</h2></div>
+      <div class="case-index">CHECKLIST</div>
+    </div>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-decision" data-visual-title="判断示例：先查覆盖空位，再决定补什么" data-visual-type="问题定位与动作选择图" data-visual-relation="按主题统计覆盖情况，找出没有记录的空位，再针对该空位定向补充" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-decision">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 240" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoDecisionTitle demoDecisionDesc">
+            <title id="demoDecisionTitle">从覆盖检查到定向补充的判断路径</title>
+            <desc id="demoDecisionDesc">先按主题检查现有记录覆盖情况，再定位完全没有记录的空位，最后只针对该空位定向补充。补充内容必须标注来源，不能由模型自行编造。</desc>
+            <defs>
+              <marker id="demoArrowFive" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <g data-node="demo-coverage-check">
+              <rect x="28" y="88" width="220" height="72" rx="13" class="s-box"/>
+              <text x="44" y="114" class="s-label">按主题查覆盖</text>
+              <text x="44" y="140" class="s-small">哪些主题已有记录</text>
+            </g>
+            <g data-node="demo-gap-found">
+              <rect x="380" y="88" width="200" height="72" rx="13" class="s-box orange"/>
+              <text x="396" y="114" class="s-label">定位空位</text>
+              <text x="396" y="140" class="s-small">完全没有记录的主题</text>
+            </g>
+            <g data-node="demo-target-fill">
+              <rect x="700" y="88" width="252" height="72" rx="13" class="s-box green"/>
+              <text x="716" y="114" class="s-label">定向补充该主题</text>
+              <text x="716" y="140" class="s-small">标注来源，不自行编造</text>
+            </g>
+            <path data-link="demo-check-to-gap" data-from="demo-coverage-check" data-to="demo-gap-found" d="M248 124H380" class="s-line" marker-end="url(#demoArrowFive)"/>
+            <path data-link="demo-gap-to-fill" data-from="demo-gap-found" data-to="demo-target-fill" d="M580 124H700" class="s-line" marker-end="url(#demoArrowFive)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>先看清缺什么，再决定补什么。</strong>这条判断链说明动作的选择依据；示例主题为虚构，真实项目需要先有可核对的覆盖统计。</figcaption>
+      </div>
+    </figure>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="demo-action" data-visual-title="执行示例：一条记录处理前后的字段变化" data-visual-type="前后对照图" data-visual-relation="同一条记录在处理前只有零散文本，处理后得到四个已核对字段与出处" data-visual-source="虚构示例，仅用于说明排版方式" style="--viz-min-w: 980px;" id="demo-action">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 980 260" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="2" data-safe-margin="24" data-min-text-px="14" role="img" aria-labelledby="demoActionTitle demoActionDesc">
+            <title id="demoActionTitle">同一条记录处理前后的字段变化</title>
+            <desc id="demoActionDesc">处理前是一条只有零散文本的记录 R-07，经过四步处理后得到同一编号 R-07 的四个已核对字段与出处。前后使用同一记录编号，表示这是同一条记录的变化，不是两条记录。</desc>
+            <defs>
+              <marker id="demoArrowSix" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+            <g data-node="demo-before">
+              <rect x="28" y="48" width="300" height="164" rx="14" class="s-box"/>
+              <text x="44" y="76" class="s-label">处理前 · R-07</text>
+              <text x="44" y="104" class="s-small">原文：一整段聊天文本</text>
+              <text x="44" y="128" class="s-small">提问人 未标注</text>
+              <text x="44" y="152" class="s-small">时间 未换算时区</text>
+              <text x="44" y="176" class="s-small">结论 混在多楼回复里</text>
+            </g>
+            <g data-node="demo-transform">
+              <rect x="392" y="88" width="200" height="84" rx="13" class="s-box blue"/>
+              <text x="408" y="116" class="s-label">四步处理</text>
+              <text x="408" y="142" class="s-small">采集 · 清洗 · 统一 · 发布</text>
+            </g>
+            <g data-node="demo-after">
+              <rect x="652" y="48" width="300" height="164" rx="14" class="s-box green"/>
+              <text x="668" y="76" class="s-label">处理后 · R-07</text>
+              <text x="668" y="104" class="s-small">提问人 已补齐</text>
+              <text x="668" y="128" class="s-small">时间 已换算时区</text>
+              <text x="668" y="152" class="s-small">主题 取自原始提问</text>
+              <text x="668" y="176" class="s-small">结论 附出处链接</text>
+            </g>
+            <path data-link="demo-before-to-transform" data-from="demo-before" data-to="demo-transform" d="M328 130H392" class="s-line" marker-end="url(#demoArrowSix)"/>
+            <path data-link="demo-transform-to-after" data-from="demo-transform" data-to="demo-after" d="M592 130H652" class="s-line" marker-end="url(#demoArrowSix)"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>执行动作的产物要能看出具体变化。</strong>前后共用编号 R-07，说明是同一条记录；每个字段的变化都可核对，而不是只写“已清洗”。记录内容与字段均为虚构示例。</figcaption>
+      </div>
+    </figure>
+    <div class="takeaway"><span class="takeaway-label">可直接复用的写法</span><p>判断项画“看见什么缺口 → 为什么选这个动作”，执行项画“拿到什么输入 → 改了什么 → 留下什么产物”。<strong>编号卡、图标和纯文字矩阵不能替代这两类图。</strong></p></div>
+  </section>
+
+  <footer class="footer"><p class="small">data-storytelling 输出示例 · 内容全部虚构，仅用于说明图文排版方式 · 生成日期 2026-11-16</p></footer>
+</div>
+
+</body>
+</html>

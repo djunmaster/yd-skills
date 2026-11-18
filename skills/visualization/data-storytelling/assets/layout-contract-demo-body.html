@@ -1,0 +1,72 @@
+<main class="wrap">
+  <section class="story-section">
+    <div class="section-head">
+      <div class="section-title-wrap">
+        <h2 class="section-title">严格布局契约示例：先留净距，再画连线</h2>
+      </div>
+      <div class="case-index">LAYOUT V1</div>
+    </div>
+    <p class="leadline">这张示例图把节点、文字、连线和标签都标记为可检查对象。生成后由浏览器读取真实几何，验证间距、内边距、连线绕行和交叉关系。</p>
+    <figure class="viz" data-layout-contract="v1" data-visual-id="layout-contract-demo" data-visual-title="AI 预标注与专家双盲复核" data-visual-type="角色协作示意图" data-visual-relation="AI 先生成候选标签，两名专家独立复核，第三方只处理分歧" data-visual-source="data-storytelling 布局契约示例">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 1100 520" role="img" aria-labelledby="layoutDemoTitle layoutDemoDesc" data-min-node-gap="16" data-text-padding="8" data-link-node-clearance="6" data-link-text-clearance="4" data-link-gap="8" data-attach-tolerance="18" data-safe-margin="24">
+            <title id="layoutDemoTitle">AI 预标注与专家双盲复核的精确布局</title>
+            <desc id="layoutDemoDesc">左侧为现场样本，AI 生成预标注，两名专家独立复核，第三方仲裁处理分歧。连线走独立通道，标签放在空白标注带。</desc>
+            <defs>
+              <marker id="layoutDemoArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+
+            <text x="44" y="58" class="s-subtitle">双盲复核</text>
+            <text x="1056" y="58" class="s-subtitle" text-anchor="end">只裁分歧</text>
+
+            <g data-node="source">
+              <rect x="44" y="220" width="205" height="120" rx="16" class="s-box"/>
+              <text x="64" y="252" class="s-label">非标现场样本</text>
+              <text x="64" y="280" class="s-small">多型号 · 故障分散</text>
+              <text x="64" y="305" class="s-small">长尾样本稀缺</text>
+            </g>
+
+            <g data-node="prelabel">
+              <rect x="310" y="220" width="210" height="120" rx="16" class="s-box blue"/>
+              <text x="330" y="252" class="s-label">AI 预标注</text>
+              <text x="330" y="280" class="s-small">生成候选框与标签</text>
+              <text x="330" y="305" class="s-small">不决定最终结果</text>
+            </g>
+
+            <g data-node="expert-a">
+              <rect x="590" y="105" width="220" height="98" rx="16" class="s-box"/>
+              <text x="610" y="137" class="s-label">专家 A</text>
+              <text x="610" y="165" class="s-small">独立复核 · 保留依据</text>
+            </g>
+
+            <g data-node="expert-b">
+              <rect x="590" y="340" width="220" height="98" rx="16" class="s-box"/>
+              <text x="610" y="372" class="s-label">专家 B</text>
+              <text x="610" y="400" class="s-small">不可见 A 的结论</text>
+            </g>
+
+            <g data-node="arbiter">
+              <rect x="880" y="210" width="180" height="130" rx="16" class="s-box green"/>
+              <text x="900" y="244" class="s-label">第三方仲裁</text>
+              <text x="900" y="272" class="s-small">只处理分歧</text>
+              <text x="900" y="297" class="s-small">分歧回流规范</text>
+            </g>
+
+            <path d="M249 280 H310" class="s-line" data-link="l1" data-from="source" data-to="prelabel" marker-end="url(#layoutDemoArrow)"/>
+            <path d="M520 260 H555 V154 H590" class="s-line" data-link="l2" data-from="prelabel" data-to="expert-a" marker-end="url(#layoutDemoArrow)"/>
+            <path d="M520 300 H555 V389 H590" class="s-line" data-link="l3" data-from="prelabel" data-to="expert-b" marker-end="url(#layoutDemoArrow)"/>
+            <path d="M810 154 H845 V235 H880" class="s-line" data-link="l4" data-from="expert-a" data-to="arbiter" marker-end="url(#layoutDemoArrow)"/>
+            <path d="M810 389 H845 V315 H880" class="s-line" data-link="l5" data-from="expert-b" data-to="arbiter" marker-end="url(#layoutDemoArrow)"/>
+
+            <text x="279" y="200" text-anchor="middle" class="s-tiny" data-link-label="l1-label" data-for="l1">候选标注</text>
+            <text x="562" y="280" class="s-tiny" data-link-label="l2-label" data-for="l2">独立复核</text>
+          </svg>
+        </div>
+        <figcaption class="viz-caption" style="margin-top:14px">布局先锁定节点网格与连线通道，再做美术细节。机器检查确认：节点不重叠、文字有内边距、标签不压线、连线不穿框且不交叉。</figcaption>
+      </div>
+    </figure>
+  </section>
+</main>

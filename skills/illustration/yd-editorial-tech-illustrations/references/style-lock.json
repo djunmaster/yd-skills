@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0-rc.2",
+  "status": "candidate_visual_repeatability_observed_manual_review_required",
+  "model": "sub2api-4/gpt-image-2.5-sunburst",
+  "size": "2560x1600",
+  "quality": "high",
+  "default_layout": "editorial",
+  "max_nodes": 12,
+  "reference_sha256": {
+    "references/style-anchor.png": "12a95d6ab25024912cf56f6e92b6ecbe472d217a3a3337af02bd63207435132c",
+    "references/layout-chapters.png": "bed29d5d5ce4b836988cf8ab64ac04147cd7e35de9897b639164c66d641a1d53",
+    "references/layout-lanes.png": "6d181bbd693ce1982a0aa130d2e947bc915213d4f3a2f2c674ad7068356784f9",
+    "assets/logos/openai.png": "5ebaa3d0662c551bfb70b224208eb88a5ee12be4e2f7a0f8c0f6ce3be1330609",
+    "assets/logos/qdrant.png": "926a9309ace792f5ad4013a4f7c4b09f32b89ec672281dac928e84e883b25868"
+  },
+  "palette": {
+    "background": "#F5F2EC",
+    "ink": "#171717",
+    "primary": "#29277B",
+    "secondary": "#777FC3",
+    "accent": "#D7704E",
+    "divider": "#D9D5D0"
+  },
+  "typography": {
+    "family_appearance": "modern grotesk sans-serif; clear Simplified Chinese sans-serif",
+    "main_title": "regular to medium, approximately 132-160 px at the default canvas, adjusted for title length",
+    "section_title": "medium, approximately 44-56 px",
+    "node_title": "medium, approximately 34-42 px",
+    "body": "regular, approximately 26-32 px",
+    "footer": "regular, approximately 22-26 px",
+    "small_english": "quiet monospace"
+  },
+  "layouts": {
+    "editorial": {
+      "extra_reference": null,
+      "instructions": "Keep the fixed two-column master: about 3% exterior margins, 25% left text column, 3% gutter and 66% right explanatory area. Use a fine vertical separator. The left contains a large, regular-to-medium title, a concise summary and exactly one takeaway. The right holds the content in declared section order. A process can wrap with a visible continuation arrow. Do not put an enormous full-width title above this layout. Keep the same visual frame across topics; node count and flow direction adapt to the actual content."
+    },
+    "chapters": {
+      "extra_reference": "references/layout-chapters.png",
+      "instructions": "Use the chapter master: a full-width heading followed by spacious horizontal chapter bands separated by fine rules. Within each band put a large section number, heading and explanation on the left, and its technical relations on the right. Connect cross-section flows explicitly. Use the actual declared number of sections; do not add a fake third stage. Preserve the shared palette and lighter typography."
+    },
+    "lanes": {
+      "extra_reference": "references/layout-lanes.png",
+      "instructions": "Use the lane master: compact full-width title above clearly named horizontal lanes. Each lane represents an actual actor or execution phase. Keep node titles and short descriptions visible; use fine routed arrows between lanes. Feedback must identify its actor and action. Do not assume every topic has offline and online stages. Preserve the shared palette and lighter typography."
+    }
+  }
+}
