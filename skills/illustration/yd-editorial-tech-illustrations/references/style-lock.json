@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-rc.2",
+  "version": "1.1.0-rc.1",
   "status": "candidate_visual_repeatability_observed_manual_review_required",
   "model": "sub2api-4/gpt-image-2.5-sunburst",
   "size": "2560x1600",
@@ -19,7 +19,10 @@
     "primary": "#29277B",
     "secondary": "#777FC3",
     "accent": "#D7704E",
-    "divider": "#D9D5D0"
+    "accent_soft": "#E8A183",
+    "success": "#5C7A4E",
+    "divider": "#D9D5D0",
+    "surface": "#EFEBE3"
   },
   "typography": {
     "family_appearance": "modern grotesk sans-serif; clear Simplified Chinese sans-serif",
@@ -28,20 +31,52 @@
     "node_title": "medium, approximately 34-42 px",
     "body": "regular, approximately 26-32 px",
     "footer": "regular, approximately 22-26 px",
-    "small_english": "quiet monospace"
+    "small_english": "quiet monospace",
+    "caption_contrast": "supporting captions are ink at 70-80% opacity, never light gray on ivory"
+  },
+  "spacing": {
+    "exterior_margin_pct": 4,
+    "section_gap_px": 110,
+    "node_gap_px": 72,
+    "connector_corridor_px": 84,
+    "left_column_pct": 25,
+    "gutter_pct": 3,
+    "caption_max_width_pct": 62
+  },
+  "connection_line_craft": {
+    "stroke_weight": "visible but light, consistent across the whole image",
+    "corner_style": "soft right-angle or one-curve elbows, no long unchecked diagonals",
+    "label_care": "edge labels sit in reserved gaps beside the line, never overlapping strokes or node text",
+    "arrowhead": "single, small, filled, exactly at the destination edge"
+  },
+  "microtexture": {
+    "rule": "optional quiet paper grain at 2-4% strength, no dot grids, no halftone"
+  },
+  "copy_rules": {
+    "eyebrow_length": "8-14 Chinese characters or a short English/Chinese label",
+    "headline_length": "10-16 Chinese characters; a full sentence reads better than a fragment",
+    "summary_length": "one clause; it should add information, not repeat the headline",
+    "takeaway_rule": "one sentence, factual; no imperative slogans, no exclamation marks",
+    "node_title_length": "2-6 Chinese characters",
+    "caption_length": "6-16 Chinese characters; write the concrete thing, not a category name",
+    "qualifier_use": "only when the section has a real trigger condition; otherwise omit",
+    "footer_length": "one or two sentences, state scope or evidence limits"
+  },
+  "visual_quote_weights": {
+    "rule": "In any layout, at most one shape or number is set in clay orange; indigo carries structure, periwinkle supports, orange only highlights the single declared key evidence, decision or transfer. Success/error states may use the quiet green/gray-brown tones above; orange is not a status color."
   },
   "layouts": {
     "editorial": {
       "extra_reference": null,
-      "instructions": "Keep the fixed two-column master: about 3% exterior margins, 25% left text column, 3% gutter and 66% right explanatory area. Use a fine vertical separator. The left contains a large, regular-to-medium title, a concise summary and exactly one takeaway. The right holds the content in declared section order. A process can wrap with a visible continuation arrow. Do not put an enormous full-width title above this layout. Keep the same visual frame across topics; node count and flow direction adapt to the actual content."
+      "instructions": "Keep the fixed two-column master: about 4% exterior margins, 25% left text column, 3% gutter and 66% right explanatory area. Use a fine vertical separator. The left contains an eyebrow label above a large regular-to-medium title, a concise one-clause summary and exactly one takeaway line. The right holds the content in declared section order with section titles, an optional qualifier and one short explanation each. A process can wrap with a visible continuation arrow. Do not put an enormous full-width title above this layout. Keep the same visual frame across topics; node count and flow direction adapt to the actual content."
     },
     "chapters": {
       "extra_reference": "references/layout-chapters.png",
-      "instructions": "Use the chapter master: a full-width heading followed by spacious horizontal chapter bands separated by fine rules. Within each band put a large section number, heading and explanation on the left, and its technical relations on the right. Connect cross-section flows explicitly. Use the actual declared number of sections; do not add a fake third stage. Preserve the shared palette and lighter typography."
+      "instructions": "Use the chapter master: a compact full-width heading, then spacious horizontal chapter bands separated by fine rules at the fixed section gap. Within each band put a large section number, heading, optional qualifier and one-sentence explanation on the left, and its technical relations on the right. Keep chapter headings at medium weight, never poster-black. Connect cross-section flows explicitly through reserved corridors. Use the actual declared number of sections; do not add a fake stage. Preserve the shared palette and lighter typography."
     },
     "lanes": {
       "extra_reference": "references/layout-lanes.png",
-      "instructions": "Use the lane master: compact full-width title above clearly named horizontal lanes. Each lane represents an actual actor or execution phase. Keep node titles and short descriptions visible; use fine routed arrows between lanes. Feedback must identify its actor and action. Do not assume every topic has offline and online stages. Preserve the shared palette and lighter typography."
+      "instructions": "Use the lane master: a compact full-width title above clearly named horizontal lanes. Each lane represents an actual actor or execution phase with a quiet lane label. Keep node titles and short descriptions visible; route arrows between lanes through the reserved corridors, keeping feedback lines separate from forward flow and labeled with their actor and action. Do not assume every topic has offline and online stages. Preserve the shared palette and lighter typography."
     }
   }
 }

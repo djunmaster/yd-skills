@@ -15,6 +15,27 @@ def validate_content(content, max_nodes):
             raise ValueError(f"Missing content field: {field_name}")
     if "connections" not in content:
         raise ValueError("Missing content field: connections")
+
+    def char_count(value):
+        return len(value) if isinstance(value, str) else 0
+
+    headline = content.get("headline", "")
+    if char_count(headline) > 18:
+        raise ValueError(f"Headline too long ({char_count(headline)} chars, max 18): keep one short sentence")
+    summary = content.get("summary", "")
+    if char_count(summary) > 32 or summary.strip().rstrip("。.!！") == headline.strip().rstrip("。.!！"):
+        raise ValueError("Summary must be one clause (<=32 chars) that adds information, not a repeat of the headline")
+    takeaway = content.get("takeaway", "")
+    if char_count(takeaway) > 36 or any(mark in takeaway for mark in ("!", "！", "，不要", "记住")):
+        raise ValueError("Takeaway must be one factual sentence (<=36 chars), no imperative slogans or exclamation marks")
+    for section in content["sections"]:
+        qualifier = section.get("qualifier", "")
+        if qualifier and isinstance(qualifier, str) and not qualifier.endswith(("时", "后", "前", "时，", "后，", "前，")):
+            raise ValueError(f"Qualifier should state a real trigger condition (usually ending with 时/后/前): {qualifier!r}")
+        explanation = section.get("explanation", "")
+        if char_count(explanation) > 48:
+            raise ValueError(f"Section explanation too long ({char_count(explanation)} chars, max 48): {section.get('id', '?')}")
+
     nodes = [node for section in content["sections"] for node in section["nodes"]]
     node_ids = [node["id"] for node in nodes]
     if not nodes or len(nodes) > max_nodes:
@@ -24,6 +45,15 @@ def validate_content(content, max_nodes):
     for node in nodes:
         if not node.get("title") or "caption" not in node:
             raise ValueError(f"Node requires a title and caption: {node['id']}")
+        title = node["title"]
+        caption = node.get("caption", "")
+        if not (2 <= char_count(title) <= 8):
+            raise ValueError(f"Node title should be 2-8 Chinese characters: {node['id']} {title!r}")
+        if not (4 <= char_count(caption) <= 24):
+            raise ValueError(f"Node caption should be 6-16 Chinese characters of concrete detail: {node['id']} {caption!r}")
+    accent_count = sum(1 for connection in content["connections"] if connection.get("kind") == "accent")
+    if accent_count > 1:
+        raise ValueError("At most one connection may use kind=accent (single clay-orange highlight per image)")
     for connection in content["connections"]:
         for endpoint in ("from", "to"):
             if connection[endpoint] not in node_ids:
@@ -62,6 +92,9 @@ def build_request(skill_root, content, layout_name, image_path):
         f"STYLE VERSION: {style['version']}",
         "FIXED PALETTE: " + json.dumps(style["palette"], ensure_ascii=False),
         "FIXED TYPE HIERARCHY: " + json.dumps(style["typography"], ensure_ascii=False),
+        "FIXED SPACING: " + json.dumps(style.get("spacing", {}), ensure_ascii=False),
+        "CONNECTOR LINE CRAFT: " + json.dumps(style.get("connection_line_craft", {}), ensure_ascii=False),
+        "COLOR WEIGHT RULE: " + json.dumps(style.get("visual_quote_weights", {}), ensure_ascii=False),
         f"SELECTED LAYOUT: {layout_name}\n{layout['instructions']}",
         "REFERENCE ROLES:\n" + "\n".join(reference_roles),
         "CURRENT CONTENT PLAN (render strings accurately; graph IDs are only instructions):\n"

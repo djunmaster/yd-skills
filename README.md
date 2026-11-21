@@ -1,6 +1,6 @@
 # yd-skills
 
-八种面向内容表达、知识沉淀与界面设计的 Skill：**把专业知识讲明白、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成图文讲解页、把网页好文深度归档到个人知识库、把界面需求变成可复用且符合个人偏好的设计。**
+八种面向内容表达、知识沉淀与界面设计的 Skill：**把专业知识讲明白、把技术流程梳理完整、把文章主题做成封面、把一段内容整理成逻辑连贯、图文编号联动的可视化讲解页、把网页好文深度归档到个人知识库、把界面需求变成可复用且符合个人偏好的设计。**
 
 [作品集](#作品集) · [怎么调用](#怎么调用) · [技能说明](#技能说明)
 
@@ -27,7 +27,7 @@
 
 ### 编辑式技术图解
 
-把技术内容按角色、阶段和关系排成阅读路径。杂志式适合概念说明，章节式适合教程，泳道式适合多角色协作。
+把技术内容按角色、阶段和关系排成阅读路径。杂志式适合概念说明，章节式适合教程，泳道式适合多角色协作。间距、连线线宽与文案长度都有固定契约：连线统一线宽、单终点箭头，陶土橙只给每图唯一的关键强调，标题保持中字重不做海报式加粗。
 
 <p align="center">
   <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/agent-tool-call-lanes.png" alt="用户、Agent 与工具之间的一次工具调用泳道图" width="100%" />
@@ -72,24 +72,42 @@
 
 ### 图文叙事整理
 
-把一段文字、一份记录或一场分享的转写，整理成“图 + 文”的讲解结构：一句主结论、一张主线总览、每个独立关系单独一张 SVG、逐项配图的判断表与执行清单。只需说“帮我整理这段内容”。
+把一段文字、一份记录或一场分享的转写，整理成逻辑连贯的可视化讲解页：先立一条 `1 → N` 的因果主线和章与章之间的承上启下，再把每个核心机制画成**具象的可视化 SVG 画面**——而不是"几个方框 + 箭头"的流程框线图。画面里的 `1–6` 号圆形锚点与图下 `1、2、3、4、5、6` 的分点逻辑说明一一联动。只需说"帮我整理这段内容"。
+
+<p align="center">
+  <img src="skills/visualization/data-storytelling/examples/showcase/roadmap-hero.png" alt="标题下方排列 1、2、3 号可点击逻辑路标，每张写清本章推进问题" width="100%" />
+</p>
+<p align="center"><strong>整页逻辑路标</strong> — 先交代因果主线，再进章节；章与章之间有承接引子和收束过渡。</p>
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <img src="skills/visualization/data-storytelling/examples/showcase/fig-pipeline.png" alt="两个渠道的记录汇入采集，依次经过清洗、口径统一、发布的主线图" width="100%" />
-      <p><strong>主线总览</strong> · 一张图只回答“主线是什么”</p>
+      <img src="skills/visualization/data-storytelling/examples/showcase/interface-workbench.png" alt="带头像气泡的聊天窗口经抽取通道变成带引用编号的知识卡" width="100%" />
+      <p><strong>可视化界面</strong> · 抹掉文字也认得出"聊天窗口 → 知识卡"</p>
     </td>
     <td width="50%" valign="top">
-      <img src="skills/visualization/data-storytelling/examples/showcase/fig-quality-gate.png" alt="质量门把记录分成进入候选池与退回补录两条去向" width="100%" />
-      <p><strong>分叉判断</strong> · 两条箭头指向两个去向，图注写明边界</p>
+      <img src="skills/visualization/data-storytelling/examples/showcase/double-blind-booth.png" alt="橙色斜纹隔断墙分开两个专家工位，印章冲突导向仲裁规范书" width="100%" />
+      <p><strong>视觉隐喻</strong> · 双盲复核画成一道物理隔断墙</p>
     </td>
   </tr>
 </table>
 
-图按“一个关系一张”拆分，交付前逐图做几何审计（节点间距、连线落点、标签避让、最小字号）和整页覆盖核对。示例页中的团队、渠道与数值均为虚构，只用于说明排版方式。
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="skills/visualization/data-storytelling/examples/showcase/privacy-before-after.png" alt="原始报告经光学滤镜变成斜纹遮蔽条，考卷库带挂锁并与训练池隔离" width="100%" />
+      <p><strong>前后分屏</strong> · 脱敏 = 斜纹遮蔽条，隔离 = 红色防火墙</p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="skills/visualization/data-storytelling/examples/showcase/numbered-points.png" alt="编号圆章加逻辑脊线的 1 到 6 分点说明列表" width="100%" />
+      <p><strong>编号分点</strong> · 图内锚点与图外 1–6 分点一一对应</p>
+    </td>
+  </tr>
+</table>
 
-[Skill 说明](skills/visualization/data-storytelling/SKILL.md) · [深色示例页](skills/visualization/data-storytelling/examples/demo-dark.html) · [浅色示例页](skills/visualization/data-storytelling/examples/demo-light.html)
+每张图必须通过"去字可辨检验"：把文字全部抹掉后，读者仍能认出画面是聊天窗口、双盲工位还是脱敏分屏。交付前逐图做几何审计（节点间距、连线落点、标签避让、最小字号），并核对图内锚点与图外分点编号同步。示例页中的对话、工单与记录均为虚构，只用于说明排版方式。
+
+[Skill 说明](skills/visualization/data-storytelling/SKILL.md) · [新版可视化示例页](skills/visualization/data-storytelling/examples/visual-story-demo.html) · [多案例示例页](skills/visualization/data-storytelling/examples/demo-dark.html) · [浅色示例页](skills/visualization/data-storytelling/examples/demo-light.html)
 
 ### 知识库深度归档
 
