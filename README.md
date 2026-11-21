@@ -8,7 +8,7 @@
 
 ### 清晰文章配图
 
-用一页图讲清一个知识点。白底、手绘黑线和少量橙蓝强调，让步骤与重点容易扫读。
+用一页图讲清一个知识点。微暖白纸底、炭黑粗笔手绘和橙蓝双色强调，让步骤与重点容易扫读。色值是固化锁定的：橙 `#F06A28` 只表示动作、疑问与流程方向，蓝 `#2563EB` 只表示资料、依据与校验对勾，两者含义不互换；横向流程最多 4 步，超出改为 2×2 折行或拆图。人物为纯黑白粗笔特征人物，不上肤色与彩发，也不画光头火柴人。
 
 <table>
   <tr>
@@ -29,31 +29,55 @@
 
 把技术内容按角色、阶段和关系排成阅读路径。杂志式适合概念说明，章节式适合教程，泳道式适合多角色协作。间距、连线线宽与文案长度都有固定契约：连线统一线宽、单终点箭头，陶土橙只给每图唯一的关键强调，标题保持中字重不做海报式加粗。
 
+v1.2.1 把约束收得更紧：节点从最多 12 个收紧到 **8 个**（理想 5–7 个），全图总字数上限 **180 字**，节点说明压到 6–16 字，避免窄栏折行叠字。视觉上改用**三级卡片色阶**——阶段标签用实心深靛蓝胶囊，普通节点暖灰 `#EFEBE3`，1–2 个核心引擎或判断节点用浅紫蓝 `#E6E9F8`，命中/成功捷径可用淡鼠尾草绿 `#EDF2EA`，并给关键节点配定制几何微图示替代千篇一律的小圆点。反馈与重试虚线一律走画布外围走廊，不与主流程实线交叉。`prepare_prompt.py` 会强制校验上述长度与字数上限，超限直接拒绝，并导出逐字核对的验收清单。
+
 <p align="center">
-  <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/agent-tool-call-lanes.png" alt="用户、Agent 与工具之间的一次工具调用泳道图" width="100%" />
+  <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/agent-tool-call-lanes.png" alt="用户、Agent 与工具三条泳道之间的一次工具调用往返" width="100%" />
 </p>
-<p align="center"><strong>泳道式 · Agent 工具调用</strong> — 用户提出任务，Agent 调用工具并检查返回结果。</p>
+<p align="center"><strong>泳道式 · 一次工具调用的完整路径</strong> — 用户提出任务，Agent 选择并调用工具；工具返回结果后，Agent 检查再答复。陶土橙只标出「返回结果」这一处跨泳道回流。</p>
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/article-chapters.png" alt="分章节呈现的技术文章生产流程" width="100%" />
-      <p><strong>章节式 · 技术文章生产流程</strong></p>
+      <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/article-chapters.png" alt="分三个章节呈现的技术文章生产流程" width="100%" />
+      <p><strong>章节式 · 技术文章生产流程</strong> · 选题 → 写作配图 → 校对发布</p>
     </td>
     <td width="50%" valign="top">
-      <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/learning-editorial.png" alt="杂志式呈现的主动回忆与间隔复习流程" width="100%" />
-      <p><strong>杂志式 · 主动回忆与间隔复习</strong></p>
+      <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/learning-editorial.png" alt="杂志式呈现的理解、闭卷回忆与间隔复习流程" width="100%" />
+      <p><strong>杂志式 · 主动回忆与间隔复习</strong> · 虚线走画布外围走廊，不与主流程交叉</p>
     </td>
   </tr>
 </table>
 
-流程图中的文字、箭头起点与方向需要逐图检查；分支和跨区关系尤其要核对。更多实测边界见[验证记录](skills/illustration/yd-editorial-tech-illustrations/references/validation.md)。
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="skills/illustration/yd-editorial-tech-illustrations/assets/showcase/rag-editorial.png" alt="RAG 资料入库与在线问答两段流程，核心引擎节点用浅紫蓝、索引节点用淡绿" width="100%" />
+      <p><strong>杂志式 · RAG 有据回答</strong> · 三级卡片色阶：暖灰 / 浅紫蓝引擎 / 淡绿索引</p>
+    </td>
+    <td width="50%" valign="top">
+      <p>这四张都是 v1.2.1 规则下的实际成图，可直接对照检查三级色阶是否成立：</p>
+      <ul>
+        <li><strong>阶段标签</strong>为实心深靛蓝胶囊，白字，不做宽横幅。</li>
+        <li><strong>普通节点</strong>暖灰 <code>#EFEBE3</code>，1px 细描边。</li>
+        <li><strong>核心引擎/判断节点</strong>浅紫蓝 <code>#E6E9F8</code>，每图只 1–2 个。</li>
+        <li><strong>命中/落地节点</strong>淡鼠尾草绿 <code>#EDF2EA</code>。</li>
+        <li><strong>陶土橙</strong>每图仅一处，且必是声明的那条关键关系。</li>
+      </ul>
+      <p>反馈与重试虚线一律走画布外围走廊，严禁与主流程实线交叉。节点控制在 8 个以内、全图文字不超过 180 字。</p>
+    </td>
+  </tr>
+</table>
+
+流程图中的文字、箭头起点与方向需要逐图检查；分支和跨区关系尤其要核对。这四张图在生成过程中分别暴露过不同问题：跨行长连线落点偏移、同泳道被误连、强调色方向画反、以及强调色节点底色错涂——它们都已逐项修正，但同类问题在别的主题上仍可能复现。更多实测边界见[验证记录](skills/illustration/yd-editorial-tech-illustrations/references/validation.md)。
 
 [Skill 说明](skills/illustration/yd-editorial-tech-illustrations/SKILL.md)
 
 ### 纸感艺术封面
 
 把文章主题或正文直接变成有书刊气质的封面。只需提供文字内容；自动提炼标题与主图，并始终延续同一套暖纸、深蓝、朱红和书刊式视觉语言。
+
+v1.2.0 起封面与正文内页分成两档底色：封面保留暖米纸 `#F0DFC1`，正文内页改用浅一档的 `#F6EFE2`，嵌进白底文章时不显沉闷。两者之间固定引入海蓝灰 `#6B7F93` 承担等距网格、次级轮廓与分隔线，朱红 `#CB4D30` 仍是全图唯一焦点。字体做出版级混排：主标题与章节编号用宋体/明朝体保住书卷气，副标题与底句用中细无衬线黑体，保证手机端小字锐利。构图按画面类型分三路锚点，不再把所有画面绑死在"左侧 1/3 深蓝竖条"上。
 
 <table>
   <tr>
@@ -170,6 +194,8 @@
 
 启用技能后，在文章封面、配图、内容整理或专业内容改写任务中只需提供主题或正文。每个 Skill 默认沿用自己的固定视觉风格，并根据内容选择构图；技术图解固定使用暖白底、炭黑文字、靛蓝主色、灰蓝紫辅助与少量陶土橙；图文叙事默认输出深色技术讲解页，需要浅色分享页时说一句即可。无需重复描述画风、配色或布局。也可用 `$skill-name` 显式指定 Skill。以下展示纯文字输入示例。
 
+三套配图 Skill 的选型可以这样记：抽象隐喻与专栏封面走 `yd-editorial-art-illustrations`；正文概念速懂与前后对比走 `yd-clear-article-illustrations`；系统架构、多阶段工作流走 `yd-editorial-tech-illustrations`。三者共用"暖白纸底 + 冷色结构 + 暖橙红单点强调"的视觉基因，同一篇长文里混排不违和。
+
 **讲清一个知识点**
 
 ```text
@@ -229,11 +255,11 @@ Agent 工作台用稳定三列，左侧导航窄一点，中央消息区最大�
 
 ## 技能说明
 
-| Skill | 适合展示的效果 | 详细说明 |
-| --- | --- | --- |
-| `yd-clear-article-illustrations` | 白底手绘知识图解 | [SKILL.md](skills/illustration/yd-clear-article-illustrations/SKILL.md) |
-| `yd-editorial-tech-illustrations` | 杂志式、章节式与泳道式技术图解 | [SKILL.md](skills/illustration/yd-editorial-tech-illustrations/SKILL.md) |
-| `yd-editorial-art-illustrations` | 纸感文章封面与正文插画 | [SKILL.md](skills/illustration/yd-editorial-art-illustrations/SKILL.md) |
+| Skill | 适合展示的效果 | 版本 | 详细说明 |
+| --- | --- | --- | --- |
+| `yd-clear-article-illustrations` | 微暖白底手绘知识图解 | v1.2.0 | [SKILL.md](skills/illustration/yd-clear-article-illustrations/SKILL.md) |
+| `yd-editorial-tech-illustrations` | 杂志式、章节式与泳道式技术图解 | v1.2.1 | [SKILL.md](skills/illustration/yd-editorial-tech-illustrations/SKILL.md) |
+| `yd-editorial-art-illustrations` | 纸感文章封面与正文插画 | v1.2.0 | [SKILL.md](skills/illustration/yd-editorial-art-illustrations/SKILL.md) |
 | `data-storytelling` | 图文一体的深色/浅色讲解页 | [SKILL.md](skills/visualization/data-storytelling/SKILL.md) |
 | `knowledge-base-archiver` | 网页好文去噪翻译并归档到个人知识库 | [SKILL.md](skills/knowledge/knowledge-base-archiver/SKILL.md) |
 | `reader-first-clarity` | 专业内容的通俗改写、术语解释与逻辑审查 | [SKILL.md](skills/writing/reader-first-clarity/SKILL.md) |

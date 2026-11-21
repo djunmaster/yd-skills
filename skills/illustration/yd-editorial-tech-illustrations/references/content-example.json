@@ -1,33 +1,29 @@
 {
-  "eyebrow": "FIELD NOTES / RAG",
-  "headline": "把资料，变成有据可查的回答。",
-  "summary": "先检索相关证据，再组织回答。",
-  "takeaway": "筛选后的上下文决定回答的依据质量。",
+  "eyebrow": "RAG NOTES",
+  "headline": "把资料，变成有据可查的回答",
+  "summary": "先检索，再组织回答",
+  "takeaway": "回答依据取决于筛选后的上下文",
   "sections": [
     {
       "id": "ingest",
       "title": "资料入库",
-      "qualifier": "内容更新时",
-      "explanation": "保留来源与权限，建立可检索索引。",
+      "explanation": "保留来源与权限",
       "nodes": [
-        {"id": "source", "title": "资料来源", "caption": "PDF · 网页 · Markdown"},
-        {"id": "chunks", "title": "解析与切块", "caption": "保留来源与权限"},
-        {"id": "embedding", "title": "文本向量化", "caption": "文本转成向量", "tool": "OpenAI"},
-        {"id": "index", "title": "向量索引", "caption": "向量与原文共存", "tool": "Qdrant"}
+        {"id": "source", "title": "资料来源", "caption": "PDF 网页"},
+        {"id": "chunks", "title": "解析切块", "caption": "保留权限"},
+        {"id": "embedding", "title": "向量化", "caption": "OpenAI 嵌入", "tool": "OpenAI"},
+        {"id": "index", "title": "向量索引", "caption": "Qdrant 存储", "tool": "Qdrant"}
       ]
     },
     {
       "id": "answer",
       "title": "在线问答",
-      "qualifier": "每次提问时",
-      "explanation": "权限内查片段，组装上下文作答。",
+      "explanation": "权限内检索作答",
       "nodes": [
-        {"id": "question", "title": "用户问题", "caption": "自然语言输入"},
-        {"id": "query", "title": "问题向量化", "caption": "与文档同一模型", "tool": "OpenAI"},
-        {"id": "retrieve", "title": "检索与重排", "caption": "权限过滤 · Top-k"},
-        {"id": "context", "title": "上下文组装", "caption": "问题加相关片段"},
-        {"id": "generate", "title": "基于证据生成", "caption": "据上下文组织回答", "tool": "OpenAI"},
-        {"id": "result", "title": "答案与引用", "caption": "证据不足时说明"}
+        {"id": "question", "title": "用户问题", "caption": "自然语言"},
+        {"id": "retrieve", "title": "检索重排", "caption": "Top-k 过滤"},
+        {"id": "generate", "title": "证据生成", "caption": "据上下文作答", "tool": "OpenAI"},
+        {"id": "result", "title": "答案引用", "caption": "证据不足时说明"}
       ]
     }
   ],
@@ -35,14 +31,12 @@
     {"from": "source", "to": "chunks", "kind": "main"},
     {"from": "chunks", "to": "embedding", "kind": "main"},
     {"from": "embedding", "to": "index", "kind": "main"},
-    {"from": "question", "to": "query", "kind": "main"},
-    {"from": "query", "to": "retrieve", "kind": "main"},
+    {"from": "question", "to": "retrieve", "kind": "main"},
     {"from": "index", "to": "retrieve", "kind": "accent", "label": "相关片段"},
-    {"from": "retrieve", "to": "context", "kind": "main"},
-    {"from": "context", "to": "generate", "kind": "main"},
+    {"from": "retrieve", "to": "generate", "kind": "main"},
     {"from": "generate", "to": "result", "kind": "main"}
   ],
-  "footer": "人工评估检索命中与引用依据。OpenAI 与 Qdrant 为示例选型。",
+  "footer": "示例选型：OpenAI 与 Qdrant",
   "logo_references": [
     {"name": "OpenAI", "file": "assets/logos/openai.png"},
     {"name": "Qdrant", "file": "assets/logos/qdrant.png"}
