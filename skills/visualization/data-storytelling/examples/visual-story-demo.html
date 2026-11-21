@@ -1,0 +1,2116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>可视化 SVG 界面与编号逻辑示范</title>
+<link rel="icon" href="data:,">
+<style>
+/* Dark technical storytelling. Palette sampled from the supplied reference images. */
+:root {
+  color-scheme: dark;
+  --page-bg: #0f1218;
+  --story-bg: #171c25;
+  --panel-bg: #1d2432;
+  --panel-2: #242c40;
+  --panel-3: #2a3242;
+  --text: #e6eaf1;
+  --muted: #98a3b3;
+  --blue: #7d97f5;
+  --blue-soft: #a3b5f8;
+  --blue-deep: #384367;
+  --green: #51cf66;
+  --orange: #f0955c;
+  --danger: #f28b82;
+  --border: #2a3242;
+  --border-strong: #384367;
+  --stroke-primary: #d9e2f5;
+  --stroke-secondary: #a3b5f8;
+  --radius: 20px;
+  --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--page-bg);
+  scroll-padding-top: 24px;
+}
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  margin: 10px 0;
+}
+
+figure {
+  margin: 0;
+}
+
+strong {
+  color: #f4f7ff;
+  font-weight: 800;
+}
+
+em {
+  color: var(--blue-soft);
+  font-style: normal;
+}
+
+.wrap {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 46px 0 84px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 42px 38px;
+  background: var(--story-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -90px;
+  top: -130px;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(125, 151, 245, 0.13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 54px rgba(125, 151, 245, 0.035),
+    0 0 0 108px rgba(125, 151, 245, 0.018);
+  pointer-events: none;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--blue);
+}
+
+h1 {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 14px 0 12px;
+  font-size: clamp(34px, 5.3vw, 58px);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+
+.deck {
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.72;
+}
+
+.chips {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.chip {
+  padding: 5px 12px;
+  color: var(--blue-soft);
+  background: rgba(125, 151, 245, 0.09);
+  border: 1px solid var(--blue-deep);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a {
+  color: var(--blue-soft);
+  text-underline-offset: 3px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--blue-soft);
+  outline-offset: 4px;
+}
+
+figure:target {
+  outline: 2px solid var(--blue-soft);
+  outline-offset: 4px;
+}
+
+.story-section {
+  margin-top: 24px;
+  padding: 32px 34px 34px;
+  background: var(--story-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 8px;
+}
+
+.section-title-wrap {
+  min-width: 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: clamp(22px, 2.8vw, 30px);
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.section-title::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 30px;
+  background: var(--blue);
+  border-radius: 2px;
+}
+
+.case-index {
+  flex: 0 0 auto;
+  padding-top: 2px;
+  color: var(--blue-deep);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.leadline {
+  max-width: 980px;
+  margin: 6px 0 22px;
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+.leadline strong {
+  color: #f4f7ff;
+  font-weight: 800;
+}
+
+.viz-card {
+  margin: 0;
+  padding: 22px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 16px;
+}
+
+.viz {
+  margin: 20px 0 0;
+}
+
+.viz-card.compact {
+  padding: 16px;
+}
+
+.viz-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-deep) transparent;
+}
+
+.viz-scroll > svg {
+  /* 整图缩到 viewBox 以下会让标称字号一起缩水，因此下限取 max(默认, --viz-min-w)。
+     --viz-min-w 写在 figure.viz 或 .viz-scroll 上，值等于该图 viewBox 宽度。 */
+  min-width: max(820px, var(--viz-min-w, 0px));
+}
+
+.viz-scroll.compact > svg {
+  min-width: max(680px, var(--viz-min-w, 0px));
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font);
+}
+
+svg text {
+  font-family: var(--font);
+}
+
+.s-title {
+  fill: #f4f7ff;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.s-subtitle {
+  fill: #b7c7ff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.s-label {
+  fill: #f4f7ff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.s-small {
+  fill: #b8c3d3;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.s-tiny {
+  fill: #aeb9c9;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.s-emphasis {
+  fill: #f4f7ff;
+  font-weight: 800;
+}
+
+.s-step {
+  fill: #f4f7ff;
+  font-weight: 800;
+}
+
+.s-note {
+  fill: #c7d1e1;
+  font-weight: 600;
+}
+
+.s-caution {
+  fill: #ffb27d;
+  font-weight: 800;
+}
+
+.s-blue {
+  fill: #a3b5f8;
+}
+
+.s-green {
+  fill: #51cf66;
+}
+
+.s-orange {
+  fill: #f0955c;
+}
+
+.s-red {
+  fill: #f28b82;
+}
+
+.s-line {
+  fill: none;
+  stroke: var(--stroke-secondary);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.s-line.thin {
+  stroke-width: 2;
+}
+
+.s-line.dash {
+  stroke-dasharray: 6 7;
+}
+
+.s-line.green {
+  stroke: #51cf66;
+}
+
+.s-line.orange {
+  stroke: #f0955c;
+}
+
+.s-line.red {
+  stroke: #f28b82;
+}
+
+.s-box {
+  fill: #242c40;
+  stroke: #384367;
+  stroke-width: 2;
+}
+
+.s-box.dark {
+  fill: #1d2432;
+}
+
+.s-box.blue {
+  fill: rgba(125, 151, 245, 0.13);
+  stroke: #7d97f5;
+  stroke-width: 2.4;
+}
+
+.s-box.green {
+  fill: rgba(81, 207, 102, 0.08);
+  stroke: #51cf66;
+  stroke-width: 2.4;
+}
+
+.s-box.orange {
+  fill: rgba(240, 149, 92, 0.08);
+  stroke: #f0955c;
+  stroke-width: 2.4;
+}
+
+.s-box.red {
+  fill: rgba(242, 139, 130, 0.08);
+  stroke: #f28b82;
+  stroke-width: 2.4;
+}
+
+.s-dot {
+  fill: #7d97f5;
+}
+
+.s-dot.green {
+  fill: #51cf66;
+}
+
+.s-dot.orange {
+  fill: #f0955c;
+}
+
+.s-dot.red {
+  fill: #f28b82;
+}
+
+/* Visual storytelling & pictorial interface SVG utilities (locked dark palette) */
+.s-stage {
+  fill: #131822;
+  stroke: #2f3a52;
+  stroke-width: 1.5;
+}
+
+.s-chrome {
+  fill: #1a2130;
+  stroke: none;
+}
+
+.s-surface {
+  fill: #21293c;
+  stroke: #384367;
+  stroke-width: 1.8;
+}
+
+.s-surface-hi {
+  fill: rgba(125, 151, 245, 0.11);
+  stroke: #7d97f5;
+  stroke-width: 2.2;
+}
+
+.s-surface-green {
+  fill: rgba(81, 207, 102, 0.09);
+  stroke: #51cf66;
+  stroke-width: 2.2;
+}
+
+.s-surface-orange {
+  fill: rgba(240, 149, 92, 0.09);
+  stroke: #f0955c;
+  stroke-width: 2.2;
+}
+
+.s-surface-red {
+  fill: rgba(242, 139, 130, 0.09);
+  stroke: #f28b82;
+  stroke-width: 2.2;
+}
+
+.s-surface-muted {
+  fill: #181e2b;
+  stroke: #2c3549;
+  stroke-width: 1.5;
+}
+
+.s-leader {
+  fill: none;
+  stroke: #a3b5f8;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.s-leader.green {
+  stroke: #51cf66;
+}
+
+.s-leader.orange {
+  stroke: #f0955c;
+}
+
+.s-leader.red {
+  stroke: #f28b82;
+}
+
+.s-leader.dash {
+  stroke-dasharray: 5 4;
+}
+
+.s-socket {
+  fill: rgba(240, 149, 92, 0.06);
+  stroke: #f0955c;
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+
+.s-censor {
+  fill: rgba(240, 149, 92, 0.22);
+  stroke: #f0955c;
+  stroke-width: 1.5;
+}
+
+.s-loupe {
+  fill: #131822;
+  stroke: #a3b5f8;
+  stroke-width: 2.4;
+}
+
+.s-badge-num {
+  fill: #0f1218;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.s-pill-text {
+  fill: #e6eaf1;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.s-skeleton {
+  fill: #323c54;
+  stroke: none;
+}
+
+.viz-caption {
+  margin: 14px 4px 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.kv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.kv {
+  padding: 15px 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.kv .k {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--blue-soft);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.kv p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.kv strong {
+  color: var(--text);
+}
+
+.takeaway {
+  margin-top: 18px;
+  padding: 15px 18px;
+  background: var(--panel-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 13px;
+}
+
+.takeaway-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.takeaway p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+.takeaway strong {
+  color: #f4f7ff;
+  font-weight: 800;
+}
+
+.note {
+  margin-top: 18px;
+  padding: 15px 18px;
+  color: var(--muted);
+  background: rgba(125, 151, 245, 0.055);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 12px 12px 0;
+  font-size: 14px;
+}
+
+.note strong {
+  color: var(--blue-soft);
+}
+
+.caution {
+  margin-top: 16px;
+  padding: 14px 18px;
+  color: #d7deeb;
+  background: rgba(240, 149, 92, 0.09);
+  border: 1.5px solid rgba(240, 149, 92, 0.58);
+  border-left: 4px solid var(--orange);
+  border-radius: 0 12px 12px 0;
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.caution b,
+.caution strong {
+  color: #ffb27d;
+}
+
+.logic-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.logic-step {
+  position: relative;
+  min-width: 0;
+  padding: 14px 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 13px;
+}
+
+.logic-step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: -17px;
+  z-index: 1;
+  color: var(--blue-soft);
+  font-size: 22px;
+  font-weight: 800;
+  transform: translateY(-50%);
+}
+
+.logic-num {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--blue-soft);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.logic-step strong {
+  display: block;
+  color: #f4f7ff;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.logic-step span:last-child {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.evidence {
+  margin-top: 16px;
+  padding: 16px 18px;
+  color: var(--muted);
+  background: var(--panel-bg);
+  border: 1px dashed var(--border-strong);
+  border-radius: 13px;
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.evidence b {
+  color: var(--orange);
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.compare-card {
+  padding: 17px 18px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.compare-card h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.compare-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.compare-card .tag {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 9px;
+  color: var(--blue-soft);
+  background: rgba(125, 151, 245, 0.1);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.grammar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.grammar-card {
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+}
+
+.grammar-card h4 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.grammar-card p,
+.grammar-card figcaption {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.grammar-card .viz-scroll > svg {
+  min-width: 480px;
+}
+
+.grammar-break,
+.grammar-wide {
+  grid-column: 1 / -1;
+}
+
+.grammar-break {
+  margin-top: 16px;
+}
+
+.grammar-break h3 {
+  margin: 0;
+  color: #f4f7ff;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.grammar-break p {
+  margin: 8px 0 0;
+  color: #b8c3d3;
+}
+
+.reading-rules {
+  padding: 24px;
+}
+
+.reading-list {
+  display: grid;
+  gap: 20px;
+  margin: 20px 0 0;
+  padding-left: 24px;
+}
+
+.reading-list li {
+  padding-left: 4px;
+}
+
+.reading-list li::marker {
+  color: var(--blue-soft);
+  font-weight: 800;
+}
+
+.reading-list strong,
+.reading-list span {
+  display: block;
+}
+
+.reading-list span {
+  margin-top: 4px;
+  color: #b8c3d3;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.grade-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.grade-card {
+  min-width: 0;
+  padding: 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 14px;
+}
+
+.grade-card strong,
+.grade-card span {
+  display: block;
+}
+
+.grade-card strong {
+  font-size: 18px;
+}
+
+.grade-card span {
+  margin-top: 4px;
+  color: #b8c3d3;
+  font-size: 14px;
+}
+
+.grade-one strong {
+  color: var(--blue-soft);
+}
+
+.grade-two strong {
+  color: var(--orange);
+}
+
+.grade-three strong {
+  color: var(--danger);
+}
+
+.grammar-card[data-visual-id="grammar-distribution"] .viz-scroll > svg {
+  min-width: 520px;
+}
+
+.grammar-wide.caution {
+  margin-top: 0;
+}
+
+.action-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: action;
+}
+
+.action-list li {
+  counter-increment: action;
+  position: relative;
+  min-height: 84px;
+  padding: 16px 16px 16px 56px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.action-list li::before {
+  content: counter(action, decimal-leading-zero);
+  position: absolute;
+  left: 15px;
+  top: 17px;
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.action-list b {
+  display: block;
+  font-size: 15px;
+}
+
+.action-list span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.legend-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.legend-dot.green {
+  background: var(--green);
+}
+
+.legend-dot.orange {
+  background: var(--orange);
+}
+
+.legend-dot.dashed {
+  background: transparent;
+  border: 1px dashed var(--blue-soft);
+}
+
+/* Whole-page logical spine & 1-2-3-4-5-6 numbered walkthrough */
+.story-roadmap {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  padding: 14px 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.roadmap-item:hover {
+  border-color: var(--blue);
+  background: var(--panel-2);
+}
+
+.roadmap-num {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue);
+  color: #0f1218;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.roadmap-copy {
+  min-width: 0;
+}
+
+.roadmap-title {
+  display: block;
+  color: #f4f7ff;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.roadmap-desc {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.section-bridge {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  background: rgba(125, 151, 245, 0.06);
+  border-left: 3px solid var(--blue-deep);
+  border-radius: 0 10px 10px 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.section-bridge strong {
+  color: var(--blue-soft);
+  font-weight: 700;
+}
+
+.logic-points {
+  display: grid;
+  gap: 14px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logic-point {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.logic-points:not(.grid-2) .logic-point:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 38px;
+  bottom: -18px;
+  width: 2px;
+  background: var(--border-strong);
+}
+
+.point-num {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  margin-top: 2px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue);
+  color: #0f1218;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 0 0 4px var(--story-bg);
+}
+
+.point-num.is-green {
+  background: var(--green);
+}
+
+.point-num.is-orange {
+  background: var(--orange);
+}
+
+.point-num.is-red {
+  background: var(--danger);
+}
+
+.point-body {
+  min-width: 0;
+  padding: 15px 18px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.point-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.point-head strong {
+  color: #f4f7ff;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.point-role {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(125, 151, 245, 0.12);
+  border: 1px solid var(--blue-deep);
+  color: var(--blue-soft);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.point-role.is-green {
+  background: rgba(81, 207, 102, 0.11);
+  border-color: rgba(81, 207, 102, 0.4);
+  color: var(--green);
+}
+
+.point-role.is-orange {
+  background: rgba(240, 149, 92, 0.12);
+  border-color: rgba(240, 149, 92, 0.45);
+  color: #ffb27d;
+}
+
+.point-role.is-red {
+  background: rgba(242, 139, 130, 0.12);
+  border-color: rgba(242, 139, 130, 0.45);
+  color: var(--danger);
+}
+
+.point-body p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+
+.point-body p strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.point-visual {
+  margin-top: 16px;
+}
+
+.point-visual .viz {
+  margin-top: 0;
+}
+
+.logic-points.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.logic-points.grid-2 .logic-point {
+  height: 100%;
+}
+
+.logic-points.grid-2 .point-body {
+  height: 100%;
+}
+
+.next-bridge {
+  margin-top: 18px;
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: rgba(125, 151, 245, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.next-bridge strong {
+  color: var(--text);
+}
+
+.next-bridge a {
+  flex: 0 0 auto;
+  color: var(--blue-soft);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.next-bridge a:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  padding: 22px 4px 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 840px) {
+  .wrap {
+    width: min(100% - 28px, 1180px);
+    padding-top: 20px;
+  }
+
+  .hero,
+  .story-section {
+    padding: 24px 20px;
+  }
+
+  .kv-grid,
+  .compare-grid,
+  .grammar-grid,
+  .action-list,
+  .logic-strip,
+  .grade-grid,
+  .story-roadmap,
+  .logic-points.grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .next-bridge {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .grammar-card .viz-scroll::before {
+    content: "左右滑动查看完整图示 →";
+    display: block;
+    margin-bottom: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .viz-scroll.focus-right {
+    direction: rtl;
+  }
+
+  .viz-scroll.focus-right > svg,
+  .viz-scroll.focus-right::before {
+    direction: ltr;
+  }
+
+  .section-head {
+    display: block;
+  }
+
+  .case-index {
+    display: block;
+    margin-bottom: 4px;
+    padding-top: 0;
+  }
+
+  .viz-card {
+    padding: 12px;
+  }
+
+  .viz-card::before {
+    content: "左右滑动查看完整图示";
+    display: block;
+    margin: 0 0 9px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .logic-step:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  .logic-step:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .viz-scroll > svg {
+    min-width: max(960px, var(--viz-min-w, 0px));
+  }
+
+  .grammar-card .viz-scroll > svg {
+    min-width: max(480px, var(--viz-min-w, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">Data Storytelling · 可视化画面与编号逻辑示范</div>
+    <h1>从杂乱原料到可靠模型：<br>三张视觉界面，讲透六步逻辑</h1>
+    <p class="deck">本页示范如何用<strong>具象的可视化 SVG 界面/场景</strong>替代普通框线图，并用<strong>整页主线 + 章节承上启下 + 1、2、3、4、5、6 编号分点联动</strong>把复杂工程逻辑一次讲清。</p>
+    <ol class="story-roadmap" aria-label="整页逻辑主线">
+      <li>
+        <a class="roadmap-item" href="#stage-context">
+          <span class="roadmap-num">1</span>
+          <span class="roadmap-copy">
+            <span class="roadmap-title">先保语境：为什么聊天不能硬切字数</span>
+            <span class="roadmap-desc">从混杂消息流里只抽同一事件，组装成有出处、可刷新的知识卡</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="roadmap-item" href="#stage-double-blind">
+          <span class="roadmap-num">2</span>
+          <span class="roadmap-copy">
+            <span class="roadmap-title">再守质量：怎样防住标注偏差与盲从</span>
+            <span class="roadmap-desc">用物理隔断的双盲工位暴露分歧，把争论沉淀为可复用规范</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="roadmap-item" href="#stage-privacy-vault">
+          <span class="roadmap-num">3</span>
+          <span class="roadmap-copy">
+            <span class="roadmap-title">最后守底线：脱敏与固定考卷怎么隔离</span>
+            <span class="roadmap-desc">遮蔽敏感身份但保留故障因果，用防火墙锁住独立评测考卷</span>
+          </span>
+        </a>
+      </li>
+    </ol>
+  </header>
+
+  <!-- 第 1 章：可视化界面工作台 -->
+  <section class="story-section" id="stage-context" data-required-visuals="visual-chat-workbench">
+    <div class="section-head">
+      <div class="section-title-wrap">
+        <h2 class="section-title">01 · 先保语境：把混杂聊天流抽成可引用的知识卡</h2>
+      </div>
+      <div class="case-index">STEP 01 · INTERFACE</div>
+    </div>
+    <p class="leadline">知识库检索失真，往往不是模型太弱，而是<strong>切分方式把同一件故障的问题、排查和结果硬生生切散了</strong>。下面用消息流工作台界面，按 <strong>1 → 6</strong> 看清从原始聊天到可靠回答的完整逻辑。</p>
+
+    <figure class="viz"
+            data-layout-contract="v1"
+            data-visual-id="visual-chat-workbench"
+            data-visual-mode="interface"
+            data-visual-title="故障沟通群消息流向有效知识卡的抽取界面"
+            data-visual-type="interface-scene"
+            data-visual-relation="从混杂聊天窗口中按同一事件选中问题、处置与验证消息，剔除无关闲聊，组装为带引用编号与版本的知识卡"
+            data-visual-source="教学界面示意，基于课程案例5“敏感信息过滤、精准对话切分与上下文组装”方法重构" style="--viz-min-w: 920px;" id="visual-chat-workbench">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 920 436"
+               data-min-text-px="12"
+               data-min-node-gap="16"
+               data-text-padding="8"
+               data-safe-margin="12"
+               role="img"
+               aria-labelledby="v1Title v1Desc">
+            <title id="v1Title">从原始聊天窗口抽取同事件知识卡的可视化工作台</title>
+            <desc id="v1Desc">左侧为带标题栏与头像气泡的深色聊天窗口，包含K17网关断连的三条同事件消息与一条被弱化剔除的开会闲聊；中间为光学抽取通道；右侧为结构化知识卡与底部问答引用预览。编号锚点1至6对应下方六点逻辑说明。</desc>
+            <defs>
+              <pattern id="v1-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.1" fill="#384367" opacity="0.45"/>
+              </pattern>
+              <linearGradient id="v1-surface" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#252f45"/>
+                <stop offset="100%" stop-color="#1b2232"/>
+              </linearGradient>
+              <linearGradient id="v1-beam" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#7d97f5" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#51cf66" stop-opacity="0.22"/>
+              </linearGradient>
+              <marker id="v1-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9 z" fill="#7d97f5"/>
+              </marker>
+            </defs>
+
+            <!-- Layer 0: 凹陷舞台底与点阵 -->
+            <g data-backdrop="true">
+              <rect x="12" y="12" width="896" height="412" rx="18" class="s-stage"/>
+              <rect x="12" y="12" width="896" height="412" rx="18" fill="url(#v1-dots)" stroke="none"/>
+            </g>
+
+            <!-- Layer 1: 左侧聊天应用窗口 -->
+            <g data-node="chat-window">
+              <rect x="56" y="42" width="398" height="352" rx="14" fill="url(#v1-surface)" stroke="#384367" stroke-width="2"/>
+              <!-- 窗口顶栏 -->
+              <path d="M56 56 Q56 42 70 42 H440 Q454 42 454 56 V78 H56 Z" class="s-chrome"/>
+              <line x1="56" y1="78" x2="454" y2="78" stroke="#2f3a52" stroke-width="1.5"/>
+              <circle cx="76" cy="60" r="4.5" fill="#f28b82"/>
+              <circle cx="92" cy="60" r="4.5" fill="#f0955c"/>
+              <circle cx="108" cy="60" r="4.5" fill="#51cf66"/>
+              <text x="126" y="65" class="s-small" font-weight="700">运维沟通群 · 原始消息流（教学示例）</text>
+
+              <!-- 消息 1：K17 现象 -->
+              <g data-object="msg-k17-problem">
+                <circle cx="84" cy="118" r="13" fill="#2b3754" stroke="#7d97f5" stroke-width="1.8"/>
+                <circle cx="84" cy="114" r="4" fill="#a3b5f8"/>
+                <path d="M76 125 Q84 119 92 125" fill="none" stroke="#a3b5f8" stroke-width="1.8" stroke-linecap="round"/>
+                <rect x="108" y="96" width="314" height="44" rx="10" class="s-surface-hi"/>
+                <text x="124" y="123" class="s-small" fill="#f4f7ff" font-weight="700">K17：核心网关出现间歇断连</text>
+              </g>
+
+              <!-- 消息 2：无关杂讯（弱化 + 剔除） -->
+              <g data-object="msg-noise">
+                <circle cx="84" cy="182" r="13" fill="#181e2b" stroke="#3b455e" stroke-width="1.5"/>
+                <circle cx="84" cy="178" r="3.5" fill="#5c6880"/>
+                <path d="M77 188 Q84 183 91 188" fill="none" stroke="#5c6880" stroke-width="1.5"/>
+                <rect x="108" y="160" width="248" height="44" rx="10" class="s-surface-muted" stroke-dasharray="5 4"/>
+                <text x="124" y="187" class="s-small" fill="#7c889d">其他：下午三点开项目周会</text>
+                <rect x="366" y="169" width="56" height="26" rx="13" fill="rgba(242,139,130,0.16)" stroke="none"/>
+                <text x="394" y="187" text-anchor="middle" fill="#f28b82" font-size="13" font-weight="700">剔除</text>
+              </g>
+
+              <!-- 消息 3：K17 处置 -->
+              <g data-object="msg-k17-action">
+                <circle cx="84" cy="246" r="13" fill="#2b3754" stroke="#7d97f5" stroke-width="1.8"/>
+                <circle cx="84" cy="242" r="4" fill="#a3b5f8"/>
+                <path d="M76 253 Q84 247 92 253" fill="none" stroke="#a3b5f8" stroke-width="1.8" stroke-linecap="round"/>
+                <rect x="108" y="224" width="314" height="44" rx="10" class="s-surface-hi"/>
+                <text x="124" y="251" class="s-small" fill="#f4f7ff">K17：按排查方案检查端口配置</text>
+              </g>
+
+              <!-- 消息 4：K17 验证 -->
+              <g data-object="msg-k17-verify">
+                <circle cx="84" cy="310" r="13" fill="#1e3628" stroke="#51cf66" stroke-width="1.8"/>
+                <path d="M78 310 L82 314 L91 305" fill="none" stroke="#51cf66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="108" y="288" width="314" height="44" rx="10" class="s-surface-green"/>
+                <text x="124" y="315" class="s-small" fill="#f4f7ff">K17：连接恢复稳定，完成验证</text>
+              </g>
+
+              <!-- 高亮选区括号（只框同事件三条） -->
+              <path d="M428 118 H440 V310 H428 M428 246 H440" fill="none" stroke="#7d97f5" stroke-width="2.4" stroke-linecap="round"/>
+
+              <!-- 窗口底栏提示 -->
+              <line x1="72" y1="350" x2="438" y2="350" stroke="#2a3242" stroke-width="1.5"/>
+              <text x="76" y="376" class="s-small" fill="#98a3b3">同一窗口混杂多话题，按事件键聚合而非截字数</text>
+            </g>
+
+            <!-- Layer 2: 中间光学抽取通道 -->
+            <g data-object="extract-beam">
+              <polygon points="462,126 536,192 536,244 462,310" fill="url(#v1-beam)" stroke="none"/>
+              <path data-link="extract-to-card" data-from="chat-window" data-to="knowledge-panel" d="M454 218 H544" class="s-line" marker-end="url(#v1-arrow)"/>
+            </g>
+
+            <!-- Layer 1: 右侧知识卡与问答预览面板 -->
+            <g data-node="knowledge-panel">
+              <rect x="544" y="42" width="320" height="352" rx="14" fill="url(#v1-surface)" stroke="#384367" stroke-width="2"/>
+              <path d="M544 56 Q544 42 558 42 H850 Q864 42 864 56 V78 H544 Z" class="s-chrome"/>
+              <line x1="544" y1="78" x2="864" y2="78" stroke="#2f3a52" stroke-width="1.5"/>
+              <text x="562" y="65" class="s-small" font-weight="700">知识库 · 有效索引</text>
+              <rect x="766" y="49" width="84" height="22" rx="11" fill="rgba(81,207,102,0.16)" stroke="none"/>
+              <text x="808" y="65" text-anchor="middle" fill="#51cf66" font-size="12" font-weight="700">v2 有效</text>
+
+              <!-- 抽出的结构化知识卡 -->
+              <g data-object="knowledge-card-k17">
+                <rect x="562" y="96" width="284" height="162" rx="12" class="s-surface-hi"/>
+                <text x="578" y="124" class="s-label" font-size="15">知识片段 · K17</text>
+                <rect x="774" y="106" width="58" height="24" rx="6" fill="rgba(125,151,245,0.22)" stroke="none"/>
+                <text x="803" y="123" text-anchor="middle" fill="#a3b5f8" font-size="13" font-weight="700">[K17]</text>
+                <line x1="578" y1="138" x2="830" y2="138" stroke="#384367" stroke-width="1.5"/>
+
+                <circle cx="584" cy="162" r="4" fill="#7d97f5"/>
+                <text x="598" y="167" class="s-small" fill="#e6eaf1">现象：核心网关间歇断连</text>
+                <circle cx="584" cy="196" r="4" fill="#7d97f5"/>
+                <text x="598" y="201" class="s-small" fill="#e6eaf1">处置：排查端口配置</text>
+                <circle cx="584" cy="230" r="4" fill="#51cf66"/>
+                <text x="598" y="235" class="s-small" fill="#e6eaf1">验证：恢复稳定并留来源</text>
+              </g>
+
+              <!-- 底部实时问答引用框 -->
+              <g data-object="rag-answer-preview">
+                <rect x="562" y="276" width="284" height="100" rx="12" class="s-surface-green"/>
+                <circle cx="584" cy="302" r="7" fill="none" stroke="#51cf66" stroke-width="2"/>
+                <line x1="589" y1="307" x2="594" y2="312" stroke="#51cf66" stroke-width="2" stroke-linecap="round"/>
+                <text x="604" y="308" class="s-small" fill="#51cf66" font-weight="700">回答附引用 · 缺据即拒答</text>
+                <text x="578" y="338" class="s-small" fill="#e6eaf1">命中 [K17] 给出排查依据</text>
+                <text x="578" y="362" class="s-small" fill="#98a3b3">未命中可靠证据 → 转人工核查</text>
+              </g>
+            </g>
+
+            <!-- Layer 3: 1-6 编号视觉锚点与精准引线 -->
+            <g data-callout-badge="1">
+              <circle data-badge-shape="true" cx="30" cy="60" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="30" y="65" text-anchor="middle" class="s-badge-num">1</text>
+            </g>
+            <path data-callout-leader="1" d="M44 60 H62" class="s-leader"/>
+
+            <g data-callout-badge="2">
+              <circle data-badge-shape="true" cx="30" cy="118" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="30" y="123" text-anchor="middle" class="s-badge-num">2</text>
+            </g>
+            <path data-callout-leader="2" d="M44 118 H68" class="s-leader"/>
+
+            <g data-callout-badge="3">
+              <circle data-badge-shape="true" cx="30" cy="182" r="14" fill="#f28b82" stroke="#0f1218" stroke-width="2"/>
+              <text x="30" y="187" text-anchor="middle" class="s-badge-num">3</text>
+            </g>
+            <path data-callout-leader="3" d="M44 182 H68" class="s-leader red"/>
+
+            <g data-callout-badge="4">
+              <circle data-badge-shape="true" cx="499" cy="118" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="499" y="123" text-anchor="middle" class="s-badge-num">4</text>
+            </g>
+            <path data-callout-leader="4" d="M499 132 V196" class="s-leader"/>
+            <circle cx="499" cy="196" r="3.5" fill="#a3b5f8"/>
+
+            <g data-callout-badge="5">
+              <circle data-badge-shape="true" cx="890" cy="136" r="14" fill="#51cf66" stroke="#0f1218" stroke-width="2"/>
+              <text x="890" y="141" text-anchor="middle" class="s-badge-num">5</text>
+            </g>
+            <path data-callout-leader="5" d="M876 136 H848" class="s-leader green"/>
+
+            <g data-callout-badge="6">
+              <circle data-badge-shape="true" cx="890" cy="326" r="14" fill="#51cf66" stroke="#0f1218" stroke-width="2"/>
+              <text x="890" y="331" text-anchor="middle" class="s-badge-num">6</text>
+            </g>
+            <path data-callout-leader="6" d="M876 326 H848" class="s-leader green"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>图示说明：</strong>图中 1–6 号圆形锚点按事件处理顺序分布，与下方 1–6 分点逐一对应。对话文本与事件 ID（K17）为教学界面示意，不代表真实运维记录。</figcaption>
+      </div>
+    </figure>
+
+    <ol class="logic-points" data-for-visual="visual-chat-workbench" aria-label="第 1 章 1 到 6 分点逻辑说明">
+      <li class="logic-point" data-point="1">
+        <span class="point-num">1</span>
+        <div class="point-body">
+          <div class="point-head"><strong>先看原始界面形态：多话题交错在同一个时间流里</strong><span class="point-role">现状痛点</span></div>
+          <p>真实运维群和文档并不是整齐的“问答对”，而是故障报修、日常开会、排查过程和恢复确认穿插在一起。如果直接按固定字数机械切块，因果上下文会被拦腰截断。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="2">
+        <span class="point-num">2</span>
+        <div class="point-body">
+          <div class="point-head"><strong>锁定同一事件线索：把“现象—处置—验证”绑成一组</strong><span class="point-role">核心机制</span></div>
+          <p>按事件标识、时间窗口和上下文关联把同属 <code>K17</code> 的三条消息用蓝色选区聚合，确保模型检索时同时看到“出了什么错、怎么修、修完是否验证”，不遗漏前提条件。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="3">
+        <span class="point-num is-red">3</span>
+        <div class="point-body">
+          <div class="point-head"><strong>显式剔除无关杂讯与敏感信息：先降噪再入库</strong><span class="point-role is-red">清洗动作</span></div>
+          <p>穿插其中的“下午开会”等无关对话与敏感身份字段在入库前就应过滤隔离，避免无关词污染向量召回，也防止把未经核实的群聊猜测当成正式知识。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="4">
+        <span class="point-num">4</span>
+        <div class="point-body">
+          <div class="point-head"><strong>通过结构化抽取重组，而不是整段原文硬塞</strong><span class="point-role">关键转换</span></div>
+          <p>中间的抽取通道把散落的口语对话提炼为固定骨架（现象、处置、验证），让不同来源的同类故障在知识库里具有一致的检索字段。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="5">
+        <span class="point-num is-green">5</span>
+        <div class="point-body">
+          <div class="point-head"><strong>给每张知识卡挂上出处编号与有效版本</strong><span class="point-role is-green">可追溯产物</span></div>
+          <p>右侧卡片同时保留 <code>[K17]</code> 来源锚点与 <code>v2 有效</code> 状态标签。后续排查方案更新时只需替换对应文档版本并重建索引，不必为了知识变动反复重训模型。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="6">
+        <span class="point-num is-green">6</span>
+        <div class="point-body">
+          <div class="point-head"><strong>回答必须落回引用，找不到证据就明确转人工</strong><span class="point-role is-orange">风险边界</span></div>
+          <p>问答端只依据命中卡片作答并附上出处；一旦检索未命中可靠证据，系统应直接暴露证据缺口转人工核查，绝不允许模型顺着语感编造维修步骤。</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="next-bridge">
+      <span><strong>逻辑承接：</strong>切出干净样本只是第一步；如果样本的业务标签本身就有争议，数据质量仍然失控。</span>
+      <a href="#stage-double-blind">进入第 2 章：双盲隔断质控 →</a>
+    </div>
+  </section>
+
+  <!-- 第 2 章：视觉机制与物理隐喻 -->
+  <section class="story-section" id="stage-double-blind" data-required-visuals="visual-double-blind-booth">
+    <div class="section-bridge"><strong>承接第 1 章：</strong>上一步解决了“把同一件事的上下文完整抽出来”，接下来最棘手的问题是——遇到疑难故障，连两位专家都可能给出不同诊断，怎样避免 AI 预标或单人主观判断污染整批标签？</div>
+    <div class="section-head">
+      <div class="section-title-wrap">
+        <h2 class="section-title">02 · 再守质量：用“双盲隔断工位”把分歧变成规范</h2>
+      </div>
+      <div class="case-index">STEP 02 · MECHANISM</div>
+    </div>
+    <p class="leadline">AI 预标注能省掉重复录入，但<strong>绝不能直接当真值</strong>。用一道“互不可见”的双盲隔断把两位专家分开审同一份样本，把分歧显性化并沉淀成规范，才是高一致性标注的核心机关。</p>
+
+    <figure class="viz"
+            data-layout-contract="v1"
+            data-visual-id="visual-double-blind-booth"
+            data-visual-mode="metaphor"
+            data-visual-title="双盲隔断工作台与分歧仲裁机制"
+            data-visual-type="metaphor-mechanism"
+            data-visual-relation="待审工单先附AI候选，经中间斜纹隔断墙分送专家A和专家B独立盖章判定，印章冲突触发分歧单并导向第三方仲裁与规范修订"
+            data-visual-source="教学机制示意，基于课程案例3“AI预标注 + 专家双盲复核 + 第三方仲裁”方法重构" style="--viz-min-w: 920px;" id="visual-double-blind-booth">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 920 456"
+               data-min-text-px="12"
+               data-min-node-gap="16"
+               data-text-padding="8"
+               data-safe-margin="12"
+               role="img"
+               aria-labelledby="v2Title v2Desc">
+            <title id="v2Title">带物理隔断墙的双盲复核工作台与仲裁规范台</title>
+            <desc id="v2Desc">顶部待审工单带AI候选标签，向下分送给被橙色斜纹隔断墙分开的专家A工位和专家B工位。专家A盖下蓝色链路故障章，专家B盖下橙色配置问题章。两份不同结果在底部触发红色分歧单，交给右侧摊开的规范书进行第三方仲裁与规范补写。</desc>
+            <defs>
+              <pattern id="v2-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.1" fill="#384367" opacity="0.45"/>
+              </pattern>
+              <pattern id="v2-hatch-orange" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="10" stroke="#f0955c" stroke-width="2" stroke-opacity="0.4"/>
+              </pattern>
+              <linearGradient id="v2-surface" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#252f45"/>
+                <stop offset="100%" stop-color="#1b2232"/>
+              </linearGradient>
+              <marker id="v2-arrow-blue" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9 z" fill="#7d97f5"/>
+              </marker>
+              <marker id="v2-arrow-red" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9 z" fill="#f28b82"/>
+              </marker>
+              <marker id="v2-arrow-green" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+                <path d="M0,1 L10,5 L0,9 z" fill="#51cf66"/>
+              </marker>
+            </defs>
+
+            <!-- Layer 0: 舞台背景 -->
+            <g data-backdrop="true">
+              <rect x="12" y="12" width="896" height="432" rx="18" class="s-stage"/>
+              <rect x="12" y="12" width="896" height="432" rx="18" fill="url(#v2-dots)" stroke="none"/>
+            </g>
+
+            <!-- 顶部：待审样本托盘 -->
+            <g data-node="sample-tray">
+              <rect x="278" y="34" width="364" height="80" rx="14" fill="url(#v2-surface)" stroke="#7d97f5" stroke-width="2.2"/>
+              <!-- 折角文档图标 -->
+              <g data-object="tray-dossier">
+                <path d="M298 48 H326 L336 58 V98 H298 Z" fill="#171c25" stroke="#a3b5f8" stroke-width="1.8"/>
+                <path d="M326 48 V58 H336" fill="none" stroke="#a3b5f8" stroke-width="1.5"/>
+                <rect x="305" y="66" width="22" height="3.5" rx="1.5" class="s-skeleton"/>
+                <rect x="305" y="75" width="18" height="3.5" rx="1.5" class="s-skeleton"/>
+                <rect x="305" y="84" width="24" height="3.5" rx="1.5" class="s-skeleton"/>
+              </g>
+              <text x="352" y="64" class="s-label" font-size="15">同一待审工单（教学样本）</text>
+              <rect x="352" y="76" width="256" height="24" rx="12" fill="rgba(125,151,245,0.16)" stroke="none"/>
+              <text x="366" y="93" fill="#a3b5f8" font-size="13" font-weight="700">AI 候选：连接异常 · 状态：待复核</text>
+            </g>
+
+            <!-- 左侧：专家 A 工位 -->
+            <g data-node="booth-a">
+              <rect x="58" y="156" width="340" height="148" rx="14" fill="url(#v2-surface)" stroke="#384367" stroke-width="2"/>
+              <path d="M58 170 Q58 156 72 156 H384 Q398 156 398 170 V192 H58 Z" class="s-chrome"/>
+              <line x1="58" y1="192" x2="398" y2="192" stroke="#2f3a52" stroke-width="1.5"/>
+              <circle cx="76" cy="175" r="4.5" fill="#7d97f5"/>
+              <text x="90" y="180" class="s-small" font-weight="700">专家 A · 独立工位</text>
+              <!-- 专家剪影 -->
+              <g data-object="expert-a-avatar">
+                <circle cx="94" cy="232" r="14" fill="#2b3754" stroke="#7d97f5" stroke-width="2"/>
+                <path d="M72 278 Q94 256 116 278" fill="#2b3754" stroke="#7d97f5" stroke-width="2" stroke-linecap="round"/>
+              </g>
+              <!-- 桌面样本缩略 -->
+              <g data-object="expert-a-sheet">
+                <rect x="132" y="206" width="76" height="78" rx="6" fill="#161b26" stroke="#384367" stroke-width="1.5"/>
+                <rect x="142" y="220" width="52" height="4" rx="2" class="s-skeleton"/>
+                <rect x="142" y="232" width="44" height="4" rx="2" class="s-skeleton"/>
+                <rect x="142" y="244" width="56" height="4" rx="2" fill="#7d97f5" opacity="0.7"/>
+                <rect x="142" y="256" width="38" height="4" rx="2" class="s-skeleton"/>
+              </g>
+              <!-- 蓝色判定印章 -->
+              <g data-object="stamp-a">
+                <rect x="226" y="208" width="152" height="74" rx="10" class="s-surface-hi"/>
+                <text x="302" y="234" text-anchor="middle" fill="#a3b5f8" font-size="13" font-weight="700">独立盖章</text>
+                <text x="302" y="264" text-anchor="middle" class="s-label" font-size="17">链路故障</text>
+              </g>
+            </g>
+
+            <!-- 中间焦点：物理斜纹双盲隔断墙 -->
+            <g data-object="blind-isolation-wall">
+              <text x="460" y="144" text-anchor="middle" fill="#ffb27d" font-size="13" font-weight="700">互不可见隔断</text>
+              <rect x="444" y="156" width="32" height="148" rx="7" fill="url(#v2-hatch-orange)" stroke="#f0955c" stroke-width="2.2"/>
+              <!-- 不可视眼睛徽章 -->
+              <circle cx="460" cy="236" r="15" fill="#131822" stroke="#f0955c" stroke-width="2"/>
+              <path d="M450 236 Q460 227 470 236 Q460 245 450 236 Z" fill="none" stroke="#ffb27d" stroke-width="1.8"/>
+              <line x1="451" y1="245" x2="469" y2="227" stroke="#f28b82" stroke-width="2.2" stroke-linecap="round"/>
+            </g>
+
+            <!-- 右侧：专家 B 工位 -->
+            <g data-node="booth-b">
+              <rect x="522" y="156" width="340" height="148" rx="14" fill="url(#v2-surface)" stroke="#384367" stroke-width="2"/>
+              <path d="M522 170 Q522 156 536 156 H848 Q862 156 862 170 V192 H522 Z" class="s-chrome"/>
+              <line x1="522" y1="192" x2="862" y2="192" stroke="#2f3a52" stroke-width="1.5"/>
+              <circle cx="540" cy="175" r="4.5" fill="#f0955c"/>
+              <text x="554" y="180" class="s-small" font-weight="700">专家 B · 独立工位</text>
+              <!-- 专家剪影 -->
+              <g data-object="expert-b-avatar">
+                <circle cx="558" cy="232" r="14" fill="#3a2c24" stroke="#f0955c" stroke-width="2"/>
+                <path d="M536 278 Q558 256 580 278" fill="#3a2c24" stroke="#f0955c" stroke-width="2" stroke-linecap="round"/>
+              </g>
+              <!-- 桌面样本缩略 -->
+              <g data-object="expert-b-sheet">
+                <rect x="596" y="206" width="76" height="78" rx="6" fill="#161b26" stroke="#384367" stroke-width="1.5"/>
+                <rect x="606" y="220" width="52" height="4" rx="2" class="s-skeleton"/>
+                <rect x="606" y="232" width="44" height="4" rx="2" class="s-skeleton"/>
+                <rect x="606" y="244" width="56" height="4" rx="2" fill="#f0955c" opacity="0.75"/>
+                <rect x="606" y="256" width="38" height="4" rx="2" class="s-skeleton"/>
+              </g>
+              <!-- 橙色判定印章 -->
+              <g data-object="stamp-b">
+                <rect x="690" y="208" width="152" height="74" rx="10" class="s-surface-orange"/>
+                <text x="766" y="234" text-anchor="middle" fill="#ffb27d" font-size="13" font-weight="700">独立盖章</text>
+                <text x="766" y="264" text-anchor="middle" class="s-label" font-size="17">配置问题</text>
+              </g>
+            </g>
+
+            <!-- 下层左：冲突分歧单触发器 -->
+            <g data-node="conflict-alert">
+              <rect x="92" y="346" width="368" height="78" rx="14" class="s-surface-red"/>
+              <!-- 警示三角图标 -->
+              <g data-object="conflict-icon">
+                <polygon points="124,366 142,400 106,400" fill="rgba(242,139,130,0.18)" stroke="#f28b82" stroke-width="2.2" stroke-linejoin="round"/>
+                <line x1="124" y1="376" x2="124" y2="388" stroke="#f28b82" stroke-width="2.4" stroke-linecap="round"/>
+                <circle cx="124" cy="394" r="1.8" fill="#f28b82"/>
+              </g>
+              <text x="158" y="378" class="s-label" fill="#f28b82" font-size="15">分歧单触发：A（链路）≠ B（配置）</text>
+              <text x="158" y="404" class="s-small" fill="#d7deeb">保留两份独立依据，禁止互相覆盖</text>
+            </g>
+
+            <!-- 下层右：第三方仲裁与摊开的规范书 -->
+            <g data-node="arbiter-desk">
+              <rect x="522" y="346" width="340" height="78" rx="14" class="s-surface-green"/>
+              <!-- 摊开的规范书图标 -->
+              <g data-object="rulebook-icon">
+                <path d="M540 368 Q554 364 562 370 V402 Q554 396 540 400 Z" fill="#172920" stroke="#51cf66" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M584 368 Q570 364 562 370 V402 Q570 396 584 400 Z" fill="#172920" stroke="#51cf66" stroke-width="2" stroke-linejoin="round"/>
+              </g>
+              <text x="600" y="378" class="s-label" fill="#51cf66" font-size="15">第三方仲裁 → 补写标注规范</text>
+              <text x="600" y="404" class="s-small" fill="#d7deeb">新增判据与正反例，回查同类样本</text>
+            </g>
+
+            <!-- 路由连线（独立通道、零交叉） -->
+            <path data-link="tray-to-a" data-from="sample-tray" data-to="booth-a" d="M368 114 V134 H228 V156" class="s-line" marker-end="url(#v2-arrow-blue)"/>
+            <path data-link="tray-to-b" data-from="sample-tray" data-to="booth-b" d="M552 114 V134 H692 V156" class="s-line" marker-end="url(#v2-arrow-blue)"/>
+            <path data-link="a-to-conflict" data-from="booth-a" data-to="conflict-alert" d="M228 304 V346" class="s-line red" marker-end="url(#v2-arrow-red)"/>
+            <path data-link="b-to-conflict" data-from="booth-b" data-to="conflict-alert" d="M692 304 V326 H392 V346" class="s-line red" marker-end="url(#v2-arrow-red)"/>
+            <path data-link="conflict-to-arbiter" data-from="conflict-alert" data-to="arbiter-desk" d="M460 385 H522" class="s-line green" marker-end="url(#v2-arrow-green)"/>
+
+            <!-- Layer 3: 1-6 编号锚点 -->
+            <g data-callout-badge="1">
+              <circle data-badge-shape="true" cx="250" cy="74" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="250" y="79" text-anchor="middle" class="s-badge-num">1</text>
+            </g>
+            <path data-callout-leader="1" d="M264 74 H278" class="s-leader"/>
+
+            <g data-callout-badge="2">
+              <circle data-badge-shape="true" cx="460" cy="182" r="14" fill="#f0955c" stroke="#0f1218" stroke-width="2"/>
+              <text x="460" y="187" text-anchor="middle" class="s-badge-num">2</text>
+            </g>
+
+            <g data-callout-badge="3">
+              <circle data-badge-shape="true" cx="30" cy="232" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="30" y="237" text-anchor="middle" class="s-badge-num">3</text>
+            </g>
+            <path data-callout-leader="3" d="M44 232 H58" class="s-leader"/>
+
+            <g data-callout-badge="4">
+              <circle data-badge-shape="true" cx="890" cy="232" r="14" fill="#f0955c" stroke="#0f1218" stroke-width="2"/>
+              <text x="890" y="237" text-anchor="middle" class="s-badge-num">4</text>
+            </g>
+            <path data-callout-leader="4" d="M876 232 H862" class="s-leader orange"/>
+
+            <g data-callout-badge="5">
+              <circle data-badge-shape="true" cx="62" cy="385" r="14" fill="#f28b82" stroke="#0f1218" stroke-width="2"/>
+              <text x="62" y="390" text-anchor="middle" class="s-badge-num">5</text>
+            </g>
+            <path data-callout-leader="5" d="M76 385 H92" class="s-leader red"/>
+
+            <g data-callout-badge="6">
+              <circle data-badge-shape="true" cx="890" cy="385" r="14" fill="#51cf66" stroke="#0f1218" stroke-width="2"/>
+              <text x="890" y="390" text-anchor="middle" class="s-badge-num">6</text>
+            </g>
+            <path data-callout-leader="6" d="M876 385 H862" class="s-leader green"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>图示说明：</strong>核心视觉焦点在中央橙色斜纹隔断墙——没有物理双盲隔离，后看的人很容易顺从前一个人的答案。图中工单与判定为教学示例，不代表真实诊断。</figcaption>
+      </div>
+    </figure>
+
+    <ol class="logic-points" data-for-visual="visual-double-blind-booth" aria-label="第 2 章 1 到 6 分点逻辑说明">
+      <li class="logic-point" data-point="1">
+        <span class="point-num">1</span>
+        <div class="point-body">
+          <div class="point-head"><strong>AI 先做预标注候选，把专家从重复录入中解放出来</strong><span class="point-role">效率起点</span></div>
+          <p>同一待审工单先附带 AI 给出的候选标签（状态明确标为“待复核”）。候选标签只用于降本提速，不拥有直接入库的决定权。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="2">
+        <span class="point-num is-orange">2</span>
+        <div class="point-body">
+          <div class="point-head"><strong>立起双盲隔断墙：让两位复核者彼此看不见结论</strong><span class="point-role is-orange">核心机关</span></div>
+          <p>如果不做双盲隔离，第二位专家看到第一位专家的答案后容易产生锚定偏差，把本来模糊的边界样本悄悄放过。隔断墙确保两份判断真正独立。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="3">
+        <span class="point-num">3</span>
+        <div class="point-body">
+          <div class="point-head"><strong>专家 A 依证据给出独立判定并留痕</strong><span class="point-role">独立视角 A</span></div>
+          <p>专家 A 对照工单原文与既有经验，盖章判为“链路故障”，同时把判断所依据的原句线索一并记录，而不是只点一个下拉选项。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="4">
+        <span class="point-num is-orange">4</span>
+        <div class="point-body">
+          <div class="point-head"><strong>专家 B 从另一视角独立判定，暴露口径歧义</strong><span class="point-role is-orange">独立视角 B</span></div>
+          <p>在看不到 A 答案的前提下，专家 B 判为“配置问题”。两条不同结论本身不是坏事，它恰恰说明当前标注规范在这类边界上定义得不够清楚。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="5">
+        <span class="point-num is-red">5</span>
+        <div class="point-body">
+          <div class="point-head"><strong>印章不一致自动生成分歧单，禁止人工私下覆盖</strong><span class="point-role is-red">分歧拦截</span></div>
+          <p>系统比对发现 <code>A ≠ B</code> 后立刻冻结该样本，把双方标签和依据打包进待仲裁分歧单，避免单方面覆盖导致历史口径混乱。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="6">
+        <span class="point-num is-green">6</span>
+        <div class="point-body">
+          <div class="point-head"><strong>第三方仲裁不只改一条样本，而是补写标注规范</strong><span class="point-role is-green">长期复利</span></div>
+          <p>仲裁结论沉淀为明确的判据、正例、反例以及“证据不足时如何挂起”的规则，写进新版标注规范并回查同类历史样本，整批数据的上限才会真正抬高。</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="next-bridge">
+      <span><strong>逻辑承接：</strong>标签质量守住了，但带着客户身份信息的样本还不能直接进入训练，更不能把考卷混进训练集。</span>
+      <a href="#stage-privacy-vault">进入第 3 章：脱敏分屏与固定考卷隔离 →</a>
+    </div>
+  </section>
+
+  <!-- 第 3 章：视觉前后分屏 + 物理防火墙 -->
+  <section class="story-section" id="stage-privacy-vault" data-required-visuals="visual-privacy-vault">
+    <div class="section-bridge"><strong>承接第 2 章：</strong>经过前两步，我们已经拿到语境完整、标签经复核的高质量候选样本。交付训练和评估前，还必须过最后两道硬底线：<strong>隐私字段脱敏</strong>与<strong>独立考卷隔离</strong>。</div>
+    <div class="section-head">
+      <div class="section-title-wrap">
+        <h2 class="section-title">03 · 最后守底线：物理遮蔽敏感身份，锁死冻结考卷</h2>
+      </div>
+      <div class="case-index">STEP 03 · BEFORE / AFTER</div>
+    </div>
+    <p class="leadline">脱敏不是“把整份报告删光”，而是<strong>遮掉能认出人的字段、留下能治病的故障因果</strong>；与此同时，用一道物理隔离墙把固定测试集 <code>T1</code> 锁在训练回流之外，评测结果才经得起复查。</p>
+
+    <figure class="viz"
+            data-layout-contract="v1"
+            data-visual-id="visual-privacy-vault"
+            data-visual-mode="before-after"
+            data-visual-title="缺陷报告隐私脱敏分屏与固定考卷隔离墙"
+            data-visual-type="before-after-stage"
+            data-visual-relation="原始缺陷报告经过脱敏滤镜后，身份字段被物理斜纹条遮蔽而故障因果完整保留；右侧独立冻结考卷T1由红色防火墙与训练候选严格隔离"
+            data-visual-source="教学界面与安全隔离示意，基于课程案例4脱敏方法与固定测试集工程规范重构" style="--viz-min-w: 920px;" id="visual-privacy-vault">
+      <div class="viz-card">
+        <div class="viz-scroll">
+          <svg viewBox="0 0 920 440"
+               data-min-text-px="12"
+               data-min-node-gap="16"
+               data-text-padding="8"
+               data-safe-margin="12"
+               role="img"
+               aria-labelledby="v3Title v3Desc">
+            <title id="v3Title">原始报告脱敏前后分屏与红色防火墙隔离的冻结考卷库</title>
+            <desc id="v3Desc">左侧原始缺陷报告暴露客户甲姓名与联系方式；经过中间光学脱敏滤镜后，中右侧脱敏候选样本用橙色斜纹遮蔽条覆盖身份字段，同时绿色框完整保留高负载运行、轴承过热和检查润滑三条故障因果。最右侧是带挂锁的冻结考卷T1与M1/M2评测仪表，由一道红色斜纹隔离墙与训练池物理分开。</desc>
+            <defs>
+              <pattern id="v3-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.1" fill="#384367" opacity="0.45"/>
+              </pattern>
+              <pattern id="v3-hatch-orange" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="9" stroke="#f0955c" stroke-width="2" stroke-opacity="0.5"/>
+              </pattern>
+              <pattern id="v3-hatch-red" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="10" stroke="#f28b82" stroke-width="2.2" stroke-opacity="0.45"/>
+              </pattern>
+              <linearGradient id="v3-lens" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f0955c" stop-opacity="0.45"/>
+                <stop offset="50%" stop-color="#7d97f5" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#51cf66" stop-opacity="0.45"/>
+              </linearGradient>
+              <linearGradient id="v3-surface" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#252f45"/>
+                <stop offset="100%" stop-color="#1b2232"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Layer 0: 舞台底 -->
+            <g data-backdrop="true">
+              <rect x="12" y="12" width="896" height="416" rx="18" class="s-stage"/>
+              <rect x="12" y="12" width="896" height="416" rx="18" fill="url(#v3-dots)" stroke="none"/>
+            </g>
+
+            <!-- 左：原始缺陷报告（折角文档） -->
+            <g data-node="raw-dossier">
+              <path d="M56 72 H250 L272 94 V386 H56 Z" fill="url(#v3-surface)" stroke="#7d97f5" stroke-width="2"/>
+              <path d="M250 72 V94 H272" fill="none" stroke="#7d97f5" stroke-width="1.8"/>
+              <text x="72" y="102" class="s-label" font-size="15">原始缺陷报告</text>
+              <text x="72" y="124" class="s-small" fill="#98a3b3">教学记录 · 含敏感字段</text>
+
+              <!-- 敏感区（橙色警示） -->
+              <g data-object="raw-pii-zone">
+                <rect x="70" y="140" width="188" height="92" rx="8" class="s-surface-orange"/>
+                <circle cx="84" cy="158" r="4" fill="#f0955c"/>
+                <text x="96" y="163" fill="#ffb27d" font-size="13" font-weight="700">暴露身份字段</text>
+                <text x="82" y="191" class="s-small" fill="#e6eaf1">姓名：客户甲（示例）</text>
+                <text x="82" y="218" class="s-small" fill="#e6eaf1">联系：〈联系方式〉</text>
+              </g>
+
+              <!-- 故障因果区 -->
+              <g data-object="raw-fault-zone">
+                <rect x="70" y="248" width="188" height="122" rx="8" class="s-surface-hi"/>
+                <circle cx="84" cy="266" r="4" fill="#7d97f5"/>
+                <text x="96" y="271" fill="#a3b5f8" font-size="13" font-weight="700">核心故障因果</text>
+                <text x="82" y="299" class="s-small" fill="#e6eaf1">条件：高负载运行</text>
+                <text x="82" y="325" class="s-small" fill="#e6eaf1">故障：轴承过热</text>
+                <text x="82" y="351" class="s-small" fill="#e6eaf1">处置：检查润滑系统</text>
+              </g>
+            </g>
+
+            <!-- 中间：光学脱敏滤镜带 -->
+            <g data-object="redaction-lens">
+              <rect x="304" y="76" width="14" height="306" rx="7" fill="url(#v3-lens)" stroke="none"/>
+              <circle cx="311" cy="228" r="18" fill="#131822" stroke="#a3b5f8" stroke-width="2.2"/>
+              <path d="M303 228 H319 M313 222 L319 228 L313 234" fill="none" stroke="#a3b5f8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <!-- 中右：脱敏后训练候选（带物理斜纹遮蔽条） -->
+            <g data-node="clean-dossier">
+              <path d="M350 72 H544 L566 94 V386 H350 Z" fill="url(#v3-surface)" stroke="#51cf66" stroke-width="2"/>
+              <path d="M544 72 V94 H566" fill="none" stroke="#51cf66" stroke-width="1.8"/>
+              <text x="366" y="102" class="s-label" font-size="15">脱敏候选样本</text>
+              <text x="366" y="124" class="s-small" fill="#51cf66">身份遮蔽 · 因果保留</text>
+
+              <!-- 物理斜纹遮蔽条区 -->
+              <g data-object="redacted-pii-zone">
+                <rect x="364" y="140" width="188" height="92" rx="8" class="s-surface-muted"/>
+                <text x="376" y="162" fill="#ffb27d" font-size="13" font-weight="700">已覆斜纹遮蔽条</text>
+                <text x="376" y="191" class="s-small" fill="#98a3b3">姓名：</text>
+                <rect x="424" y="176" width="116" height="19" rx="4" fill="url(#v3-hatch-orange)" stroke="#f0955c" stroke-width="1.5"/>
+                <text x="376" y="218" class="s-small" fill="#98a3b3">联系：</text>
+                <rect x="424" y="203" width="116" height="19" rx="4" fill="url(#v3-hatch-orange)" stroke="#f0955c" stroke-width="1.5"/>
+              </g>
+
+              <!-- 完整保留的业务特征 -->
+              <g data-object="preserved-fault-zone">
+                <rect x="364" y="248" width="188" height="122" rx="8" class="s-surface-green"/>
+                <circle cx="378" cy="266" r="4" fill="#51cf66"/>
+                <text x="390" y="271" fill="#51cf66" font-size="13" font-weight="700">逐项保留可训练特征</text>
+                <text x="376" y="299" class="s-small" fill="#e6eaf1">条件：高负载运行</text>
+                <text x="376" y="325" class="s-small" fill="#e6eaf1">故障：轴承过热</text>
+                <text x="376" y="351" class="s-small" fill="#e6eaf1">处置：检查润滑系统</text>
+              </g>
+            </g>
+
+            <!-- 红色斜纹物理隔离墙 -->
+            <g data-object="benchmark-firewall">
+              <rect x="602" y="72" width="26" height="314" rx="7" fill="url(#v3-hatch-red)" stroke="#f28b82" stroke-width="2.2"/>
+              <circle cx="615" cy="228" r="15" fill="#131822" stroke="#f28b82" stroke-width="2.2"/>
+              <line x1="606" y1="237" x2="624" y2="219" stroke="#f28b82" stroke-width="2.4" stroke-linecap="round"/>
+            </g>
+
+            <!-- 最右：加锁冻结考卷库 T1 + 双模型仪表盘 -->
+            <g data-node="sealed-vault">
+              <rect x="662" y="72" width="212" height="314" rx="14" class="s-surface-red"/>
+              <!-- 挂锁图标 -->
+              <g data-object="vault-padlock">
+                <path d="M750 116 V104 A18 18 0 0 1 786 104 V116" fill="none" stroke="#f0955c" stroke-width="3.2" stroke-linecap="round"/>
+                <rect x="740" y="116" width="56" height="44" rx="9" fill="#242c40" stroke="#f0955c" stroke-width="2.4"/>
+                <circle cx="768" cy="135" r="4.5" fill="#f0955c"/>
+                <line x1="768" y1="139" x2="768" y2="149" stroke="#f0955c" stroke-width="2.8" stroke-linecap="round"/>
+              </g>
+              <text x="768" y="188" text-anchor="middle" class="s-label" font-size="16">独立冻结考卷 T1</text>
+              <text x="768" y="214" text-anchor="middle" fill="#f28b82" font-size="14" font-weight="700">禁止回流训练池</text>
+
+              <!-- 双模型对比仪表盘（纯形态示意，不编造分数） -->
+              <g data-object="eval-gauges">
+                <rect x="678" y="236" width="180" height="130" rx="10" fill="#171c25" stroke="#384367" stroke-width="1.6"/>
+                <!-- 左仪表 M1 -->
+                <path d="M696 300 A26 26 0 0 1 748 300" fill="none" stroke="#2c3549" stroke-width="6" stroke-linecap="round"/>
+                <path d="M696 300 A26 26 0 0 1 730 276" fill="none" stroke="#7d97f5" stroke-width="6" stroke-linecap="round"/>
+                <line x1="722" y1="300" x2="730" y2="281" stroke="#e6eaf1" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="722" cy="300" r="3.5" fill="#7d97f5"/>
+                <text x="722" y="326" text-anchor="middle" class="s-small" fill="#a3b5f8" font-weight="700">模型 M1</text>
+
+                <!-- 右仪表 M2 -->
+                <path d="M788 300 A26 26 0 0 1 840 300" fill="none" stroke="#2c3549" stroke-width="6" stroke-linecap="round"/>
+                <path d="M788 300 A26 26 0 0 1 834 282" fill="none" stroke="#51cf66" stroke-width="6" stroke-linecap="round"/>
+                <line x1="814" y1="300" x2="830" y2="285" stroke="#e6eaf1" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="814" cy="300" r="3.5" fill="#51cf66"/>
+                <text x="814" y="326" text-anchor="middle" class="s-small" fill="#51cf66" font-weight="700">模型 M2</text>
+
+                <text x="768" y="352" text-anchor="middle" fill="#98a3b3" font-size="13">同一 T1 口径可比评测</text>
+              </g>
+            </g>
+
+            <!-- Layer 3: 1-6 编号锚点 -->
+            <g data-callout-badge="1">
+              <circle data-badge-shape="true" cx="30" cy="186" r="14" fill="#f0955c" stroke="#0f1218" stroke-width="2"/>
+              <text x="30" y="191" text-anchor="middle" class="s-badge-num">1</text>
+            </g>
+            <path data-callout-leader="1" d="M44 186 H68" class="s-leader orange"/>
+
+            <g data-callout-badge="2">
+              <circle data-badge-shape="true" cx="311" cy="40" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="311" y="45" text-anchor="middle" class="s-badge-num">2</text>
+            </g>
+            <path data-callout-leader="2" d="M311 54 V74" class="s-leader"/>
+
+            <g data-callout-badge="3">
+              <circle data-badge-shape="true" cx="458" cy="40" r="14" fill="#f0955c" stroke="#0f1218" stroke-width="2"/>
+              <text x="458" y="45" text-anchor="middle" class="s-badge-num">3</text>
+            </g>
+            <path data-callout-leader="3" d="M458 54 V70" class="s-leader orange"/>
+
+            <g data-callout-badge="4">
+              <circle data-badge-shape="true" cx="458" cy="408" r="14" fill="#51cf66" stroke="#0f1218" stroke-width="2"/>
+              <text x="458" y="413" text-anchor="middle" class="s-badge-num">4</text>
+            </g>
+            <path data-callout-leader="4" d="M458 394 V386" class="s-leader green"/>
+
+            <g data-callout-badge="5">
+              <circle data-badge-shape="true" cx="615" cy="40" r="14" fill="#f28b82" stroke="#0f1218" stroke-width="2"/>
+              <text x="615" y="45" text-anchor="middle" class="s-badge-num">5</text>
+            </g>
+            <path data-callout-leader="5" d="M615 54 V70" class="s-leader red"/>
+
+            <g data-callout-badge="6">
+              <circle data-badge-shape="true" cx="768" cy="40" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+              <text x="768" y="45" text-anchor="middle" class="s-badge-num">6</text>
+            </g>
+            <path data-callout-leader="6" d="M768 54 V70" class="s-leader"/>
+          </svg>
+        </div>
+        <figcaption class="viz-caption"><strong>图示说明：</strong>仪表指针仅示意“两版模型面对同一考卷做横向对比”，不代表真实评测分数。图中样本记录为教学构造，脱敏也不自动等于已获准对外流通。</figcaption>
+      </div>
+    </figure>
+
+    <ol class="logic-points" data-for-visual="visual-privacy-vault" aria-label="第 3 章 1 到 6 分点逻辑说明">
+      <li class="logic-point" data-point="1">
+        <span class="point-num is-orange">1</span>
+        <div class="point-body">
+          <div class="point-head"><strong>先识别两类字段：把“身份信息”和“业务因果”剥离开</strong><span class="point-role is-orange">风险识别</span></div>
+          <p>原始报告里客户姓名、联系方式与设备故障混在同一页。直接进训练集会带来隐私泄露风险，必须先逐字段划出敏感边界。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="2">
+        <span class="point-num">2</span>
+        <div class="point-body">
+          <div class="point-head"><strong>让所有样本统一通过脱敏处理通道，不靠人工临场删改</strong><span class="point-role">标准门槛</span></div>
+          <p>中间的光学滤镜代表规则化脱敏脚本与复核检查：记录每次替换的字段清单、规则版本和责任人，保证处理结果可审计、可复现。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="3">
+        <span class="point-num is-orange">3</span>
+        <div class="point-body">
+          <div class="point-head"><strong>对身份字段做物理级遮蔽，并同步检查再识别风险</strong><span class="point-role is-orange">隐私遮蔽</span></div>
+          <p>姓名、联系方式被统一替换为遮蔽标识；同时仍需核对来源授权、用途范围及间接字段组合是否会导致再识别，脱敏本身不等于已获准对外流通。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="4">
+        <span class="point-num is-green">4</span>
+        <div class="point-body">
+          <div class="point-head"><strong>完整保留故障条件、现象与处置，不损伤模型学习价值</strong><span class="point-role is-green">核心保留</span></div>
+          <p>“高负载运行 → 轴承过热 → 检查润滑系统”这条业务因果逐项原样保留，确保脱敏后的候选样本仍然具备真实的故障诊断训练价值。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="5">
+        <span class="point-num is-red">5</span>
+        <div class="point-body">
+          <div class="point-head"><strong>立起红色隔离防火墙：测试集及其派生副本严禁回流训练</strong><span class="point-role is-red">防泄漏红线</span></div>
+          <p>如果把考卷样本、同一事件的改写版或增强副本混回训练集，指标看似暴涨实则只是“背了答案”，上线后遇到新场景立刻露馅。</p>
+        </div>
+      </li>
+      <li class="logic-point" data-point="6">
+        <span class="point-num">6</span>
+        <div class="point-body">
+          <div class="point-head"><strong>锁死固定考卷 T1，让 M1 与 M2 在同一口径下公平对比</strong><span class="point-role">可信验收</span></div>
+          <p>无论是改进切分、修订规范还是补充长尾样本，每一版模型都在同一份冻结考卷 <code>T1</code> 上跑出可追溯报告，才能真正证明迭代带来了实质提升。</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="takeaway">
+      <span class="takeaway-label">全页逻辑收束</span>
+      <p><strong>先保语境（第 1 章）→ 再守标注一致性（第 2 章）→ 最后守住隐私与评估隔离底线（第 3 章）。</strong>三条防线首尾相接，数据建设才不是零散动作的堆叠，而是可复现、可验证的工程闭环。</p>
+    </div>
+    <div class="evidence"><b>证据边界：</b>本示范页中的对话内容（K17）、工单判定、缺陷记录、模型版本号（M1/M2）及考卷编号（T1）均为配合方法讲解构造的教学界面示意，不代表任何真实生产数据或实测指标。</div>
+  </section>
+
+  <div class="footer">Data Storytelling · 可视化 SVG 界面 + 1–6 编号逻辑示范</div>
+</div>
+
+</body>
+</html>

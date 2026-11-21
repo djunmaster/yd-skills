@@ -22,13 +22,13 @@
 
 启动并行前，Lead Agent 必须一次性确定：
 
-1. 页面主题、章节顺序和每张图的 `visual-id`。
-2. 深色/浅色风格、viewBox 宽度、颜色变量、字体层级。
-3. 节点最小间距、文字内边距、连线通道和标签规则。
-4. 每张图只回答的一个关系句。
+1. **整页逻辑主线与章节承接**：先冻结整页的 `1 → 2 → 3 → 4 → 5 → 6`（按实际章数）因果递进主线（`.story-roadmap`）、每章的承上启下过渡（`.section-bridge` / `.next-bridge`），以及每章内部的 `1、2、3、4、5、6` 分点逻辑大纲（`.logic-points`）。不要把页面规划成一堆互不关联的孤立小图卡片墙。
+2. 深色/浅色风格、画布分级宽度（主视觉画面推荐 `920×420`～`960×460`，局部特写推荐 `560×300`～`680×340`）、颜色变量、字体层级。
+3. 节点最小间距、文字内边距、连线通道、编号锚点（`data-callout-badge`）与特征引线（`data-callout-leader`）规则。
+4. 每张图的**视觉画面方案**（`visualMode` + `visualScene`：选什么具象界面、物理场景或视觉隐喻，必须画出哪些非方框视觉道具，如何通过**去字可辨检验**）以及与图外分点对应的编号锚点清单（`callouts`: `1, 2, 3, 4, 5, 6`）。
 5. 每张图的原文片段及定位、规则来源、参考依据与未知点；区分独立核验事实、课程业务简化和示意，不能只传改写后的结论。
    Lead 自行设计的教学记录应明确标为“讲解示例”；Worker 收到 Lead 的任务简报不等于真实用户或原文提供了该记录，禁止在 `evidence` 或 `data-visual-source` 中错误归因。
-6. 每张图的视觉焦点、阅读顺序、关键提示和注意事项；场景、规则、步骤、结果不得在一张图里混成一张大图。
+6. 每张图的视觉焦点、阅读顺序、关键提示和注意事项；不要退化成“几个矩形文字框 + 直线箭头”的框线图，也不要把大段说明塞进 SVG。
 7. 涉及曲线时的轴定义、尺度与已知分类映射；涉及现实对象时的朝向、铰链和连接点参考。缺失规则保留待补，不由 Worker 补造。
 
 契约示例：
@@ -36,43 +36,54 @@
 ```json
 {
   "theme": "dark",
-  "viewBoxWidth": 1100,
+  "featureViewBox": "0 0 920 420",
+  "detailViewBox": "0 0 640 340",
   "nodeGap": 16,
   "textPadding": 8,
   "linkNodeClearance": 6,
   "linkGap": 8,
   "laneGrid": 4,
-  "maxNodesPerFigure": 7,
-  "maxLinksPerFigure": 8
+  "calloutBadgeRadius": 14,
+  "requireTextRemovalPass": true
 }
 ```
 
-每张图先输出 `FigureSpec`，再渲染 SVG。不要让 Figure Worker 直接从散文跳到坐标。在已有 `evidence` 字段记录来源片段、定位和参考，在 `boundary`/`caution` 中记录候选、示意及规则缺口；这些内容也要随任务传给 Auditor。最小格式见 `references/figure-spec.schema.json`：
+每张图先输出 `FigureSpec`（必填 `visualMode`、`visualScene` 与 `callouts`），再渲染 SVG。不要让 Figure Worker 直接从散文跳到方框坐标。在 `evidence` 字段记录来源片段、定位和参考，在 `boundary`/`caution` 中记录候选、示意及规则缺口；这些内容也要随任务传给 Auditor。最小格式见 `references/figure-spec.schema.json`：
 
 ```json
 {
-  "id": "case3-double-blind",
-  "claim": "AI 预标注把专家从重复劳动转为分歧复核",
-  "visualType": "role-loop",
-  "focus": "AI 预标注后由两名专家独立复核",
-  "sequence": ["候选生成", "独立复核", "分歧仲裁"],
-  "callout": "专家处理分歧，不重复画框",
-  "caution": "AI 候选不能直接作为最终标签",
-  "entities": [
-    {"id": "ai", "label": "AI 预标注", "role": "producer"},
-    {"id": "expert-a", "label": "专家 A", "role": "reviewer"},
-    {"id": "expert-b", "label": "专家 B", "role": "reviewer"},
-    {"id": "arbiter", "label": "第三方仲裁", "role": "resolver"}
+  "id": "double-blind-workbench",
+  "claim": "双盲隔断让两名专家独立判定同一工单，冲突自动触发第三方仲裁与规范修订",
+  "visualType": "metaphor-mechanism",
+  "visualMode": "metaphor",
+  "visualScene": {
+    "metaphor": "物理隔断双盲工作台 + 印章冲突指示灯 + 仲裁规范台",
+    "stageLayout": "上方待审样本托盘，中层左右两间工位被橙色斜纹隔断墙分开，下方冲突检测灯连向摊开的规范书",
+    "visualProps": ["深色舞台点阵底", "带折角工单文档与AI候选胶囊", "橙色斜纹不可互见隔断墙", "左右专家头像与不同色判定印章", "冲突警报灯与摊开的规范书"],
+    "focalHighlight": "中间的橙色斜纹双盲隔断墙与下方冲突触发器",
+    "textRemovalCheck": "抹去文字后仍可一眼看出顶部一份文档分送左右两个被墙隔开的工位、盖下不同颜色印章并在底部汇入冲突仲裁台"
+  },
+  "callouts": [
+    {"number": 1, "target": "顶部待审工单与AI候选徽章", "label": "AI先提候选", "tone": "blue"},
+    {"number": 2, "target": "中间斜纹隔断墙", "label": "物理双盲隔离", "tone": "orange"},
+    {"number": 3, "target": "左侧专家A工位与蓝色印章", "label": "独立判定A", "tone": "blue"},
+    {"number": 4, "target": "右侧专家B工位与橙色印章", "label": "独立判定B", "tone": "orange"},
+    {"number": 5, "target": "底部冲突触发指示器", "label": "暴露分歧单", "tone": "red"},
+    {"number": 6, "target": "右侧摊开的标注规范书", "label": "仲裁并补规范", "tone": "green"}
   ],
-  "relations": [
-    {"from": "ai", "to": "expert-a", "label": "候选标注"},
-    {"from": "ai", "to": "expert-b", "label": "候选标注"},
-    {"from": "expert-a", "to": "arbiter", "label": "分歧"},
-    {"from": "expert-b", "to": "arbiter", "label": "分歧"}
+  "focus": "用物理隔断避免互相抄答案，把分歧沉淀成规范",
+  "sequence": ["AI提候选", "隔断盲审", "对比印章", "暴露分歧", "第三方仲裁", "修订规范"],
+  "callout": "专家只处理分歧与证据，不重复录入",
+  "caution": "AI 候选不能跳过复核直接成为训练真值",
+  "entities": [
+    {"id": "sample-tray", "label": "待审工单托盘", "role": "producer"},
+    {"id": "booth-a", "label": "专家 A 工位", "role": "reviewer"},
+    {"id": "booth-b", "label": "专家 B 工位", "role": "reviewer"},
+    {"id": "arbiter-desk", "label": "仲裁与规范台", "role": "resolver"}
   ],
   "constraints": {
-    "direction": "left-to-right",
-    "minNodeGap": 24,
+    "direction": "top-to-bottom",
+    "minNodeGap": 20,
     "textPadding": 10,
     "minLinkGap": 12,
     "allowEdgeCrossing": false
@@ -130,47 +141,41 @@ runs/<run-id>/
 ## Figure Worker 提示模板
 
 ```text
-你只负责 visual-id=<id> 的一张图。
-关系句：<一句唯一关系>
+你只负责 visual-id=<id> 的一张可视化 SVG 图画。
+视觉模式：data-visual-mode=<interface|scene|metaphor|mechanism|before-after|cutaway|chart>
+画面隐喻/界面方案：<用什么具体视觉界面、物理场景或机制机关呈现，而非普通框线图>
+关系句：<一句核心判断>
 原文与参考：<本图相关原文片段、行号/位置、图像或结构参考>
-规则与缺口：<已给定判别条件及来源；课程业务简化；待定义条件>
-视觉焦点：<读者首先应该看见的对象或结论>
-阅读顺序：<01 → 02 → 03，最多四步>
-关键提示：<需要加粗显示的一句话>
+规则与缺口：<已给定判别条件及来源；业务简化；待定义条件>
+视觉焦点：<读者第一眼应该看见的画面中心或对比>
+编号锚点清单（与图外 1、2、3、4、5、6 分点说明一一对应）：<1:... 2:... 3:... 4:... 5:... 6:...>
 注意事项：<风险、边界或不能误读的地方>
-必须出现：<对象/阈值/角色/输入输出>
-先输出符合 references/figure-spec.schema.json 的 spec.json，再生成 SVG。
-用 evidence 保存上述来源，用 boundary/caution 说明候选、示意和未证实结论。
-按 references/svg-layout-protocol.md 的“语义与证据门槛”绘图：
-检测框相交只作定位候选，可见接触不能证明电气接通或合规接地；保留原文业务规则的身份。
-曲线明确轴和尺度；已有类别映射要直接绑定对应可见曲线/区域，规则缺失时只画事实、待补专家规则和等级输出，不补造阈值或时长，也不强配三色波形。
-现实物体按参考核对外形、朝向、铰链、开合及连接点；结构示意不作现场证据。
-使用固定 viewBox <width>x<height>、深色技术讲解风格和布局契约 v1。
-每个独立对象分别放在 <g data-node="..."> 内，不把整图合成单一节点逃避扫描；连线必须有 data-link/data-from/data-to；
-标签必须有 data-link-label/data-for。节点间距 >=16，文字内边距 >=8，
-默认零连线交叉，路径仅走水平/垂直通道。
-关键对象框和主路径使用较粗线宽，辅助线变细；主标签使用 700–800 字重。
-如果输入同时要求场景、规则和执行步骤，先拆成多个 visual-id，不要在这一张图中补齐全部内容。
-只输出 runs/<run-id>/figures/<id>/ 下的文件，不修改全局 CSS、页面或其他图。
-完成后列出节点 id、连线 id、证据边界和潜在不确定点；分别报告几何、语义与可读性自检，几何 PASS 不能代替另两项。
+
+绘图前必读 references/visual-svg-cookbook.md 与 references/svg-layout-protocol.md：
+1. 先输出符合 references/figure-spec.schema.json 的 spec.json（含 visualMode、visualScene 与 callouts），再生成 SVG。
+2. 严禁退化成“几个矩形文字框 + 箭头”的框线图！必须通过“去字可辨检验”：把全部中文抹掉后，画面仍能一眼辨认出具体的界面形态、物理结构、视觉隐喻或前后状态对比。
+3. 画面占 60%–75%，文字标注占 25%–40%；长解释留给图外 1、2、3、4、5、6 分点说明，不往方框里塞多行大段文字。
+4. 使用深色技术讲解四层质感：Layer 0 低对比舞台背景（data-backdrop="true" 或 <pattern>），Layer 1 具象界面/物件表面，Layer 2 语义高亮/斜纹/空槽/挂锁/放大镜，Layer 3 圆形编号锚点（data-callout-badge="1..6" + data-badge-shape="true"）和精准特征引线（data-callout-leader="1..6"，不加 data-link，严禁压字）。
+5. 严格遵守“语义与证据门槛”：检测框相交只作定位候选，不宣称真实物理接通；曲线明确轴和尺度，缺失规则不自造阈值或三色波形；现实物体按参考核对朝向和结构，教学示例明确标明身份。
+6. 使用固定 viewBox <width>x<height>（主视觉画面推荐 920x420～960x460）和布局契约 v1：独立容器放 <g data-node="...">，关系连线用 data-link/data-from/data-to，节点间距 >=16，文字内边距 >=8，核心文字 >=14px。
+7. 只输出 runs/<run-id>/figures/<id>/ 下的文件，不修改全局 CSS、页面或其他图。
+8. 完成后报告：视觉隐喻说明、去字可辨自检、编号锚点清单（1–6）、证据边界，以及几何/语义/可视化可读性自检结果。
 ```
 
 ## Auditor 提示模板
 
 ```text
-你只读审核 visual-id=<id>，不修改 SVG。
-输入：<相关原文片段及定位、参考、FigureSpec、图段、几何报告与渲染截图>。
-分别报告 geometry、semantics、readability 的 PASS/FAIL/UNVERIFIED、依据及待补项；缺少相应证据时不得默认通过。
-Geometry Auditor 运行 audit_svg_layout.py --strict；Content Auditor 对照原文和截图独立检查下列语义及可读性门槛：
-1. 唯一关系和结论是否有来源；原文业务简化、已验证事实、示意和待定义条件是否分清。
-2. 检测框是否定位原文定义的对象；框相交/可见接触是否被误写成真实电气接通或合规接地。
-3. 曲线的轴、单位、方向和比较尺度是否明确；声称的类别能否直接找到对应可见曲线/区域；是否自造阈值、持续时长或波形分级。
-   若原文只给等级含义，应保留“曲线事实 → 独立专家规则（待补）→ 等级输出”，无需强配三色曲线。
-4. 物体前后朝向、外形、铰链、开合及连接点是否合理且有参考；示意是否被当成现场证据。
-5. 独立对象是否各有 data-node，标签是否归属于对象或绑定连线；每条关系箭头是否绑定有效的源/目标节点，箭头尖端是否接到其边界；是否用整图单一节点隐藏重叠或漏扫。旧图基础扫描不验证端点，修改关系箭头后需升级为 v1。
-6. 按实际渲染尺寸检查对象、标签与阅读顺序能否辨认；加粗或几何 PASS 都不能替代语义正确性与可读性。
-任一项失败应说明具体对象、来源位置和返修原因；任何一项未验证都不能由几何 PASS 覆盖。
-清楚披露的规则待补可作为表达边界保留，但不算规则已验证，也不得给示意曲线作实际判级。
+你只读审核 visual-id=<id>（或整页逻辑与视觉质量），不修改 SVG。
+输入：<相关原文片段及定位、参考、FigureSpec、图段/页面 HTML、几何报告与渲染截图>。
+分别报告 geometry、visual_craft（去框线图检验）、logic_coherence（1–6 分点与承上启下）、semantics、readability 的 PASS/FAIL/UNVERIFIED、依据及待补项；缺少相应证据时不得默认通过。
+Geometry Auditor 运行 audit_svg_layout.py --strict；Content Auditor 对照原文和截图独立检查：
+1. 【去字可辨检验】抹掉全部文字后，是否能看出具象界面、物体、视觉隐喻或前后对比？如果退化成均匀圆角矩形 + 箭头（或触发 VISUAL_TOO_SCHEMATIC），直接判 FAIL 退回重画。
+2. 【逻辑连贯与编号联动】图内 data-callout-badge（1–6）是否按自然阅读顺序分布，并与图外 .logic-points 的 1、2、3、4、5、6 分点说明一一对应？页面章节之间是否有承上启下的逻辑主线，而非孤立卡片堆叠？
+3. 【语义与证据边界】唯一关系和结论是否有来源；业务简化、已验证事实、教学示意和待定义条件是否分清。
+4. 【对象与空间边界】检测框是否定位原文定义的对象；框相交/可见接触是否被误写成真实物理/电气接通；物体朝向、外形、铰链和连接点是否合理。
+5. 【曲线与规则边界】曲线轴、单位、方向和尺度是否明确；是否自造阈值、持续时长或未给定映射的三色波形。
+6. 【几何与可读性】核心文字 >=14px，无文字重叠、描边穿字、锚点越界或箭头悬空；按实际渲染截图确认阅读顺序清晰。
+任一项失败应说明具体对象、来源位置和返修原因；几何 PASS 不能替代视觉质量、逻辑连贯性、语义正确性与可读性。
 ```
 
 ## 加速策略

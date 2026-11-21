@@ -13,26 +13,33 @@
 - 若图声称某类别对应某曲线或区域，类别标签应就近标注或用引线直接绑定该可见对象，图例只作辅助。不能用一条未分类曲线旁的多个孤立色块替代映射；类别只是规则的可能输出时，标输出含义即可，不强配多色波形。
 - 等级阈值、边界条件和持续时长须有来源。教学自选值只能在明确标为“示意，非判别标准”的独立示例中使用；原文规则缺失时保留“读曲线事实 → 独立专家规则（待补）→ 等级输出”，不对示意曲线直接判级。
 
-### 门槛应用示例（内容虚构）
+### 本次课程原文示例
 
-下面四行是同一门槛在不同材料类型上的应用示范。**示例内容全部虚构**，只演示“原文给了什么 → 能画什么 → 不能画成什么”的写法；整理真实材料时，应引用你自己的原文位置（文件加行号或段落编号），便于追溯。
+以下引文来自[本次课程转写](C:/Users/10034/.codex/attachments/1a382891-81f2-40cf-a7af-ece74730c7d8/已粘贴的文本.txt:79)，行号用于追溯这份材料；课程陈述不等于已独立核验的行业标准。
 
-| 原文给出的依据（示意） | 可表达的关系与边界 |
+| 原文依据 | 可表达的关系与边界 |
 |---|---|
-| 原文只说明“甲类表示正常，乙类、丙类表示异常，丙类最严重”，并给出“先取客观信息、再用人的经验判断、最后得出结论”的顺序 | 保留三种等级的文字含义与“事实 → 专家规则 → 等级输出”的顺序；具体分类阈值原文未给，标为待补，不给每类各编一条曲线。 |
-| 原文给出定性判据“主要看曲线有没有落在这个区域内” | 画出曲线相对指定区域的位置关系；缺少原始检测图时区域形状标为示意。完整等级映射仍待补，不把时长带、阈值或像素参数画成等级标准。 |
-| 原文提到某可开合部件，但没有图片参考 | 生成前核对该对象的外形、朝向、铰链与开合方向；没有参考支持的结构细节标“结构示意，细节待核实”，不把绘图当作现场证据。 |
-| 原文把两个对象简化为“位置相交”这一业务判据 | 保留该业务简化的身份，输出只作定位候选；不升级为“两者已物理接通”或“已符合要求”这类原文未断言的结论。 |
+| 第 79–95 行：“一类表示没啥问题”“二类、三类表示有问题，三类最严重”；随后分为获取客观信息、运用人的主观判断经验、得出结论 | 保留三种等级的文字含义及“事实 → 专家规则 → 等级输出”的顺序；具体分类规则待补，不给三类各编一条波形。 |
+| 第 110–124 行：“主要就是看这个曲线有没有在这个柱子里面”“考虑曲线的位置”“这个文字再跟刚才大家看的判别经验一对比” | 原文已经给出曲线相对指定区域的定性位置判据，应保留这个可视关系；缺少原始检测图时，区域形状标为示意。完整等级映射仍待补，不把时长带、阈值或像素提取参数画成等级标准。 |
+| 第 175 行：“‘打开引擎盖’，那车屁股后面给你搞个车头出来” | 生成前核对车型参考、前后朝向、铰链和开合结构；没有参考支持的细节保留为示意。 |
+| 第 185 行：“一个是卸油车，一个是接地线的接头”“它们两个处于相交的位置” | 保留“卸油车整体框与接头框相交”的课程业务简化，输出只作定位候选；不偷换为“两个端子接触”，也不宣称真实电气接通或合规接地。 |
 
 ## 必填契约
 
 声明 `data-layout-contract="v1"` 的 `figure.viz` 进入完整契约审计；未声明契约的旧图进入文字/路径基础扫描，不再静默跳过。新生成的复杂 SVG 图解默认全部使用该契约。
 
+**可视化画面优先声明 `data-visual-mode`**：新图应在 `figure.viz` 上声明视觉模式，优先选择 `interface`（可视化界面/工作台）、`scene`（现实/空间场景）、`metaphor`（视觉隐喻）、`mechanism`（可视化机关/原理）、`before-after`（视觉前后分屏）、`cutaway`（立体分层/剖面）或 `chart`（仪表/曲线观测屏）；只有纯拓扑流程才是 `diagram`。完整画面构建技法见 `references/visual-svg-cookbook.md`。
+
 完整图文页的案例分组、判断表和执行清单可声明 `data-required-visuals="id-a id-b"`。每个 id 必须在该分组内唯一对应含 SVG 的 `figure.viz`。审计器返回逐组覆盖结果；缺图、重复图或只有文字卡时失败。结构覆盖不证明图有解释作用，仍应对照原文检查具体对象、前后变化、条件和操作产物。
 
+当可视化 SVG 内含编号锚点（`1`、`2`、`3`、`4`、`5`、`6`）并配图外分点逻辑说明时，在 `<ol class="logic-points" data-for-visual="<visual-id>">` 中用 `data-point="1"` … `data-point="6"` 对齐，审计器会自动核对图文编号同步。
+
 ```html
-<figure class="viz" data-layout-contract="v1" data-visual-id="case-1">
-  <svg viewBox="0 0 1100 520"
+<figure class="viz"
+        data-layout-contract="v1"
+        data-visual-id="chat-context-workbench"
+        data-visual-mode="interface">
+  <svg viewBox="0 0 920 420"
        data-min-node-gap="16"
        data-text-padding="8"
        data-link-node-clearance="6"
@@ -40,23 +47,49 @@
        data-link-gap="8"
        data-attach-tolerance="18"
        data-safe-margin="24">
-    <g data-node="source">
-      <rect x="44" y="220" width="205" height="120" rx="16"/>
-      <text x="64" y="252">非标现场样本</text>
+    <!-- Layer 0: 低对比舞台背景（stroke-opacity <= 0.28 时不触发文字碰撞） -->
+    <g data-backdrop="true">
+      <rect x="12" y="12" width="896" height="396" rx="16" class="s-stage"/>
     </g>
 
-    <path data-link="source-to-model"
-          data-from="source"
-          data-to="model"
-          d="M249 280 H310"
-          marker-end="url(#arrow)"/>
+    <!-- Layer 1: 可视化界面/对象主舞台（内部放窗口栏、气泡、字段、斜纹等具象元素） -->
+    <g data-node="chat-window">
+      <rect x="44" y="56" width="380" height="300" rx="14" class="s-surface"/>
+      <rect x="44" y="56" width="380" height="34" rx="14" class="s-chrome"/>
+      <circle cx="64" cy="73" r="4" fill="#f28b82"/>
+      <circle cx="80" cy="73" r="4" fill="#f0955c"/>
+      <circle cx="96" cy="73" r="4" fill="#51cf66"/>
+      <text x="116" y="78" class="s-small">故障沟通群 · 原始消息流</text>
+    </g>
 
-    <text data-link-label="source-label"
-          data-for="source-to-model"
-          x="258" y="250">候选标注</text>
+    <!-- Layer 3: 编号锚点 1（与下方 .logic-points 的 data-point="1" 同步） -->
+    <g data-callout-badge="1">
+      <circle data-badge-shape="true" cx="44" cy="56" r="14" fill="#7d97f5" stroke="#0f1218" stroke-width="2"/>
+      <text x="44" y="61" text-anchor="middle" class="s-badge-num">1</text>
+    </g>
+    <!-- 精准引线指向画面细节（不加 data-link，允许落入内部特征，但仍严禁压字） -->
+    <path data-callout-leader="1" d="M58 56 H92" class="s-leader"/>
+    <circle cx="92" cy="56" r="3.5" fill="#a3b5f8"/>
   </svg>
 </figure>
 ```
+
+## 可视化图画与界面 SVG 扩展规则
+
+为了支持真正的“视觉画面 / 可视化界面”，同时不放松几何安全底线，协议明确区分**节点关系连线**与**画面内部视觉标注**：
+
+1. **画布宽度分层**：
+   - 章节主视觉界面/机制画面：推荐 `viewBox="0 0 920 420"` ～ `960×460`，占满卡片宽度；不要把复杂界面硬塞进 `480×300`。
+   - 局部特写/分点嵌入式小图：推荐 `viewBox="0 0 560 300"` ～ `680×340`，只放大单一零件、反例或对比细节。
+2. **背景舞台层（`data-backdrop="true"`）**：
+   - 舞台网格、坐标底纹、背景分区线可放入 `<g data-backdrop="true">`；仅当有效描边透明度 `<= 0.28`（或使用 `<defs><pattern>` / `stroke="none"`）时，审计器不将其视为前景碰撞障碍。严禁把真实关系线放进 `data-backdrop`。
+3. **编号锚点（`data-callout-badge="1"`…`"6"`）**：
+   - 锚点圆/胶囊图形加 `data-badge-shape="true"`（建议半径 `r >= 14`），数字使用 `14px`、字重 `800`。审计器自动检查数字完全落在锚点图形内（防 `BADGE_TEXT_OVERFLOW`）、各锚点互不重叠（防 `CALLOUT_BADGE_OVERLAP`）且不超出 `viewBox`。
+4. **特征引线（`data-callout-leader="1"`）**：
+   - 用于从编号锚点或图外短标签精准指向界面/物体内部的某个具体细节（如某一行代码、某条消息气泡、某个铰链或空槽），末端配 `r="3.5"` 圆点落在该特征上。
+   - 特征引线允许使用简洁折线或克制的曲线，**不加 `data-link`**（避免与节点边界连接规则冲突），但仍接受全图描边穿字审计，绝不能压过任何文字。
+5. **去框线图审计（`VISUAL_TOO_SCHEMATIC`）**：
+   - 当图声明 `data-visual-mode` 为 `interface`、`scene`、`metaphor`、`mechanism`、`before-after` 或 `cutaway` 时，审计器会统计除普通节点外框和连线外的具象视觉原语数量；若几乎只有空方框与连线，会报 `VISUAL_TOO_SCHEMATIC` 警告。
 
 ## 坐标与间距
 
@@ -157,9 +190,9 @@ python scripts/audit_svg_layout.py output.html --channel msedge --strict `
 - 连线穿节点、穿文字、端点悬空
 - 连线交叉与平行线过近
 - 标签压线、贴节点
-- 元素超出 viewBox 或安全边距
-- 整图渲染宽度小于 viewBox（`FIGURE_SHRUNK`）
-- 需要横向滚动的图缺少可见滑动提示（`SWIPE_HINT_MISSING`）
+ - 元素超出 viewBox 或安全边距
+ - 整图渲染宽度小于 viewBox（`FIGURE_SHRUNK`）
+ - 需要横向滚动的图缺少可见滑动提示（`SWIPE_HINT_MISSING`）
 - 浏览器控制台和页面脚本错误
 
 `--strict` 必须通过，且语义和可读性审核通过后才可交付。旧图的基础扫描也必须通过；若只有 `SKIP` 没有有效扫描结果，视为未完成，不得声称布局已验证。明确披露的规则待补可以保留，但不能声称已完成该规则验证或据此作出实际判级。
@@ -187,4 +220,8 @@ python scripts/audit_svg_layout.py output.html --channel msedge --strict `
 | `TEXT_PATH_OVERLAP` | 把文字移出路径通道，或改道路径 |
 | `TEXT_LINE_OVERLAP` | 把文字移出直线通道，或缩短直线 |
 | `TEXT_LABEL_TOUCHES_STROKE` | 增加文字与描边之间的留白 |
+| `BADGE_TEXT_OVERFLOW` | 增大编号锚点圆半径（建议 `r >= 14`）或缩短序号 |
+| `CALLOUT_BADGE_OVERLAP` | 拉开各编号锚点位置，按阅读顺序错开摆放 |
+| `CALLOUT_POINT_MISMATCH` | 对齐 SVG 中 `data-callout-badge` 与 `.logic-points` 中 `data-point` 的编号集合 |
+| `VISUAL_TOO_SCHEMATIC` | 参考 `references/visual-svg-cookbook.md`，用真实界面、物件或视觉隐喻替换纯方框连线 |
 

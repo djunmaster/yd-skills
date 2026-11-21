@@ -8,7 +8,6 @@
     "claim",
     "visualType",
     "entities",
-    "relations",
     "constraints"
   ],
   "properties": {
@@ -20,6 +19,85 @@
       "type": "string",
       "minLength": 4
     },
+    "visualMode": {
+      "type": "string",
+      "enum": [
+        "interface",
+        "scene",
+        "metaphor",
+        "mechanism",
+        "before-after",
+        "cutaway",
+        "chart",
+        "diagram"
+      ],
+      "description": "优先使用 interface / scene / metaphor / mechanism / before-after / cutaway 等可视化图画模式；仅当流程拓扑本身是重点时使用 diagram。"
+    },
+    "visualScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metaphor", "visualProps", "textRemovalCheck"],
+      "properties": {
+        "metaphor": {
+          "type": "string",
+          "description": "用什么具象界面、物理场景或视觉隐喻来呈现逻辑（如：聊天窗口+高亮选区括号+抽离的知识卡）。"
+        },
+        "stageLayout": {
+          "type": "string",
+          "description": "画面分区与景深安排（如：左侧深色聊天窗口，中间抽取通道，右侧索引知识卡）。"
+        },
+        "visualProps": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          },
+          "description": "必须在 SVG 中画出的非方框视觉道具/界面构件（如：窗口标题栏三点、头像气泡、斜纹遮蔽条、隔断墙、挂锁图标）。"
+        },
+        "focalHighlight": {
+          "type": "string",
+          "description": "读者第一眼应该看到的视觉焦点。"
+        },
+        "textRemovalCheck": {
+          "type": "string",
+          "description": "抹去全部文字后，读者依然能从画面辨认出什么形态或对比。"
+        }
+      }
+    },
+    "callouts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "description": "图内圆形编号锚点（1, 2, 3, 4, 5, 6），与图外 HTML .logic-points 分点说明一一联动。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["number", "target", "label"],
+        "properties": {
+          "number": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "target": {
+            "type": "string",
+            "description": "引线指向的画面特征或构件。"
+          },
+          "label": {
+            "type": "string",
+            "description": "对应分点的简短主题。"
+          },
+          "tone": {
+            "type": "string",
+            "enum": ["blue", "green", "orange", "red"]
+          },
+          "pointSummary": {
+            "type": "string",
+            "description": "该编号在图外分点说明中承担的逻辑推进作用。"
+          }
+        }
+      }
+    },
     "focus": {
       "type": "string",
       "minLength": 2
@@ -27,7 +105,7 @@
     "sequence": {
       "type": "array",
       "minItems": 1,
-      "maxItems": 4,
+      "maxItems": 6,
       "items": {
         "type": "string",
         "minLength": 1
@@ -42,6 +120,11 @@
     "visualType": {
       "type": "string",
       "enum": [
+        "interface-scene",
+        "before-after-stage",
+        "metaphor-mechanism",
+        "cutaway",
+        "story-map",
         "scene",
         "pipeline",
         "threshold",
@@ -112,7 +195,7 @@
       "properties": {
         "direction": {
           "type": "string",
-          "enum": ["left-to-right", "right-to-left", "top-to-bottom", "center-out"]
+          "enum": ["left-to-right", "right-to-left", "top-to-bottom", "center-out", "split-stage", "layered"]
         },
         "minNodeGap": {
           "type": "number",

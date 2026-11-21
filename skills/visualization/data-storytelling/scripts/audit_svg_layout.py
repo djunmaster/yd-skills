@@ -221,6 +221,7 @@ LAYOUT_JS = r"""
     const strokeOpacity = Number.parseFloat(style.strokeOpacity || "1");
     if (!stroke || stroke === "none" || !Number.isFinite(strokeWidth) || strokeWidth <= 0) return null;
     if (style.display === "none" || style.visibility === "hidden" || opacity <= 0 || strokeOpacity <= 0) return null;
+    if (el.closest('[data-backdrop="true"]') && opacity * strokeOpacity <= 0.28) return null;
     const svg = svgRoot(el);
     const rootCtm = svg?.getScreenCTM?.();
     const ctm = el.getScreenCTM?.();
@@ -240,6 +241,28 @@ LAYOUT_JS = r"""
     if (!svg) return;
     const contract = figure.dataset.layoutContract || svg.dataset.layoutContract || "";
     const figureId = figure.dataset.visualId || figure.id || `figure-${figureIndex + 1}`;
+    const visualMode = (figure.dataset.visualMode || svg.dataset.visualMode || "").trim().toLowerCase();
+    const countVisualPrimitives = () => {
+      let count = 0;
+      const defsPatterns = svg.querySelectorAll("defs pattern, defs linearGradient, defs radialGradient, defs filter");
+      if (defsPatterns.length) count += Math.min(2, defsPatterns.length);
+      const nonLinkShapes = [...svg.querySelectorAll("path,circle,ellipse,polygon,polyline,line")].filter((el) => {
+        if (el.closest("defs") || el.closest("[data-callout-badge]") || el.closest('[data-backdrop="true"]')) return false;
+        if (el.hasAttribute("data-link") || el.hasAttribute("data-callout-leader")) return false;
+        return true;
+      });
+      count += nonLinkShapes.length;
+      const objectGroups = svg.querySelectorAll("[data-object]");
+      count += objectGroups.length;
+      svg.querySelectorAll("[data-node]").forEach((nodeEl) => {
+        const directRects = [...nodeEl.querySelectorAll("rect")].filter(
+          (r) => !r.closest("defs") && !r.closest("[data-callout-badge]") && r.closest("[data-node]") === nodeEl
+        );
+        if (directRects.length > 1) count += directRects.length - 1;
+      });
+      return count;
+    };
+    const visualPrimitives = countVisualPrimitives();
     const strokeAudit = (() => {
       const violations = [];
       const addLegacyViolation = (severity, code, message, details = {}, fix = "") => {
@@ -291,6 +314,8 @@ LAYOUT_JS = r"""
         .filter((item) => item);
       texts.forEach((text) => {
         strokeEls.forEach((stroke) => {
+          const badgeGroup = stroke.el.dataset.badgeShape === "true" ? stroke.el.closest("[data-callout-badge]") : null;
+          if (badgeGroup && text.el.closest("[data-callout-badge]") === badgeGroup) return;
           let overlapsText = false;
           let touchesText = false;
           const strokePadding = Math.max(1.5, stroke.width / 2 + 0.5);
@@ -349,15 +374,71 @@ LAYOUT_JS = r"""
           );
         }
       });
+      const calloutBadges = [...figure.querySelectorAll("[data-callout-badge]")]
+        .filter((el) => !el.closest("defs"))
+        .map((el, index) => ({
+          el,
+          id: (el.dataset.calloutBadge || `badge-${index + 1}`).trim(),
+          rect: rectOf(el),
+        }))
+        .filter((item) => item.rect);
+      calloutBadges.forEach((badge) => {
+        const shapeEl = badge.el.querySelector('[data-badge-shape="true"]');
+        const shapeRect = shapeEl ? rectOf(shapeEl) : null;
+        if (shapeRect) {
+          badge.el.querySelectorAll("text").forEach((textEl) => {
+            const tRect = rectOf(textEl);
+            if (!tRect) return;
+            if (
+              tRect.x < shapeRect.x + 1 ||
+              tRect.y < shapeRect.y + 1 ||
+              tRect.right > shapeRect.right - 1 ||
+              tRect.bottom > shapeRect.bottom - 1
+            ) {
+              addLegacyViolation(
+                "error",
+                "BADGE_TEXT_OVERFLOW",
+                `编号锚点“${badge.id}”内的文字超出锚点外框。`,
+                { figure: figureId, badge: badge.id, text: textEl.textContent.trim() },
+                "适当增大锚点图形半径（建议 r>=14）或缩短锚点序号。"
+              );
+            }
+          });
+        }
+      });
+      for (let i = 0; i < calloutBadges.length; i += 1) {
+        for (let j = i + 1; j < calloutBadges.length; j += 1) {
+          const ov = overlapSize(calloutBadges[i].rect, calloutBadges[j].rect);
+          if (ov.width > 0.5 && ov.height > 0.5) {
+            addLegacyViolation(
+              "error",
+              "CALLOUT_BADGE_OVERLAP",
+              `编号锚点 ${calloutBadges[i].id} 与 ${calloutBadges[j].id} 重叠。`,
+              { figure: figureId, badges: [calloutBadges[i].id, calloutBadges[j].id] },
+              "拉开编号锚点位置，按阅读顺序分布在画面清晰空位。"
+            );
+          }
+        }
+      }
+      if (["interface", "scene", "metaphor", "mechanism", "before-after", "cutaway"].includes(visualMode) && visualPrimitives < 4) {
+        addLegacyViolation(
+          "warning",
+          "VISUAL_TOO_SCHEMATIC",
+          `图“${figureId}”声明为 ${visualMode} 可视化画面，但视觉原语仅 ${visualPrimitives} 项，疑似退化为纯方框连线图。`,
+          { figure: figureId, visualMode, visualPrimitives },
+          "参考 references/visual-svg-cookbook.md，补充界面框架、物体轮廓、状态隐喻或对比细节，确保通过去字可辨检验。"
+        );
+      }
       const errors = violations.filter((item) => item.severity === "error");
       const warnings = violations.filter((item) => item.severity === "warning");
       return {
         id: figureId,
         contract: contract || "(missing)",
+        visualMode: visualMode || "",
         skipped: false,
         legacy: true,
         status: errors.length ? "error" : warnings.length ? "warning" : "pass",
-        counts: { nodes: 0, links: 0, labels: 0, texts: texts.length, strokes: strokeEls.length, targets: targetBoxes.length },
+        counts: { nodes: 0, links: 0, labels: 0, texts: texts.length, strokes: strokeEls.length, targets: targetBoxes.length, badges: calloutBadges.length, visualPrimitives },
         violations,
       };
     })();
@@ -744,21 +825,76 @@ LAYOUT_JS = r"""
       }
     });
     allTexts.forEach((item, index) => checkBounds("文字", `text-${index + 1}`, item.rect, 0));
+    [...figure.querySelectorAll("[data-callout-badge]")].forEach((badgeEl, index) => {
+      if (badgeEl.closest("defs")) return;
+      const bRect = rectOf(badgeEl);
+      checkBounds("编号锚点", badgeEl.dataset.calloutBadge || `badge-${index + 1}`, bRect, 4);
+    });
 
     const errors = violations.filter((item) => item.severity === "error");
     const warnings = violations.filter((item) => item.severity === "warning");
     figures.push({
       id: figureId,
       contract,
+      visualMode: visualMode || "",
       skipped: false,
       status: errors.length ? "error" : warnings.length ? "warning" : "pass",
-      counts: { nodes: nodes.length, links: links.length, labels: labels.length, texts: allTexts.length, strokes: strokeAudit.counts.strokes, targets: strokeAudit.counts.targets },
+      counts: {
+        nodes: nodes.length,
+        links: links.length,
+        labels: labels.length,
+        texts: allTexts.length,
+        strokes: strokeAudit.counts.strokes,
+        targets: strokeAudit.counts.targets,
+        badges: strokeAudit.counts.badges,
+        visualPrimitives,
+      },
       violations,
     });
   });
 
   const pageViolations = [];
   const coverage = [];
+  const logicSync = [];
+  document.querySelectorAll("[data-for-visual]").forEach((listEl) => {
+    const visualId = (listEl.dataset.forVisual || "").trim();
+    if (!visualId) return;
+    const figure = [...document.querySelectorAll("figure.viz")].find((item) => item.dataset.visualId === visualId);
+    if (!figure) {
+      logicSync.push({ visual: visualId, badges: [], points: [], missingInList: [], missingInSvg: [], status: "error" });
+      pageViolations.push({
+        severity: "error",
+        code: "LOGIC_VISUAL_MISSING",
+        message: `分点说明关联的图示 ${visualId} 不存在于页面中。`,
+        fix: "核对 data-for-visual 与对应 figure.viz 的 data-visual-id 是否一致。",
+      });
+      return;
+    }
+    const badgeSet = new Set(
+      [...figure.querySelectorAll("[data-callout-badge]")]
+        .filter((el) => !el.closest("defs"))
+        .map((el) => (el.dataset.calloutBadge || "").trim())
+        .filter(Boolean)
+    );
+    const pointSet = new Set(
+      [...listEl.querySelectorAll("[data-point]")]
+        .filter((el) => el.dataset.noBadge !== "true")
+        .map((el) => (el.dataset.point || "").trim())
+        .filter(Boolean)
+    );
+    const missingInList = [...badgeSet].filter((id) => !pointSet.has(id));
+    const missingInSvg = [...pointSet].filter((id) => !badgeSet.has(id));
+    const status = missingInList.length || missingInSvg.length ? "error" : "pass";
+    logicSync.push({ visual: visualId, badges: [...badgeSet], points: [...pointSet], missingInList, missingInSvg, status });
+    if (missingInList.length || missingInSvg.length) {
+      pageViolations.push({
+        severity: "error",
+        code: "CALLOUT_POINT_MISMATCH",
+        message: `图示 ${visualId} 的编号锚点与分点说明未对齐（图有文无：${missingInList.join(",") || "无"}；文有图无：${missingInSvg.join(",") || "无"}）。`,
+        fix: "让 SVG 中的 data-callout-badge（1–6）与 .logic-points 中的 data-point（1–6）完全对应；纯总括分点可加 data-no-badge=\"true\"。",
+      });
+    }
+  });
   document.querySelectorAll('[data-required-visuals]').forEach((group, index) => {
     const required = group.dataset.requiredVisuals.trim().split(/\s+/).filter(Boolean);
     const available = [...group.querySelectorAll('figure.viz')];
@@ -854,6 +990,7 @@ LAYOUT_JS = r"""
   return {
     figures,
     coverage,
+    logic_sync: logicSync,
     page_violations: pageViolations,
     summary: {
       total: figures.length,
@@ -900,6 +1037,8 @@ def print_report(report: dict[str, Any]) -> None:
             print(f"  - {error}")
     for group in report["layout"].get("coverage", []):
         print(f"CONTENT COVERAGE: {group['group']} {group['status'].upper()} required={len(group['required'])} missing={len(group['missing'])}")
+    for item in report["layout"].get("logic_sync", []):
+        print(f"LOGIC SYNC: {item['visual']} {item['status'].upper()} badges={len(item['badges'])} points={len(item['points'])}")
     for figure in report["layout"]["figures"]:
         if figure.get("skipped"):
             print(f"- {figure['id']}: SKIP contract={figure['contract']}")
@@ -915,7 +1054,13 @@ def print_report(report: dict[str, Any]) -> None:
                 if violation.get("fix"):
                     print(f"    FIX: {violation['fix']}")
             continue
-        print(f"- {figure['id']}: {figure['status'].upper()} nodes={figure['counts']['nodes']} links={figure['counts']['links']}")
+        mode_tag = f" mode={figure['visualMode']}" if figure.get("visualMode") else ""
+        badges_tag = f" badges={figure['counts'].get('badges', 0)}" if figure["counts"].get("badges") else ""
+        print(
+            f"- {figure['id']}: {figure['status'].upper()} "
+            f"nodes={figure['counts']['nodes']} links={figure['counts']['links']}"
+            f"{mode_tag}{badges_tag} primitives={figure['counts'].get('visualPrimitives', 0)}"
+        )
         for violation in figure["violations"]:
             print(f"  [{violation['severity'].upper()}] {violation['code']}: {violation['message']}")
             if violation.get("fix"):

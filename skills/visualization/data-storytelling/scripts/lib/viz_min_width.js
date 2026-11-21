@@ -3,7 +3,8 @@
 // smaller than its viewBox, which shrinks every label below its declared
 // data-min-text-px and makes text unreadable on narrow viewports.
 
-const FIGURE_OPEN = /<figure\b[^>]*class="[^"]*\bviz\b[^"]*"[^>]*>/g;
+const FIGURE_OPEN = /<figure\b(?:[^>"']|"[^"]*"|'[^']*')*>/g;
+const CLASS_VIZ = /\bclass\s*=\s*(?:"[^"]*\bviz\b[^"]*"|'[^']*\bviz\b[^']*')/i;
 const VIEW_BOX = /viewBox\s*=\s*["']\s*0\s+0\s+(\d+(?:\.\d+)?)/;
 
 function setMinWidth(figureTag, width) {
@@ -26,6 +27,7 @@ function applyVizMinWidth(html) {
   let match;
   while ((match = FIGURE_OPEN.exec(html)) !== null) {
     const tag = match[0];
+    if (!CLASS_VIZ.test(tag)) continue;
     if (/--viz-min-w\s*:/.test(tag)) continue;
     const rest = html.slice(match.index + tag.length);
     const figureEnd = rest.search(/<figure\b|<\/figure>/i);

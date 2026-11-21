@@ -12,7 +12,7 @@ function read(file) {
 }
 
 function build(bodyFile, outputFile, title, theme) {
-  const body = applyVizMinWidth(read(bodyFile)).replace(/<figure\b[^>]*>/g, (openingTag) => {
+  const body = applyVizMinWidth(read(bodyFile)).replace(/<figure\b(?:[^>"']|"[^"]*"|'[^']*')*>/g, (openingTag) => {
     const visualId = openingTag.match(/\sdata-visual-id="([a-z0-9-]+)"/);
     if (!visualId || /\sid\s*=/.test(openingTag)) return openingTag;
     return openingTag.replace(/>$/, ` id="${visualId[1]}">`);
@@ -55,6 +55,6 @@ if (!bodyArg || !outputArg) {
 build(
   path.resolve(bodyArg),
   path.resolve(outputArg),
-    titleArg || "图文叙事页面",
+  titleArg || "大模型微调与数据建设方法论",
   (themeArg || "light").toLowerCase()
 );
