@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>universal-ui v2.0 · 现成页面模板与布局骨架全景图谱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root, [data-theme="dark"] {
+  --canvas: #1c1c1c;
+  --sidebar: #171717;
+  --surface: #232323;
+  --subtle: #2a2a2a;
+  --hover: #2f2f2f;
+  --line: rgba(255, 255, 255, 0.075);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --ink: #ececec;
+  --ink-2: #b8b8b8;
+  --muted: #808080;
+  --action: #ececec;
+  --action-fg: #171717;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.14);
+  --green: #4ade80;
+  --green-soft: rgba(74, 222, 128, 0.12);
+  --amber: #fbbf24;
+  --amber-soft: rgba(251, 191, 36, 0.12);
+  --violet: #c3b5f5;
+  --violet-soft: rgba(195, 181, 245, 0.13);
+  --wf-bg: #181818;
+  --wf-block: #2c2c2c;
+  --wf-hi: #3f3f46;
+}
+
+[data-theme="light"] {
+  --canvas: #f6f6f7;
+  --sidebar: #efeff1;
+  --surface: #ffffff;
+  --subtle: #f1f1f4;
+  --hover: #eaeaeD;
+  --line: rgba(24, 24, 27, 0.08);
+  --line-strong: rgba(24, 24, 27, 0.15);
+  --ink: #18181b;
+  --ink-2: #4a4a52;
+  --muted: #71717a;
+  --action: #18181b;
+  --action-fg: #ffffff;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.10);
+  --green: #15803d;
+  --green-soft: rgba(21, 128, 61, 0.10);
+  --amber: #b45309;
+  --amber-soft: rgba(180, 83, 9, 0.10);
+  --violet: #7055b4;
+  --violet-soft: rgba(112, 85, 180, 0.11);
+  --wf-bg: #f4f4f6;
+  --wf-block: #e4e4e9;
+  --wf-hi: #d1d1da;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11.5px; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--sidebar);
+  border-bottom: 1px solid var(--line);
+  padding: 11px 24px;
+}
+
+.topbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.seg {
+  display: inline-flex;
+  background: var(--subtle);
+  padding: 3px;
+  border-radius: 9px;
+  gap: 2px;
+}
+.seg button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.seg button.active {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.btn-flat {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-flat:hover { background: var(--hover); }
+
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 26px 24px 64px;
+}
+
+.sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.sec-head h1, .sec-head h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.sec-head p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pill.v1 { background: var(--violet-soft); color: var(--violet); }
+.pill.v2 { background: var(--green-soft); color: var(--green); }
+.pill.opt { background: var(--amber-soft); color: var(--amber); }
+.pill.neu { background: var(--subtle); color: var(--ink-2); }
+
+/* Template Cards Grid */
+.tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tpl-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  cursor: pointer;
+  transition: border-color 140ms ease, transform 140ms ease;
+}
+.tpl-card:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+.tpl-card.selected { border-color: var(--accent); }
+
+.wf-box {
+  background: var(--wf-bg);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 10px;
+  height: 118px;
+  overflow: hidden;
+}
+.wf-box svg { display: block; width: 100%; height: 100%; }
+
+.tpl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.tpl-title { font-size: 14.5px; font-weight: 600; }
+.tpl-file { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.tpl-desc { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; margin: 0; }
+.tpl-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* Detail Inspector Banner (Appears when clicking any card) */
+.inspector {
+  margin-top: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 20px;
+}
+.insp-col h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.insp-list {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12.8px;
+  color: var(--ink-2);
+  line-height: 1.65;
+}
+
+/* Layout Skeletons Section */
+.sec-divider {
+  margin-top: 44px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lay-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lay-wf {
+  height: 78px;
+  background: var(--wf-bg);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 7px;
+}
+.lay-wf svg { width: 100%; height: 100%; display: block; }
+
+.lay-name { font-size: 13.2px; font-weight: 600; }
+.lay-use { font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+@media (max-width: 1020px) {
+  .tpl-grid { grid-template-columns: repeat(2, 1fr); }
+  .layout-grid { grid-template-columns: repeat(2, 1fr); }
+  .inspector { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .tpl-grid, .layout-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <strong style="font-size:14px;">universal-ui · 模板与布局全景图谱</strong>
+      <div class="seg" id="filterSeg">
+        <button data-f="all" class="active" type="button">全部模板 (9)</button>
+        <button data-f="v1" type="button">原仓库已有 (5)</button>
+        <button data-f="v2" type="button">v2.0 新增 (4)</button>
+      </div>
+    </div>
+    <button class="btn-flat" id="themeBtn" type="button">切换浅色</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- SECTION 1: ALL PAGE TEMPLATES -->
+  <div class="sec-head">
+    <div>
+      <h1>一、现有整页模板清单（点击任意卡片查看拆解与优化空间）</h1>
+      <p>包含你原仓库 <code>assets/</code> 里的 5 个基础模板 + 本轮新增的 4 个行业标杆范本，每张缩略图直观展示其页面骨架。</p>
+    </div>
+    <span class="mono" style="color:var(--muted)" id="tplCountText">显示 9 / 9 个模板</span>
+  </div>
+
+  <div class="tpl-grid" id="tplGrid"></div>
+
+  <!-- LIVE INSPECTOR FOR SELECTED TEMPLATE -->
+  <section class="inspector" id="tplInspector"></section>
+
+  <!-- SECTION 2: 8 CORE LAYOUT SKELETONS -->
+  <div class="sec-divider">
+    <div class="sec-head">
+      <div>
+        <h2>二、核心可复用布局骨架（从 36 套精简提炼的 8 大高频结构）</h2>
+        <p>做任何新工具页面时，AI 不必从零猜布局，而是直接从这 8 种骨架里选定主结构再填充业务模块。</p>
+      </div>
+    </div>
+    <div class="layout-grid" id="layoutGrid"></div>
+  </div>
+
+</main>
+
+<script>
+const TEMPLATES = [
+  {
+    id: "analytics", src: "v1", badge: "v1 结构 · 已并入 v2 骨架",
+    name: "收入分析看板", file: "结构参考 · 无独立页面文件",
+    desc: "用于经营/业务指标复盘：顶部周期切换、4 列光学 KPI 带、焦噪分离趋势折线与渠道占比明细表。",
+    palette: "Apple Clarity / Neutral Core",
+    blocks: ["顶部周期分段器（7D/30D/90D）+ 导出操作", "4 列统一光学 KPI 指标带（等宽数字 + 环比徽章）", "结论型标题 + 焦噪分离趋势折线（终点直接标注）", "带微占比进度条的明细数据表"],
+    reuse: ["4 列 KPI 指标带", "焦噪分离折线图", "带微进度条的明细表"],
+    improve: ["可补充「多维度下钻抽屉」（点击渠道行展开子趋势）", "可增加对比周期自定义选择器（替代固定 3 档）"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="80" height="10" rx="2" fill="var(--wf-hi)"/>
+      <rect x="175" y="0" width="65" height="10" rx="3" fill="var(--wf-block)"/>
+      <rect x="0" y="18" width="56" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="61" y="18" width="56" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="122" y="18" width="56" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="183" y="18" width="57" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="0" y="46" width="240" height="30" rx="4" fill="var(--wf-block)"/>
+      <polyline fill="none" stroke="var(--accent)" stroke-width="2" points="10,70 60,64 110,66 165,56 228,51"/>
+      <rect x="0" y="82" width="240" height="16" rx="3" fill="var(--wf-block)"/>
+    </svg>`
+  },
+  {
+    id: "monitoring", src: "v1", badge: "v1 结构 · 已并入 v2 骨架",
+    name: "服务可用率监控", file: "结构参考 · 无独立页面文件",
+    desc: "用于系统与接口健康巡检：服务分类快筛、全链路可用率概览、30 天状态脉冲时间线与延迟说明。",
+    palette: "Swiss Slate / Neutral Core",
+    blocks: ["服务分层筛选胶囊（全部 / API / 网关 / 数据库）", "3 列可用率与 P95 延迟概览条", "30 天脉冲状态条（悬停看当日故障/恢复时长）", "异常事件时间线说明"],
+    reuse: ["30 格脉冲状态时间线", "服务健康状态胶囊"],
+    improve: ["可补充「告警阈值配置行」与「实时日志流抽屉」", "可增加多地域节点（华南/华东/新加坡）延迟对比"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="70" height="10" rx="2" fill="var(--wf-hi)"/>
+      <rect x="145" y="0" width="95" height="10" rx="3" fill="var(--wf-block)"/>
+      <rect x="0" y="18" width="76" height="20" rx="4" fill="var(--wf-block)"/>
+      <rect x="82" y="18" width="76" height="20" rx="4" fill="var(--wf-block)"/>
+      <rect x="164" y="18" width="76" height="20" rx="4" fill="var(--wf-block)"/>
+      <rect x="0" y="46" width="240" height="52" rx="4" fill="var(--wf-block)"/>
+      ${Array.from({length:22},(_,i)=>`<rect x="${8+i*10}" y="58" width="6" height="14" rx="1.5" fill="${i===14?'var(--amber)':'var(--green)'}" opacity="0.85"/>`).join("")}
+      ${Array.from({length:22},(_,i)=>`<rect x="${8+i*10}" y="78" width="6" height="14" rx="1.5" fill="${i===8?'var(--amber)':'var(--green)'}" opacity="0.85"/>`).join("")}
+    </svg>`
+  },
+  {
+    id: "gateway", src: "v1", badge: "v1 结构 · 已并入 v2 骨架",
+    name: "模型网关配置台", file: "结构参考 · 无独立页面文件",
+    desc: "用于上游 API 提供方管理：活跃节点与加权延迟概览、提供方配置行、延迟对比条与滑动启停开关。",
+    palette: "Codex Matte / Neutral Core",
+    blocks: ["活跃节点数与平均 TTFT 概览带", "上游提供方列表行（模型标签、状态点、延迟条、权重）", "实时启停滑动开关（联动重算平均延迟）"],
+    reuse: ["配置开关行组件", "延迟进度微条"],
+    improve: ["可与 Magpie 跨 Agent 协议绑定（Responses/Messages）合并升级", "可补充「多 Key 轮询配额条」与「一键连通性测试」"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="76" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="82" y="0" width="76" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="164" y="0" width="76" height="22" rx="4" fill="var(--wf-block)"/>
+      <rect x="0" y="30" width="240" height="19" rx="4" fill="var(--wf-block)"/>
+      <rect x="206" y="35" width="24" height="9" rx="4.5" fill="var(--green)"/>
+      <rect x="0" y="54" width="240" height="19" rx="4" fill="var(--wf-block)"/>
+      <rect x="206" y="59" width="24" height="9" rx="4.5" fill="var(--green)"/>
+      <rect x="0" y="78" width="240" height="19" rx="4" fill="var(--wf-block)"/>
+      <rect x="206" y="83" width="24" height="9" rx="4.5" fill="var(--wf-hi)"/>
+    </svg>`
+  },
+  {
+    id: "crm", src: "v1", badge: "v1 结构 · 已并入 v2 骨架",
+    name: "客户与记录管理", file: "结构参考 · 无独立页面文件",
+    desc: "用于高频列表检索与状态兜底：单行搜索/筛选工具条、可排序数据表，以及标准化的加载/空态/异常重试四态。",
+    palette: "Neutral Core / Apple Clarity",
+    blocks: ["单行紧凑工具条（关键词搜索 + 负责人下拉）", "支持表头点击排序的 44px 行高数据表", "完整四态兜底（正常 / 骨架屏 / 空态 / 异常重试）"],
+    reuse: ["四态状态机模板", "单行筛选工具栏", "可排序标准表格"],
+    improve: ["把负责人筛选从原生 `<select>` 全面替换为自定义 Popover", "可补充「右侧客户详情滑出抽屉」与批量勾选操作条"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="110" height="14" rx="4" fill="var(--wf-block)"/>
+      <rect x="116" y="0" width="60" height="14" rx="4" fill="var(--wf-block)"/>
+      <rect x="182" y="0" width="58" height="14" rx="4" fill="var(--wf-hi)"/>
+      <rect x="0" y="22" width="240" height="76" rx="5" fill="var(--wf-block)"/>
+      <line x1="10" y1="38" x2="230" y2="38" stroke="var(--wf-hi)" stroke-width="1"/>
+      <line x1="10" y1="54" x2="230" y2="54" stroke="var(--wf-hi)" stroke-width="1"/>
+      <line x1="10" y1="70" x2="230" y2="70" stroke="var(--wf-hi)" stroke-width="1"/>
+      <line x1="10" y1="86" x2="230" y2="86" stroke="var(--wf-hi)" stroke-width="1"/>
+    </svg>`
+  },
+  {
+    id: "saas", src: "v1", badge: "v1 结构 · 已并入 v2 骨架",
+    name: "订阅与账单回款", file: "结构参考 · 无独立页面文件",
+    desc: "用于收款与逾期跟进：克制柔和的逾期提醒条、已收/待收/逾期三段式收款进度条，以及可筛选账单状态明细。",
+    palette: "Mercury Emerald / Neutral Core",
+    blocks: ["克制逾期提醒横幅（附一键筛选跳转）", "三段式收款进度条（已结清 / 待支付 / 已逾期）", "按状态筛选的账单明细表"],
+    reuse: ["三段式进度条", "克制警告提醒条"],
+    improve: ["可补充「账单详情预览抽屉」与「催款邮件草稿一键生成」", "可增加 MRR/ARR 续费留存队列小图"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="240" height="16" rx="4" fill="var(--amber-soft)" stroke="var(--amber)" stroke-opacity="0.4"/>
+      <rect x="0" y="24" width="240" height="24" rx="4" fill="var(--wf-block)"/>
+      <rect x="10" y="34" width="150" height="6" rx="3" fill="var(--accent)"/>
+      <rect x="163" y="34" width="38" height="6" rx="3" fill="var(--amber)"/>
+      <rect x="204" y="34" width="24" height="6" rx="3" fill="var(--wf-hi)"/>
+      <rect x="0" y="56" width="240" height="42" rx="4" fill="var(--wf-block)"/>
+    </svg>`
+  },
+  {
+    id: "codex", src: "v2", badge: "v2.0 新增标杆",
+    name: "AI Agent 对话与 Magpie 路由台", file: "assets/codex-magpie-workbench.html",
+    desc: "对标 Codex Desktop + Magpie：46px 窄图标栏 + 无框线程列表 + 居中安静对话流 + 双层悬浮输入卡 + 按需 Diff 抽屉。",
+    palette: "Codex Matte（纯中性雾面灰）",
+    blocks: ["46px 极窄图标栏 + 236px 无框置顶/最近线程列表", "零冗余顶栏 + 740px 居中 Markdown 对话渲染区", "双层悬浮输入卡（上层项目/分支条 + 下层可搜索路由弹出菜单）", "左侧独立切换 Magpie 配额路由与 Privacy Masking 隐私脱敏"],
+    reuse: ["双层悬浮输入框", "可搜索自定义 Popover", "按需右侧 Diff 抽屉"],
+    improve: ["可补充「多 Agent 并行子任务状态条」", "可增加「语音输入/截图粘贴预览」与「分支对比 Diff」"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="14" height="100" rx="2" fill="var(--wf-hi)"/>
+      <rect x="17" y="0" width="46" height="100" rx="2" fill="var(--wf-block)"/>
+      <rect x="78" y="10" width="144" height="44" rx="4" fill="var(--wf-block)" opacity="0.5"/>
+      <rect x="92" y="64" width="116" height="8" rx="3" fill="var(--wf-block)"/>
+      <rect x="82" y="72" width="136" height="24" rx="6" fill="var(--wf-hi)"/>
+      <circle cx="206" cy="84" r="5" fill="var(--ink)"/>
+    </svg>`
+  },
+  {
+    id: "treasury", src: "v2", badge: "v2.0 新增标杆",
+    name: "企业司库与多银行资金台", file: "assets/treasury-vpp-showcase.html",
+    desc: "对标 Mercury + Stripe：首屏直出净现金余额 Hero 与现金流趋势，6 家直连银行等宽对账，右侧待审批划转实时联动。",
+    palette: "Mercury Emerald（零焦虑金融绿）",
+    blocks: ["净资金总额 Hero + 30D/90D/1Y 焦噪分离现金流曲线", "6 家直连银行余额表（点击筛选，红仅留超限）", "右侧待审批划转卡片（批准后实时扣减可用余额）", "流动性结构分段条"],
+    reuse: ["净资金 Hero 趋势块", "零焦虑银行账户表", "实时联动审批卡"],
+    improve: ["可补充「多币种汇率换算切换（CNY/USD/HKD）」", "可增加「未来 30 天现金流预测瀑布图」"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="154" height="52" rx="5" fill="var(--wf-block)"/>
+      <polyline fill="none" stroke="var(--green)" stroke-width="2" points="10,42 45,38 85,32 142,22"/>
+      <rect x="0" y="58" width="154" height="40" rx="5" fill="var(--wf-block)"/>
+      <rect x="162" y="0" width="78" height="58" rx="5" fill="var(--wf-block)"/>
+      <rect x="162" y="64" width="78" height="34" rx="5" fill="var(--wf-block)"/>
+    </svg>`
+  },
+  {
+    id: "vpp", src: "v2", badge: "v2.0 新增标杆",
+    name: "虚拟电厂 VPP 能源遥测台", file: "assets/treasury-vpp-showcase.html",
+    desc: "对标 Tesla Energy + Vercel Observability：实时光伏/储能/负荷/电网能量流拓扑 + 24h 峰谷电价响应曲线 + 站点心跳条。",
+    palette: "Swiss Slate / Codex Matte",
+    blocks: ["实时能量流向拓扑图（支持午间/晚高峰/夜间 3 工况切换）", "24h 聚合出力与尖峰电价阴影带曲线", "聚合场站与边缘网关 20 格心跳矩阵"],
+    reuse: ["4 节点能量流拓扑图", "带峰谷阴影带的功率曲线", "设备脉冲心跳行"],
+    improve: ["可补充「单站点逆变器下钻详情抽屉」", "可增加「日前调度计划 vs 实际执行偏差条」"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="116" height="56" rx="5" fill="var(--wf-block)"/>
+      <circle cx="58" cy="28" r="4" fill="var(--green)"/>
+      <line x1="58" y1="10" x2="58" y2="46" stroke="var(--green)" stroke-width="1.5"/>
+      <line x1="20" y1="28" x2="96" y2="28" stroke="var(--wf-hi)" stroke-width="1.5"/>
+      <rect x="124" y="0" width="116" height="56" rx="5" fill="var(--wf-block)"/>
+      <rect x="192" y="8" width="38" height="40" fill="var(--amber-soft)"/>
+      <polyline fill="none" stroke="var(--ink)" stroke-width="1.8" points="132,42 162,36 196,20 230,26"/>
+      <rect x="0" y="64" width="240" height="34" rx="5" fill="var(--wf-block)"/>
+    </svg>`
+  },
+  {
+    id: "kb-life", src: "v2", badge: "v2.0 拓展原型",
+    name: "知识库阅读 & 个人生活总控", file: "round2 / round3 原型",
+    desc: "对标 Notion / Craft + Apple Health：弱侧栏 + ≤64ch 无框长文阅读流，以及光学三环、睡眠柱图、时间块日程与微习惯打卡。",
+    palette: "Warm Editorial / Apple Clarity",
+    blocks: ["弱侧栏集合导航 + 顶部快速链接归档输入", "≤64ch 舒适无框长文排版与核心提炼区", "Apple 风格光学三环 + 睡眠柱图 + 习惯联动打卡"],
+    reuse: ["≤64ch 阅读画布", "光学三环组件", "时间块日程列表"],
+    improve: ["建议拆分为两个独立正式模板（`knowledge-base.html` 与 `life-os.html`）写入仓库", "可补充「双向链接大纲」与「周视图日历切换」"],
+    svg: `<svg viewBox="0 0 240 100">
+      <rect x="0" y="0" width="52" height="100" rx="4" fill="var(--wf-block)"/>
+      <rect x="60" y="0" width="180" height="16" rx="4" fill="var(--wf-block)"/>
+      <rect x="60" y="22" width="180" height="76" rx="5" fill="var(--wf-block)"/>
+      <rect x="78" y="34" width="90" height="7" rx="2" fill="var(--wf-hi)"/>
+      <rect x="78" y="48" width="140" height="4" rx="2" fill="var(--wf-hi)" opacity="0.6"/>
+      <rect x="78" y="58" width="132" height="4" rx="2" fill="var(--wf-hi)" opacity="0.6"/>
+      <rect x="78" y="68" width="110" height="4" rx="2" fill="var(--wf-hi)" opacity="0.6"/>
+    </svg>`
+  }
+];
+
+const LAYOUTS = [
+  { name: "1. 双窄栏 + 居中对话流", use: "AI Agent 对话、Codex、编程助手；右侧 Diff 按需滑出", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="10" height="60" rx="2" fill="var(--wf-hi)"/><rect x="13" y="0" width="26" height="60" rx="2" fill="var(--wf-block)"/><rect x="52" y="8" width="74" height="32" rx="3" fill="var(--wf-block)"/><rect x="52" y="44" width="74" height="12" rx="4" fill="var(--wf-hi)"/></svg>` },
+  { name: "2. KPI 带 + 趋势图 + 表", use: "收入分析、经营看板、订阅回款与运营复盘", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="32" height="14" rx="2" fill="var(--wf-block)"/><rect x="36" y="0" width="32" height="14" rx="2" fill="var(--wf-block)"/><rect x="72" y="0" width="32" height="14" rx="2" fill="var(--wf-block)"/><rect x="108" y="0" width="32" height="14" rx="2" fill="var(--wf-block)"/><rect x="0" y="18" width="140" height="22" rx="3" fill="var(--wf-block)"/><rect x="0" y="44" width="140" height="16" rx="2" fill="var(--wf-hi)"/></svg>` },
+  { name: "3. 主区 + 右侧审批栏 (2:1)", use: "企业司库、审批工作台、工单与任务详情", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="90" height="34" rx="3" fill="var(--wf-block)"/><rect x="0" y="38" width="90" height="22" rx="3" fill="var(--wf-block)"/><rect x="96" y="0" width="44" height="60" rx="3" fill="var(--wf-hi)"/></svg>` },
+  { name: "4. 弱侧栏 + ≤68ch 阅读流", use: "知识库、笔记、技术文档、深度调研报告", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="30" height="60" rx="2" fill="var(--wf-block)"/><rect x="44" y="6" width="82" height="48" rx="3" fill="var(--wf-hi)"/></svg>` },
+  { name: "5. 拓扑/曲线 + 状态脉冲行", use: "服务监控、IoT 遥测、虚拟电厂 VPP 调度", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="67" height="34" rx="3" fill="var(--wf-block)"/><rect x="73" y="0" width="67" height="34" rx="3" fill="var(--wf-block)"/><rect x="0" y="39" width="140" height="21" rx="3" fill="var(--wf-hi)"/></svg>` },
+  { name: "6. 工具行 + 全宽数据表", use: "CRM 客户管理、交易流水、账单检索（含四态）", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="140" height="12" rx="2" fill="var(--wf-hi)"/><rect x="0" y="16" width="140" height="44" rx="3" fill="var(--wf-block)"/></svg>` },
+  { name: "7. 配置行列表 + 开关联动", use: "模型网关、Magpie 路由表、插件与隐私权限", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="140" height="17" rx="3" fill="var(--wf-block)"/><rect x="0" y="21" width="140" height="17" rx="3" fill="var(--wf-block)"/><rect x="0" y="42" width="140" height="17" rx="3" fill="var(--wf-block)"/></svg>` },
+  { name: "8. 多轨时间轴 + 同步大纲", use: "音视频剪辑台、按日出行行程、项目排期甘特", svg: `<svg viewBox="0 0 140 60"><rect x="0" y="0" width="92" height="32" rx="3" fill="var(--wf-hi)"/><rect x="0" y="36" width="92" height="24" rx="3" fill="var(--wf-block)"/><rect x="98" y="0" width="42" height="60" rx="3" fill="var(--wf-block)"/></svg>` }
+];
+
+let curFilter = "all";
+let selectedId = "codex";
+
+function renderTemplates() {
+  const rows = TEMPLATES.filter(t => curFilter === "all" || t.src === curFilter);
+  document.getElementById("tplCountText").textContent = `显示 ${rows.length} / ${TEMPLATES.length} 个模板`;
+  if (!rows.some(r => r.id === selectedId) && rows.length) selectedId = rows[0].id;
+
+  const grid = document.getElementById("tplGrid");
+  grid.innerHTML = rows.map(t => `
+    <article class="tpl-card ${t.id === selectedId ? "selected" : ""}" data-id="${t.id}">
+      <div class="wf-box">${t.svg}</div>
+      <div class="tpl-top">
+        <div>
+          <div class="tpl-title">${t.name}</div>
+          <div class="tpl-file">${t.file}</div>
+        </div>
+        <span class="pill ${t.src === "v1" ? "v1" : "v2"}">${t.badge}</span>
+      </div>
+      <p class="tpl-desc">${t.desc}</p>
+      <div class="tpl-foot">
+        <span>色盘：${t.palette}</span>
+        <span>查看拆解 →</span>
+      </div>
+    </article>
+  `).join("");
+
+  grid.querySelectorAll(".tpl-card").forEach(c => {
+    c.addEventListener("click", () => {
+      selectedId = c.dataset.id;
+      renderTemplates();
+    });
+  });
+
+  const sel = TEMPLATES.find(t => t.id === selectedId) || TEMPLATES[0];
+  document.getElementById("tplInspector").innerHTML = `
+    <div class="insp-col">
+      <h3>当前选中：${sel.name}（区块结构拆解）</h3>
+      <ul class="insp-list">${sel.blocks.map(b => `<li>${b}</li>`).join("")}</ul>
+    </div>
+    <div class="insp-col">
+      <h3>可直接局部拆用的组件</h3>
+      <ul class="insp-list">${sel.reuse.map(r => `<li>${r}</li>`).join("")}</ul>
+    </div>
+    <div class="insp-col">
+      <h3>下一步可继续优化的空间</h3>
+      <ul class="insp-list">${sel.improve.map(i => `<li>${i}</li>`).join("")}</ul>
+    </div>
+  `;
+}
+
+function renderLayouts() {
+  document.getElementById("layoutGrid").innerHTML = LAYOUTS.map(l => `
+    <div class="lay-card">
+      <div class="lay-wf">${l.svg}</div>
+      <div class="lay-name">${l.name}</div>
+      <div class="lay-use">${l.use}</div>
+    </div>
+  `).join("");
+}
+
+document.querySelectorAll("#filterSeg button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#filterSeg button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  curFilter = b.dataset.f;
+  renderTemplates();
+}));
+
+document.getElementById("themeBtn").addEventListener("click", e => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  e.currentTarget.textContent = dark ? "切换深色" : "切换浅色";
+});
+
+renderTemplates();
+renderLayouts();
+</script>
+</body>
+</html>

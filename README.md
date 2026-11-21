@@ -159,24 +159,47 @@ v1.2.0 起封面与正文内页分成两档底色：封面保留暖米纸 `#F0DF
 
 ### Universal UI 界面设计
 
-把界面需求先转成信息架构，再从 36 个页面布局方案和 56 个克制风格中选出可实施方案。五个整页模板可只取局部组件：收入分析、服务监控、模型网关、客户管理和订阅分析；新工具则按任务推导布局，保留目标项目的导航、技术栈和真实数据。
+把界面需求转成可落地的高审美方案：先调研该领域公认的标杆产品，再锁定一套克制色盘与信息密度，最后按硬规范实现并实测验收。保留目标项目的路由、导航、技术栈与真实数据。
+
+v2.0 把 v1 的「36 个布局 × 56 个风格」穷举选择改成**一条收敛路径**：先看该领域 2–3 个标杆（AI Agent 工作台看 Codex Desktop / Magpie，金融司库看 Mercury / Stripe，能源监控看 Tesla Energy / Vercel），只提炼外壳重量、视觉重心与核心微交互；再从 **6 套克制色盘**中锁定一套，叠加 **3 档密度**（`Airy` / `Balanced` / `Compact`）；最后在 `1440 / 1024 / 390px` 与浅深双主题下实测打分，**≥ 85 分且未触发一票否决**才交付。
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <img src="skills/ui/universal-ui/assets/layout-atlas.png" alt="AI Agent 工作台的稳定三列、紧凑双列和命令台三个布局方案" width="100%" />
-      <p><strong>Layout Atlas</strong> · 12 类页面 × 稳妥 / 紧凑 / 个性三方案</p>
+      <img src="skills/ui/universal-ui/assets/showcase-treasury.png" alt="企业司库界面：净资金 Hero、焦噪分离现金流曲线、6 家直连银行等宽对账表、右侧待审批划转" width="100%" />
+      <p><strong>Mercury Emerald</strong> · 企业司库与多银行资金台，零焦虑绿、红色只留给超限项</p>
     </td>
     <td width="50%" valign="top">
-      <img src="skills/ui/universal-ui/assets/style-atlas.png" alt="Neutral、Quiet、Technical、Data 等 56 个克制风格样张" width="100%" />
-      <p><strong>Style Atlas</strong> · 56 个克制的字体、密度与色彩样张</p>
+      <img src="skills/ui/universal-ui/assets/showcase-codex-workbench.png" alt="AI Agent 工作台：极窄图标栏、无框线程列表、居中对话流、双层悬浮输入卡" width="100%" />
+      <p><strong>Codex Matte</strong> · AI Agent 工作台，纯中性雾面灰、零蓝偏零霓虹</p>
     </td>
   </tr>
 </table>
 
-所有模板离线可用，并按浅色、深色、1440 / 1024 / 390px 做溢出、对比度、焦点和可访问名称审计。
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="skills/ui/universal-ui/assets/showcase-palette-gallery.png" alt="六套色盘切换面板，含焦噪分离趋势图与色盘场景映射速查" width="100%" />
+      <p><strong>Palette Gallery</strong> · 6 套色盘实时切换，同一界面对比配色差异</p>
+    </td>
+    <td width="50%" valign="top">
+      <p><strong>六套色盘</strong>按场景匹配，不随机拼接：</p>
+      <ul>
+        <li><code>neutral-core</code> — 通用 B 端后台、管理控制台</li>
+        <li><code>codex-matte</code> — AI Agent 对话工作台、模型路由台</li>
+        <li><code>apple-clarity</code> — 经营分析看板、个人健康与效率工具</li>
+        <li><code>mercury-emerald</code> — 企业司库、财务对账、订阅计费</li>
+        <li><code>warm-editorial</code> — 知识库、长文阅读、研究报告</li>
+        <li><code>swiss-slate</code> — 工业 IoT、虚拟电厂、服务监控</li>
+      </ul>
+      <p>另有 <a href="skills/ui/universal-ui/assets/dataviz-kit.html">DataViz Kit</a>（8 色盘 × 16 个可视化组件）、<a href="skills/ui/universal-ui/assets/component-kit.html">Component Kit</a>（组件标本与搭配）、<a href="skills/ui/universal-ui/assets/template-atlas.html">Template Atlas</a>（8 大布局骨架），全部离线可用。</p>
+    </td>
+  </tr>
+</table>
 
-[Skill 说明](skills/ui/universal-ui/SKILL.md) · [使用说明](skills/ui/universal-ui/README.md) · [Layout Atlas](skills/ui/universal-ui/assets/layout-atlas.html) · [Style Atlas](skills/ui/universal-ui/assets/style-atlas.html)
+三条硬规范：7 级光学字阶且禁止 `< 12px` 与细字重、数字强制 `tabular-nums`；现代工作台禁用未样式化的原生 `<select>`，一律用支持 `Escape` 关闭的雾面 Popover；页面 90% 以上保持中性，红色仅留给需立即处理的异常。
+
+[Skill 说明](skills/ui/universal-ui/SKILL.md) · [使用说明](skills/ui/universal-ui/README.md) · [Template Atlas](skills/ui/universal-ui/assets/template-atlas.html) · [Palette Gallery](skills/ui/universal-ui/assets/palette-gallery.html)
 
 ### UI 偏好账本
 
@@ -188,7 +211,9 @@ v1.2.0 起封面与正文内页分成两档底色：封面保留暖米纸 `#F0DF
 | “这个项目是品牌要求必须用紫色。” | 当前项目偏好 |
 | “这次为了演示先临时夸张一点。” | 不沉淀 |
 
-[Skill 说明](skills/ui/ui-preference-ledger/SKILL.md) · [使用说明](skills/ui/ui-preference-ledger/README.md) · [Profile 规则](skills/ui/ui-preference-ledger/references/profile-schema.md)
+v2.0 新增 `init-design-md` 模式，可按当前全局偏好为新项目一键生成 `DESIGN.md` 脚手架；`summarize` 改为同时产出**最多 8 条正面规则**与**最多 8 条反模式黑名单**——「不要什么」往往比「要什么」更好执行。路径统一按环境变量解析，不再硬编码用户名。
+
+[Skill 说明](skills/ui/ui-preference-ledger/SKILL.md) · [使用说明](skills/ui/ui-preference-ledger/README.md)
 
 ## 怎么调用
 
@@ -240,7 +265,7 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 ```text
 使用 $universal-ui。做一个本地优先的 AI Agent 工作台：
 左侧是任务列表，中央是消息与执行轨迹，右侧按需打开文件详情。
-先给我三个布局方案，再实现我选择的那一个。
+先调研该领域标杆，给我三个可区分的色盘候选，确认后再实现。
 ```
 
 **沉淀一次界面偏好**
@@ -249,6 +274,13 @@ Agent 工具调用：用户提出任务，Agent 理解后选择并调用工具�
 使用 $ui-preference-ledger 记录这次选择：
 Agent 工作台用稳定三列，左侧导航窄一点，中央消息区最大。
 我以后都不喜欢卡片墙和过度留白。
+```
+
+**为新项目生成设计基线**
+
+```text
+使用 $ui-preference-ledger 的 init-design-md，
+按我的全局偏好为这个新项目生成一份 DESIGN.md。
 ```
 
 生成图片里的中文、专有名称和技术关系都需要人工核对。这里展示的是实际样图，不代表每次生成都会得到相同结果。
@@ -263,7 +295,7 @@ Agent 工作台用稳定三列，左侧导航窄一点，中央消息区最大�
 | `data-storytelling` | 图文一体的深色/浅色讲解页 | [SKILL.md](skills/visualization/data-storytelling/SKILL.md) |
 | `knowledge-base-archiver` | 网页好文去噪翻译并归档到个人知识库 | [SKILL.md](skills/knowledge/knowledge-base-archiver/SKILL.md) |
 | `reader-first-clarity` | 专业内容的通俗改写、术语解释与逻辑审查 | [SKILL.md](skills/writing/reader-first-clarity/SKILL.md) |
-| `universal-ui` | 可复用组件、新工具布局与克制风格方案 | [SKILL.md](skills/ui/universal-ui/SKILL.md) |
-| `ui-preference-ledger` | 记录、归纳和维护个人与项目 UI 偏好 | [SKILL.md](skills/ui/ui-preference-ledger/SKILL.md) |
+| `universal-ui` | 标杆调研 + 6 色盘 × 3 密度的可落地界面方案 | v2.0 | [SKILL.md](skills/ui/universal-ui/SKILL.md) |
+| `ui-preference-ledger` | 记录、归纳个人 UI 偏好与反模式黑名单 | v2.0 | [SKILL.md](skills/ui/ui-preference-ledger/SKILL.md) |
 
 结构参考：[Anthropic Skills](https://github.com/anthropics/skills) · [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills)

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-palette="codex-matte">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>universal-ui v2.0 · 基础组件标本库与黄金搭配指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 6 Curated Restrained Palettes */
+:root {
+  --canvas: #f7f7f9; --sidebar: #efeff2; --surface: #ffffff; --subtle: #f1f1f4; --hover: #e8e8ee;
+  --line: rgba(28, 27, 34, 0.09); --line-strong: rgba(28, 27, 34, 0.16);
+  --ink: #1c1b22; --ink-2: #4b4956; --muted: #6e6c7a;
+  --action: #2b2932; --action-fg: #ffffff;
+  --accent: #7055b4; --accent-soft: rgba(112, 85, 180, 0.11);
+  --green: #16794c; --green-soft: rgba(22, 121, 76, 0.10);
+  --amber: #b25c00; --amber-soft: rgba(178, 92, 0, 0.11);
+  --red: #c4364a; --red-soft: rgba(196, 54, 74, 0.10);
+  --popover: rgba(255, 255, 255, 0.96);
+  --pop-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 20px rgba(0,0,0,0.03);
+}
+[data-theme="dark"] {
+  --canvas: #1b1b1e; --sidebar: #141417; --surface: #232327; --subtle: #2b2b30; --hover: #323238;
+  --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.14);
+  --ink: #eeedf1; --ink-2: #b9b7c2; --muted: #8b8996;
+  --action: #eeedf1; --action-fg: #1b1b1e;
+  --accent: #c3b5f5; --accent-soft: rgba(195, 181, 245, 0.14);
+  --green: #4ade80; --green-soft: rgba(74, 222, 128, 0.13);
+  --amber: #fbbf24; --amber-soft: rgba(251, 191, 36, 0.13);
+  --red: #f87171; --red-soft: rgba(248, 113, 113, 0.13);
+  --popover: rgba(34, 34, 38, 0.96);
+  --pop-shadow: 0 18px 44px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.09);
+  --shadow: 0 8px 26px rgba(0,0,0,0.34);
+}
+[data-palette="codex-matte"] {
+  --canvas: #ffffff; --sidebar: #f4f4f5; --surface: #f8f8f9; --subtle: #efefef; --hover: #e5e5e8;
+  --ink: #18181b; --ink-2: #4a4a52; --muted: #76767f; --action: #18181b; --action-fg: #ffffff;
+  --accent: #2563eb; --accent-soft: rgba(37, 99, 235, 0.10);
+}
+[data-palette="codex-matte"][data-theme="dark"] {
+  --canvas: #1c1c1c; --sidebar: #171717; --surface: #232323; --subtle: #2a2a2a; --hover: #313131;
+  --line: rgba(255,255,255,0.068); --line-strong: rgba(255,255,255,0.12);
+  --ink: #ececec; --ink-2: #b8b8b8; --muted: #7e7e7e; --action: #ececec; --action-fg: #171717;
+  --accent: #3b82f6; --accent-soft: rgba(59, 130, 246, 0.14);
+  --popover: rgba(36, 36, 36, 0.96);
+}
+[data-palette="apple-clarity"] {
+  --canvas: #f5f5f7; --sidebar: #efeff2; --surface: #ffffff; --subtle: #ebebf0; --hover: #e1e1e8;
+  --ink: #1d1d1f; --ink-2: #48484c; --muted: #6e6e73; --action: #1d1d1f; --action-fg: #ffffff;
+  --accent: #0066cc; --accent-soft: rgba(0, 102, 204, 0.10);
+}
+[data-palette="apple-clarity"][data-theme="dark"] {
+  --canvas: #0c0d10; --sidebar: #111216; --surface: #16171b; --subtle: #212329; --hover: #2a2d35;
+  --ink: #f5f5f7; --ink-2: #c7c7cc; --muted: #8e8e93; --action: #f5f5f7; --action-fg: #0c0d10;
+  --accent: #2997ff; --accent-soft: rgba(41, 151, 255, 0.15);
+}
+[data-palette="mercury-emerald"] {
+  --canvas: #f6f7f6; --sidebar: #eff2f0; --surface: #ffffff; --subtle: #edf0ee; --hover: #e3e8e5;
+  --ink: #151917; --ink-2: #404a44; --muted: #67726b; --action: #151917; --action-fg: #ffffff;
+  --accent: #15803d; --accent-soft: rgba(21, 128, 61, 0.10);
+}
+[data-palette="mercury-emerald"][data-theme="dark"] {
+  --canvas: #141716; --sidebar: #101312; --surface: #1b1f1d; --subtle: #222725; --hover: #2a302d;
+  --ink: #edf2ef; --ink-2: #b4bfb9; --muted: #7c8882; --action: #edf2ef; --action-fg: #101312;
+  --accent: #34d399; --accent-soft: rgba(52, 211, 153, 0.14);
+}
+[data-palette="warm-editorial"] {
+  --canvas: #f8f6f2; --sidebar: #f1eee8; --surface: #fffefb; --subtle: #edeae3; --hover: #e4e0d7;
+  --ink: #1e1c1a; --ink-2: #4e4943; --muted: #787168; --action: #1e1c1a; --action-fg: #fffefb;
+  --accent: #9a4a2a; --accent-soft: rgba(154, 74, 42, 0.10);
+}
+[data-palette="warm-editorial"][data-theme="dark"] {
+  --canvas: #191816; --sidebar: #141311; --surface: #211f1c; --subtle: #282622; --hover: #322f2a;
+  --ink: #f1ede6; --ink-2: #c2bbb0; --muted: #8a8277; --action: #f1ede6; --action-fg: #141311;
+  --accent: #e08e68; --accent-soft: rgba(224, 142, 104, 0.15);
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11.8px; }
+
+/* Sticky Top Bar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--sidebar);
+  border-bottom: 1px solid var(--line);
+  padding: 11px 24px;
+}
+.topbar-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.pal-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.pal-chip {
+  height: 29px;
+  padding: 0 10px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.pal-chip:hover { background: var(--subtle); color: var(--ink); }
+.pal-chip.active { background: var(--surface); border-color: var(--line-strong); color: var(--ink); font-weight: 600; }
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px 24px 72px;
+}
+
+h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.sub { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+h2 { margin: 40px 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+.sec-sub { margin: 0 0 16px; font-size: 12.8px; color: var(--muted); }
+
+/* Specimen Grid */
+.kit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.spec-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.spec-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.spec-title { font-size: 14.5px; font-weight: 600; }
+.spec-note { font-size: 11.8px; color: var(--muted); }
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ==================== ATOMIC COMPONENTS ==================== */
+.btn-p {
+  height: 33px; padding: 0 14px; border-radius: 8px; border: none;
+  background: var(--action); color: var(--action-fg);
+  font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.btn-p:hover { opacity: 0.88; }
+
+.btn-s {
+  height: 33px; padding: 0 13px; border-radius: 8px;
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+  font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.btn-s:hover { background: var(--subtle); }
+
+.btn-g {
+  height: 33px; padding: 0 11px; border-radius: 8px; border: none;
+  background: transparent; color: var(--ink-2);
+  font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.btn-g:hover { background: var(--subtle); color: var(--ink); }
+
+.btn-d {
+  height: 33px; padding: 0 13px; border-radius: 8px;
+  border: 1px solid rgba(248, 113, 113, 0.35); background: var(--red-soft); color: var(--red);
+  font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.btn-d:hover { opacity: 0.88; }
+
+.btn-dis {
+  height: 33px; padding: 0 13px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--subtle); color: var(--muted); font-family: inherit; font-size: 13px;
+  cursor: not-allowed; opacity: 0.6;
+}
+
+/* Segmented Control */
+.seg {
+  display: inline-flex; background: var(--subtle); padding: 2.5px; border-radius: 9px; gap: 2px;
+}
+.seg button {
+  border: none; background: transparent; color: var(--muted); font-family: inherit;
+  font-size: 12.5px; font-weight: 500; padding: 5px 12px; border-radius: 7px; cursor: pointer;
+}
+.seg button.active { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+/* Search Input & Custom Popover */
+.inp-search {
+  height: 33px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line-strong);
+  background: var(--canvas); color: var(--ink); font-family: inherit; font-size: 13px; outline: none;
+}
+.inp-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.pop-wrap { position: relative; display: inline-block; }
+.pop-btn {
+  height: 33px; padding: 0 11px; border-radius: 8px; border: 1px solid var(--line-strong);
+  background: var(--canvas); color: var(--ink); font-family: inherit; font-size: 12.5px; font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+}
+.pop-btn:hover { background: var(--subtle); }
+.pop-menu {
+  position: absolute; top: calc(100% + 6px); left: 0; width: 236px; padding: 5px;
+  border-radius: 11px; background: var(--popover); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--pop-shadow); z-index: 60; display: none;
+}
+.pop-menu.open { display: block; }
+.pop-opt {
+  width: 100%; border: none; background: transparent; text-align: left; padding: 7px 9px;
+  border-radius: 7px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  font-family: inherit;
+}
+.pop-opt:hover { background: var(--subtle); }
+.pop-opt.sel { background: var(--accent-soft); }
+.pop-t { font-size: 12.5px; font-weight: 500; color: var(--ink); }
+.pop-d { font-size: 11px; color: var(--muted); }
+
+/* Matte Switch */
+.sw-btn {
+  position: relative; width: 38px; height: 21px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--canvas); cursor: pointer; padding: 0;
+  transition: background 140ms ease;
+}
+.sw-btn.on { background: var(--green); border-color: var(--green); }
+.sw-btn::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 15px; height: 15px;
+  border-radius: 50%; background: #ffffff; transition: transform 140ms ease;
+}
+.sw-btn.on::after { transform: translateX(17px); }
+
+/* Status Pills */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500;
+  padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+}
+.pill.ok { background: var(--green-soft); color: var(--green); }
+.pill.warn { background: var(--amber-soft); color: var(--amber); }
+.pill.err { background: var(--red-soft); color: var(--red); }
+.pill.acc { background: var(--accent-soft); color: var(--accent); }
+.pill.neu { background: var(--subtle); color: var(--ink-2); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ==================== GOLDEN PAIRING RECIPES ==================== */
+.recipe-box {
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 14px 16px;
+}
+
+.cfg-row {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--line);
+}
+.cfg-row:last-child { border-bottom: none; padding-bottom: 0; }
+.cfg-row:first-child { padding-top: 0; }
+
+.gate-strip {
+  border-left: 2.5px solid var(--accent);
+  background: var(--canvas);
+  border-radius: 0 10px 10px 0;
+  padding: 12px 14px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+}
+
+.skel {
+  height: 12px; border-radius: 6px; background: var(--subtle); margin-bottom: 8px;
+}
+
+/* Do vs Don't Comparison */
+.vs-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.vs-col {
+  padding: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--canvas);
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 90;
+  background: var(--action); color: var(--action-fg);
+  padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  opacity: 0; transform: translateY(10px); pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* Slide-over Drawer */
+.drawer-mask {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 80;
+  display: none; justify-content: flex-end;
+}
+.drawer-mask.open { display: flex; }
+.drawer-panel {
+  width: 360px; max-width: 92vw; height: 100%; background: var(--surface);
+  border-left: 1px solid var(--line-strong); padding: 20px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .kit-grid, .vs-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="pal-row" id="palBar">
+      <button class="pal-chip active" data-p="codex-matte" type="button">Codex Matte</button>
+      <button class="pal-chip" data-p="neutral-core" type="button">Neutral Core 原紫</button>
+      <button class="pal-chip" data-p="apple-clarity" type="button">Apple Clarity</button>
+      <button class="pal-chip" data-p="mercury-emerald" type="button">Mercury 绿</button>
+      <button class="pal-chip" data-p="warm-editorial" type="button">Warm 杂志纸</button>
+    </div>
+    <button class="btn-s" id="themeBtn" style="height:29px;font-size:12px;" type="button">切换浅色</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>一、基础组件标本库（全色盘实时验质）</h1>
+  <p class="sub">顶部可一键切换 5 套色盘与浅/深模式，所有按钮、弹出菜单、开关、Toast 和抽屉均可直接点击测试质感。</p>
+
+  <div class="kit-grid">
+    <!-- 1. Buttons & Action Hierarchy -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">1. 按钮层级（单屏最多 1 个主操作）</span>
+        <span class="spec-note">高度 33px · 按下不位移</span>
+      </div>
+      <div class="demo-row">
+        <button class="btn-p" id="toastOkBtn" type="button">主操作 Primary</button>
+        <button class="btn-s" id="openDrawerBtn" type="button">次操作 · 打开抽屉</button>
+        <button class="btn-g" type="button">安静文字 Ghost</button>
+        <button class="btn-d" id="toastErrBtn" type="button">危险删除</button>
+        <button class="btn-dis" disabled type="button">禁用态</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">纪律：同一工具区禁止并排出现两个高对比实心主按钮，次级动作一律退为描边或无底文字。</div>
+    </section>
+
+    <!-- 2. Custom Popover & Segmented Control -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">2. 自定义毛玻璃弹出菜单 &amp; 分段器</span>
+        <span class="spec-note">彻底禁用粗糙原生 &lt;select&gt;</span>
+      </div>
+      <div class="demo-row">
+        <div class="pop-wrap" id="demoPop">
+          <button class="pop-btn" type="button"><span id="demoPopVal">Agent 自动执行</span><span style="font-size:10px;color:var(--muted)">⌄</span></button>
+          <div class="pop-menu">
+            <button class="pop-opt sel" data-v="Agent 自动执行" type="button"><div><div class="pop-t">Agent 自动执行</div><div class="pop-d">写文件前自动触发审批</div></div><span class="mono">✓</span></button>
+            <button class="pop-opt" data-v="先出计划再执行" type="button"><div><div class="pop-t">先出计划再执行</div><div class="pop-d">确认分步里程碑后再改</div></div><span class="mono"></span></button>
+            <button class="pop-opt" data-v="只读静态审查" type="button"><div><div class="pop-t">只读静态审查</div><div class="pop-d">仅读代码与对比度检查</div></div><span class="mono"></span></button>
+          </div>
+        </div>
+        <div class="seg" id="demoSeg">
+          <button class="active" type="button">7天</button>
+          <button type="button">30天</button>
+          <button type="button">90天</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">纪律：选项 ≤ 4 个用分段器（Segmented），选项 &gt; 4 个或需要说明文字时用自定义 Popover。</div>
+    </section>
+
+    <!-- 3. Status Pills & Semantic Signals -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">3. 状态胶囊与语义色（状态必配文字）</span>
+        <span class="spec-note">不单靠颜色表达 · 红色仅留异常</span>
+      </div>
+      <div class="demo-row">
+        <span class="pill ok"><span class="dot"></span>运行正常</span>
+        <span class="pill warn"><span class="dot"></span>延迟升高</span>
+        <span class="pill err"><span class="dot"></span>余额超限</span>
+        <span class="pill acc">审核中</span>
+        <span class="pill neu">已归档</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">纪律：标签只表达状态，不拿来当按钮点击；背景用 10–14% 柔和低饱和软底色。</div>
+    </section>
+
+    <!-- 4. Matte Toggle Switches & Feedback -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">4. 哑光滑动开关 &amp; 骨架屏反馈</span>
+        <span class="spec-note">即时生效 · 无弹窗打断</span>
+      </div>
+      <div class="demo-row" style="justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="sw-btn on" id="sw1" type="button" aria-label="开关示例1"></button>
+          <span style="font-size:13px;" id="sw1Lbl">隐私密钥脱敏（已开启）</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="sw-btn" id="sw2" type="button" aria-label="开关示例2"></button>
+          <span style="font-size:13px;color:var(--muted)" id="sw2Lbl">自动压缩上下文（关闭）</span>
+        </div>
+      </div>
+      <div style="padding-top:4px;">
+        <div class="skel" style="width:72%"></div>
+        <div class="skel" style="width:48%;margin-bottom:0;"></div>
+      </div>
+    </section>
+  </div>
+
+  <h2>二、黄金组件搭配方案（可直接抄进业务页面）</h2>
+  <p class="sec-sub">好看的界面不是单个组件堆出来的，而是靠克制的“主次搭配比例”撑出来的。</p>
+
+  <div class="kit-grid">
+    <!-- Pairing A: Table Toolbar -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">搭配 A · 表格单行筛选工具栏</span>
+        <span class="spec-note">搜索 + 筛选 + 唯一主操作</span>
+      </div>
+      <div class="recipe-box">
+        <div class="demo-row" style="justify-content:space-between;">
+          <div class="demo-row">
+            <input class="inp-search" type="text" placeholder="搜索客户或编号…" style="width:170px;">
+            <div class="seg" id="pairSeg"><button class="active" type="button">全部</button><button type="button">待处理</button></div>
+          </div>
+          <button class="btn-p" type="button">+ 新建记录</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">左放高频检索与状态切页，右放唯一主操作；窄屏自动折行不横向溢出。</div>
+    </section>
+
+    <!-- Pairing B: Config Row -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">搭配 B · 配置与权限控制行</span>
+        <span class="spec-note">双行语义 + 状态胶囊 + 开关</span>
+      </div>
+      <div class="recipe-box">
+        <div class="cfg-row">
+          <div><div style="font-weight:500;font-size:13.5px;">Codex → deepseek-v4-pro</div><div class="mono" style="color:var(--muted)">Responses API · 340 ms</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span class="pill ok">在线</span><button class="sw-btn on sw-mini" type="button"></button></div>
+        </div>
+        <div class="cfg-row">
+          <div><div style="font-weight:500;font-size:13.5px;">本地密钥脱敏中间件</div><div class="mono" style="color:var(--muted)">Privacy Masking · 0ms</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span class="pill neu">待命</span><button class="sw-btn sw-mini" type="button"></button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pairing C: Approval Gate -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">搭配 C · 高危/审批确认条</span>
+        <span class="spec-note">左竖线锚定 + 取消/批准二选一</span>
+      </div>
+      <div class="gate-strip">
+        <div style="font-size:13px;"><strong>待审批：</strong>将 2 个文件补丁写入 master 分支</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-s" id="gateCancel" type="button">暂缓</button>
+          <button class="btn-p" id="gateOk" type="button">批准执行</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">不做全屏打断弹窗；用 2.5px 左侧色条吸引视线，右侧严格 1 次要 + 1 主操作。</div>
+    </section>
+
+    <!-- Pairing D: Do vs Don't -->
+    <section class="spec-card">
+      <div class="spec-head">
+        <span class="spec-title">避坑对照 · 为什么同样功能一个高级一个廉价</span>
+        <span class="spec-note">Anti-Slop 红线</span>
+      </div>
+      <div class="vs-grid">
+        <div class="vs-col">
+          <div class="pill ok" style="margin-bottom:8px;">推荐 · 1 主 1 次 + 留白</div>
+          <div style="display:flex;gap:8px;"><button class="btn-s" type="button">取消</button><button class="btn-p" type="button">保存配置</button></div>
+        </div>
+        <div class="vs-col" style="opacity:0.78;">
+          <div class="pill err" style="margin-bottom:8px;">禁止 · 亮色渐变撞车</div>
+          <div style="display:flex;gap:6px;">
+            <span style="padding:6px 10px;border-radius:8px;background:linear-gradient(90deg,#6366f1,#ec4899);color:#fff;font-size:12px;">✨ 立即保存</span>
+            <span style="padding:6px 10px;border-radius:8px;background:#0ea5e9;color:#fff;font-size:12px;">🚀 导出</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toastEl">已保存当前配置</div>
+
+<!-- Slide-over Drawer Demo -->
+<div class="drawer-mask" id="drawerMask">
+  <div class="drawer-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px;">
+      <strong>右侧按需滑出抽屉（Drawer）</strong>
+      <button class="btn-g" id="closeDrawerBtn" type="button">✕</button>
+    </div>
+    <p style="margin:0;font-size:13px;color:var(--ink-2);">用于承载代码 Diff、客户详情、单站遥测等次级深度信息。平时完全收起，不挤占主画布阅读宽度，支持按 <code>Escape</code> 键立即关闭。</p>
+    <div style="margin-top:auto;display:flex;justify-content:flex-end;gap:8px;">
+      <button class="btn-s" id="closeDrawerBtn2" type="button">关闭</button>
+      <button class="btn-p" id="drawerConfirmBtn" type="button">确认并应用</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Palette & Theme Switch
+document.querySelectorAll("#palBar .pal-chip").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#palBar .pal-chip").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  document.documentElement.setAttribute("data-palette", b.dataset.p);
+}));
+document.getElementById("themeBtn").addEventListener("click", e => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  e.currentTarget.textContent = dark ? "切换深色" : "切换浅色";
+});
+
+// Toast helper
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toastEl");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+document.getElementById("toastOkBtn").addEventListener("click", () => showToast("✓ 主操作已执行"));
+document.getElementById("toastErrBtn").addEventListener("click", () => showToast("已触发危险操作二次确认提示"));
+document.getElementById("gateOk").addEventListener("click", () => showToast("✓ 审批通过，补丁已写入"));
+document.getElementById("gateCancel").addEventListener("click", () => showToast("已暂缓执行"));
+
+// Popover
+const pop = document.getElementById("demoPop");
+const popMenu = pop.querySelector(".pop-menu");
+pop.querySelector(".pop-btn").addEventListener("click", e => { e.stopPropagation(); popMenu.classList.toggle("open"); });
+popMenu.querySelectorAll(".pop-opt").forEach(opt => opt.addEventListener("click", e => {
+  e.stopPropagation();
+  popMenu.querySelectorAll(".pop-opt").forEach(o => { o.classList.remove("sel"); o.querySelector(".mono").textContent = ""; });
+  opt.classList.add("sel"); opt.querySelector(".mono").textContent = "✓";
+  document.getElementById("demoPopVal").textContent = opt.dataset.v;
+  popMenu.classList.remove("open");
+}));
+document.addEventListener("click", () => popMenu.classList.remove("open"));
+
+// Segmented controls
+document.querySelectorAll(".seg").forEach(seg => {
+  seg.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    seg.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+  }));
+});
+
+// Switches
+document.getElementById("sw1").addEventListener("click", e => {
+  const on = e.currentTarget.classList.toggle("on");
+  document.getElementById("sw1Lbl").textContent = on ? "隐私密钥脱敏（已开启）" : "隐私密钥脱敏（已关闭）";
+});
+document.getElementById("sw2").addEventListener("click", e => {
+  const on = e.currentTarget.classList.toggle("on");
+  document.getElementById("sw2Lbl").textContent = on ? "自动压缩上下文（已开启）" : "自动压缩上下文（关闭）";
+});
+document.querySelectorAll(".sw-mini").forEach(s => s.addEventListener("click", () => s.classList.toggle("on")));
+
+// Drawer
+const mask = document.getElementById("drawerMask");
+const closeD = () => mask.classList.remove("open");
+document.getElementById("openDrawerBtn").addEventListener("click", () => mask.classList.add("open"));
+document.getElementById("closeDrawerBtn").addEventListener("click", closeD);
+document.getElementById("closeDrawerBtn2").addEventListener("click", closeD);
+document.getElementById("drawerConfirmBtn").addEventListener("click", () => { closeD(); showToast("✓ 抽屉变更已应用"); });
+mask.addEventListener("click", e => { if (e.target === mask) closeD(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeD(); popMenu.classList.remove("open"); } });
+</script>
+</body>
+</html>

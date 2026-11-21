@@ -1,4 +1,4 @@
 interface:
   display_name: "UI Preference Ledger"
-  short_description: "记录、归纳和查看个人与项目的 UI 偏好"
-  default_prompt: "使用 $ui-preference-ledger，帮我记录本次 UI 选择。区分长期个人偏好和当前项目偏好，归属不清楚时先问我。"
+  short_description: "记录、归纳个人 UI 偏好与反模式黑名单，并可一键生成项目 DESIGN.md"
+  default_prompt: "使用 $ui-preference-ledger，帮我记录本次 UI 选择。区分长期个人偏好和当前项目偏好，归属不清楚时先问我；归纳时同时产出正面规则与反模式黑名单。"

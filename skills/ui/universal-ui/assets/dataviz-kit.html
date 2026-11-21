@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-palette="codex-matte">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>universal-ui v2.0 · 8 大多元色盘 × 16 大精修可视化组件库</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 8 Curated Diverse Palettes x Light/Dark Equivalent */
+:root {
+  --canvas: #f7f7f9; --sidebar: #efeff2; --surface: #ffffff; --subtle: #f1f1f4;
+  --line: rgba(28, 27, 34, 0.09); --line-strong: rgba(28, 27, 34, 0.15);
+  --ink: #1c1b22; --ink-2: #4b4956; --muted: #6e6c7a;
+  --action: #2b2932; --action-fg: #ffffff;
+  --accent: #7055b4; --accent-2: #2563eb;
+  --green: #16794c; --amber: #b25c00; --red: #c4364a;
+  --grid: rgba(28, 27, 34, 0.07); --ctx: #b4b6bf;
+  --hm-0: #ebebf0; --hm-1: #dfd7f5; --hm-2: #bca8e8; --hm-3: #8f72d1; --hm-4: #6547ad;
+  --shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 20px rgba(0,0,0,0.03);
+}
+[data-theme="dark"] {
+  --canvas: #1b1b1e; --sidebar: #141417; --surface: #232327; --subtle: #2b2b30;
+  --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.14);
+  --ink: #eeedf1; --ink-2: #b9b7c2; --muted: #8b8996;
+  --action: #eeedf1; --action-fg: #1b1b1e;
+  --accent: #c3b5f5; --accent-2: #60a5fa;
+  --green: #4ade80; --amber: #fbbf24; --red: #f87171;
+  --grid: rgba(255,255,255,0.06); --ctx: #5c5c66;
+  --hm-0: #2a2a30; --hm-1: #3b3354; --hm-2: #584687; --hm-3: #7c62bf; --hm-4: #b29cf0;
+  --shadow: 0 8px 26px rgba(0,0,0,0.34);
+}
+[data-palette="codex-matte"] {
+  --canvas: #ffffff; --sidebar: #f4f4f5; --surface: #f8f8f9; --subtle: #efefef;
+  --ink: #18181b; --ink-2: #4a4a52; --muted: #76767f; --action: #18181b; --action-fg: #ffffff;
+  --accent: #2563eb; --accent-2: #15803d;
+  --hm-0: #ececef; --hm-1: #dbeafe; --hm-2: #93c5fd; --hm-3: #3b82f6; --hm-4: #1d4ed8;
+}
+[data-palette="codex-matte"][data-theme="dark"] {
+  --canvas: #1c1c1c; --sidebar: #171717; --surface: #232323; --subtle: #2a2a2a;
+  --line: rgba(255,255,255,0.068); --line-strong: rgba(255,255,255,0.12);
+  --ink: #ececec; --ink-2: #b8b8b8; --muted: #7e7e7e; --action: #ececec; --action-fg: #171717;
+  --accent: #3b82f6; --accent-2: #4ade80;
+  --hm-0: #2b2b2b; --hm-1: #1e314d; --hm-2: #244a7d; --hm-3: #2e6bc0; --hm-4: #60a5fa;
+}
+[data-palette="apple-clarity"] {
+  --canvas: #f5f5f7; --sidebar: #efeff2; --surface: #ffffff; --subtle: #ebebf0;
+  --ink: #1d1d1f; --ink-2: #48484c; --muted: #6e6e73; --action: #1d1d1f; --action-fg: #ffffff;
+  --accent: #0066cc; --accent-2: #5856d6;
+  --hm-0: #ebebf0; --hm-1: #d4e8ff; --hm-2: #8bc2ff; --hm-3: #2e8bff; --hm-4: #005bb8;
+}
+[data-palette="apple-clarity"][data-theme="dark"] {
+  --canvas: #0c0d10; --sidebar: #111216; --surface: #16171b; --subtle: #212329;
+  --ink: #f5f5f7; --ink-2: #c7c7cc; --muted: #8e8e93; --action: #f5f5f7; --action-fg: #0c0d10;
+  --accent: #2997ff; --accent-2: #818cf8;
+  --hm-0: #202229; --hm-1: #152d47; --hm-2: #1a497a; --hm-3: #1e6ec4; --hm-4: #4da6ff;
+}
+[data-palette="mercury-emerald"] {
+  --canvas: #f6f7f6; --sidebar: #eff2f0; --surface: #ffffff; --subtle: #edf0ee;
+  --ink: #151917; --ink-2: #404a44; --muted: #67726b; --action: #151917; --action-fg: #ffffff;
+  --accent: #15803d; --accent-2: #0284c7;
+  --hm-0: #eaefea; --hm-1: #ccead6; --hm-2: #86d3a1; --hm-3: #2fa35b; --hm-4: #146c35;
+}
+[data-palette="mercury-emerald"][data-theme="dark"] {
+  --canvas: #141716; --sidebar: #101312; --surface: #1b1f1d; --subtle: #222725;
+  --ink: #edf2ef; --ink-2: #b4bfb9; --muted: #7c8882; --action: #edf2ef; --action-fg: #101312;
+  --accent: #34d399; --accent-2: #38bdf8;
+  --hm-0: #232826; --hm-1: #173a2c; --hm-2: #1c5e44; --hm-3: #248a62; --hm-4: #34d399;
+}
+[data-palette="warm-editorial"] {
+  --canvas: #f8f6f2; --sidebar: #f1eee8; --surface: #fffefb; --subtle: #edeae3;
+  --ink: #1e1c1a; --ink-2: #4e4943; --muted: #787168; --action: #1e1c1a; --action-fg: #fffefb;
+  --accent: #9a4a2a; --accent-2: #3f6a58;
+  --hm-0: #edeae3; --hm-1: #f0d7c9; --hm-2: #dfa88d; --hm-3: #bf6d48; --hm-4: #8c3d1e;
+}
+[data-palette="warm-editorial"][data-theme="dark"] {
+  --canvas: #191816; --sidebar: #141311; --surface: #211f1c; --subtle: #282622;
+  --ink: #f1ede6; --ink-2: #c2bbb0; --muted: #8a8277; --action: #f1ede6; --action-fg: #141311;
+  --accent: #e08e68; --accent-2: #6eb596;
+  --hm-0: #292723; --hm-1: #473026; --hm-2: #754633; --hm-3: #ad6648; --hm-4: #e08e68;
+}
+/* NEW 6: Nordic Teal (Clean MedTech / Green Energy / Research) */
+[data-palette="nordic-teal"] {
+  --canvas: #f2f6f6; --sidebar: #e9f0f0; --surface: #ffffff; --subtle: #e7efef;
+  --ink: #122021; --ink-2: #384e50; --muted: #61787a; --action: #122021; --action-fg: #ffffff;
+  --accent: #0f766e; --accent-2: #0284c7;
+  --hm-0: #e5eeee; --hm-1: #c5e8e4; --hm-2: #7fd0c7; --hm-3: #2ca69a; --hm-4: #0d6e66;
+}
+[data-palette="nordic-teal"][data-theme="dark"] {
+  --canvas: #111718; --sidebar: #0d1213; --surface: #172021; --subtle: #1f2a2c;
+  --ink: #e9f2f2; --ink-2: #aec2c4; --muted: #768d90; --action: #e9f2f2; --action-fg: #0d1213;
+  --accent: #2dd4bf; --accent-2: #38bdf8;
+  --hm-0: #1e282a; --hm-1: #14393b; --hm-2: #175c5f; --hm-3: #1e8c8b; --hm-4: #2dd4bf;
+}
+/* NEW 7: Amber Forge (Industrial / Supply Chain / Hardware Dispatch) */
+[data-palette="amber-forge"] {
+  --canvas: #f7f6f4; --sidebar: #efede9; --surface: #ffffff; --subtle: #ece9e3;
+  --ink: #1c1917; --ink-2: #4a4540; --muted: #756e67; --action: #1c1917; --action-fg: #ffffff;
+  --accent: #b45309; --accent-2: #0d8a55;
+  --hm-0: #eceae5; --hm-1: #fde6bd; --hm-2: #f8c471; --hm-3: #df8b22; --hm-4: #a34d08;
+}
+[data-palette="amber-forge"][data-theme="dark"] {
+  --canvas: #181614; --sidebar: #131110; --surface: #201d1a; --subtle: #292521;
+  --ink: #f3efe9; --ink-2: #c2bbb2; --muted: #8a8278; --action: #f3efe9; --action-fg: #131110;
+  --accent: #f59e0b; --accent-2: #34d399;
+  --hm-0: #282420; --hm-1: #473317; --hm-2: #754f16; --hm-3: #b57713; --hm-4: #f59e0b;
+}
+/* NEW 8: Rose Quartz (Brand / Creator / Editorial Ops) */
+[data-palette="rose-quartz"] {
+  --canvas: #f8f5f6; --sidebar: #f2ecef; --surface: #ffffff; --subtle: #eee7ea;
+  --ink: #1f171a; --ink-2: #524249; --muted: #7d6b73; --action: #1f171a; --action-fg: #ffffff;
+  --accent: #be123c; --accent-2: #6d28d9;
+  --hm-0: #eee7ea; --hm-1: #f9d5df; --hm-2: #f29fb7; --hm-3: #dc4b74; --hm-4: #a61439;
+}
+[data-palette="rose-quartz"][data-theme="dark"] {
+  --canvas: #191517; --sidebar: #141012; --surface: #221c1f; --subtle: #2b2327;
+  --ink: #f5eef1; --ink-2: #c7b8bf; --muted: #8f7e86; --action: #f5eef1; --action-fg: #141012;
+  --accent: #fb7185; --accent-2: #a78bfa;
+  --hm-0: #2b2327; --hm-1: #4d2230; --hm-2: #7d2c44; --hm-3: #b83d5f; --hm-4: #fb7185;
+}
+
+body {
+  margin: 0; background: var(--canvas); color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55; font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased; transition: background 160ms ease, color 160ms ease;
+}
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11.5px; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--sidebar); border-bottom: 1px solid var(--line); padding: 10px 24px;
+}
+.topbar-inner {
+  max-width: 1320px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+}
+.pal-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.pal-chip, .cat-chip {
+  height: 28px; padding: 0 9px; border-radius: 7px; border: 1px solid var(--line);
+  background: transparent; color: var(--ink-2); font-family: inherit; font-size: 11.8px; font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.pal-chip:hover, .cat-chip:hover { background: var(--subtle); color: var(--ink); }
+.pal-chip.active, .cat-chip.active { background: var(--surface); border-color: var(--line-strong); color: var(--ink); font-weight: 600; }
+.sw-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+.btn-s {
+  height: 28px; padding: 0 11px; border-radius: 7px; border: 1px solid var(--line-strong);
+  background: var(--surface); color: var(--ink); font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
+}
+
+.wrap { max-width: 1320px; margin: 0 auto; padding: 22px 24px 72px; }
+.head-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px; margin-bottom: 14px; }
+h1 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: -0.02em; }
+.sub { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+
+/* Live Palette Token Strip */
+.token-strip {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 14px; border-radius: 11px; background: var(--surface); border: 1px solid var(--line);
+  margin-bottom: 20px; font-size: 12px; color: var(--muted);
+}
+.swatch-pills { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sp-item { display: inline-flex; align-items: center; gap: 5px; }
+.sp-box { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line-strong); }
+
+.viz-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.viz-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px 20px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 12px; transition: border-color 140ms ease;
+}
+.viz-card:hover { border-color: var(--line-strong); }
+.viz-card.hidden { display: none; }
+
+.viz-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.viz-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+.viz-sub { font-size: 12px; color: var(--muted); margin: 3px 0 0; }
+.viz-kpi { font-size: 18.5px; font-weight: 600; letter-spacing: -0.025em; color: var(--accent); white-space: nowrap; }
+
+.svg-box { position: relative; width: 100%; }
+.svg-box svg { display: block; width: 100%; height: auto; }
+.tip {
+  position: absolute; top: 0; right: 0; background: var(--action); color: var(--action-fg);
+  font-size: 11.5px; padding: 3px 9px; border-radius: 6px; pointer-events: none; opacity: 0; transition: opacity 120ms ease;
+}
+.tip.show { opacity: 1; }
+
+.cal-outer { display: grid; grid-template-columns: 20px 1fr; gap: 6px; align-items: start; }
+.cal-days { display: grid; grid-template-rows: repeat(7, 1fr); gap: 4px; font-size: 10px; color: var(--muted); height: 100%; align-items: center; }
+.cal-grid { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 4px; }
+.cal-col { display: grid; grid-template-rows: repeat(7, 1fr); gap: 4px; }
+.cal-cell { aspect-ratio: 1; border-radius: 3.5px; cursor: pointer; transition: transform 100ms ease; }
+.cal-cell:hover { transform: scale(1.22); outline: 1px solid var(--ink); }
+
+.mat-wrap { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-items: center; }
+.mat-days { display: flex; flex-direction: column; gap: 3.5px; font-size: 10.5px; color: var(--muted); }
+.mat-days span { height: 16px; line-height: 16px; }
+.mat-rows { display: flex; flex-direction: column; gap: 3.5px; }
+.mat-row { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3.5px; }
+.mat-cell { height: 16px; border-radius: 3.5px; cursor: pointer; }
+.mat-cell:hover { outline: 1px solid var(--ink); }
+.hm-legend { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); }
+.hm-dot { width: 10px; height: 10px; border-radius: 2.5px; display: inline-block; }
+
+.donut-layout { display: grid; grid-template-columns: 156px 1fr; gap: 20px; align-items: center; }
+.donut-list { display: flex; flex-direction: column; gap: 7px; }
+.donut-item { display: flex; justify-content: space-between; align-items: center; font-size: 12.8px; padding: 6px 8px; border-radius: 7px; cursor: pointer; }
+.donut-item:hover, .donut-item.active { background: var(--subtle); }
+
+.spark-row { display: grid; grid-template-columns: 1.05fr 0.75fr 0.55fr 1fr; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.spark-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.funnel-row { display: grid; grid-template-columns: 78px 1fr 76px; align-items: center; gap: 10px; margin-bottom: 9px; }
+.funnel-row:last-child { margin-bottom: 0; }
+.funnel-bar { height: 24px; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; font-size: 11.5px; font-weight: 600; color: #fff; }
+
+@media (max-width: 960px) {
+  .viz-grid { grid-template-columns: 1fr; }
+  .donut-layout { grid-template-columns: 1fr; justify-items: center; }
+  .donut-list { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="pal-row" id="palBar">
+      <button class="pal-chip active" data-p="codex-matte" type="button"><span class="sw-dot" style="background:#7e7e7e"></span>Codex 雾面</button>
+      <button class="pal-chip" data-p="neutral-core" type="button"><span class="sw-dot" style="background:#7055b4"></span>Neutral 原紫</button>
+      <button class="pal-chip" data-p="apple-clarity" type="button"><span class="sw-dot" style="background:#0066cc"></span>Apple 光学蓝</button>
+      <button class="pal-chip" data-p="mercury-emerald" type="button"><span class="sw-dot" style="background:#15803d"></span>Mercury 绿</button>
+      <button class="pal-chip" data-p="warm-editorial" type="button"><span class="sw-dot" style="background:#9a4a2a"></span>Warm 杂志纸</button>
+      <button class="pal-chip" data-p="nordic-teal" type="button"><span class="sw-dot" style="background:#0f766e"></span>Nordic 冷青</button>
+      <button class="pal-chip" data-p="amber-forge" type="button"><span class="sw-dot" style="background:#b45309"></span>Amber 工业琥珀</button>
+      <button class="pal-chip" data-p="rose-quartz" type="button"><span class="sw-dot" style="background:#be123c"></span>Rose 莫兰迪粉</button>
+    </div>
+    <button class="btn-s" id="themeBtn" type="button">切换浅色</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="head-bar">
+    <div>
+      <h1>8 大多元克制色盘 × 16 大可视化组件库</h1>
+      <p class="sub">新增北欧冷青、工业琥珀、莫兰迪玫瑰 3 套克制色盘，并补齐矩形树图、K 线波动带、半圆仪表盘与 100% 堆叠面积图。</p>
+    </div>
+    <div class="pal-row" id="catBar">
+      <button class="cat-chip active" data-c="all" type="button">全部 (16)</button>
+      <button class="cat-chip" data-c="trend" type="button">趋势与波动</button>
+      <button class="cat-chip" data-c="heat" type="button">热力图</button>
+      <button class="cat-chip" data-c="flow" type="button">流向与占比</button>
+      <button class="cat-chip" data-c="eval" type="button">多维与仪表</button>
+    </div>
+  </div>
+
+  <!-- Live Active Palette Swatch Strip -->
+  <div class="token-strip">
+    <div class="swatch-pills">
+      <span class="sp-item"><span class="sp-box" style="background:var(--canvas)"></span>画布</span>
+      <span class="sp-item"><span class="sp-box" style="background:var(--surface)"></span>表面</span>
+      <span class="sp-item"><span class="sp-box" style="background:var(--accent)"></span>主焦色</span>
+      <span class="sp-item"><span class="sp-box" style="background:var(--accent-2)"></span>辅助色</span>
+      <span class="sp-item" style="margin-left:6px;">热力 5 阶：
+        <span class="sp-box" style="background:var(--hm-0)"></span>
+        <span class="sp-box" style="background:var(--hm-1)"></span>
+        <span class="sp-box" style="background:var(--hm-2)"></span>
+        <span class="sp-box" style="background:var(--hm-3)"></span>
+        <span class="sp-box" style="background:var(--hm-4)"></span>
+      </span>
+    </div>
+    <span class="mono" id="palNote">Codex Matte · 纯中性雾面（AI / 开发工作台）</span>
+  </div>
+
+  <div class="viz-grid">
+    <!-- 1. Smooth Trend Line -->
+    <section class="viz-card" data-cat="trend">
+      <div class="viz-head"><div><h2 class="viz-title">1. 平滑焦噪分离趋势图</h2><p class="viz-sub">贝塞尔曲线 + 悬停垂直准星 + 终点直接标注</p></div><span class="viz-kpi">+18.4%</span></div>
+      <div class="svg-box"><div class="tip" id="tipLine"></div><svg id="svgLine" viewBox="0 0 520 175"></svg></div>
+    </section>
+
+    <!-- 2. Calendar Heatmap -->
+    <section class="viz-card" data-cat="heat">
+      <div class="viz-head"><div><h2 class="viz-title">2. 日历贡献热力图（Calendar Heatmap）</h2><p class="viz-sub" id="calReadout">18 周 × 7 天单色 5 阶色阶，悬停查看当日频次</p></div><span class="viz-kpi">428 次</span></div>
+      <div class="cal-outer">
+        <div class="cal-days mono"><span>一</span><span></span><span>三</span><span></span><span>五</span><span></span><span>日</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="hm-legend"><span class="mono">8月 · 9月 · 10月 · 11月</span><div style="display:flex;align-items:center;gap:4px;"><span>低</span><span class="hm-dot" style="background:var(--hm-0)"></span><span class="hm-dot" style="background:var(--hm-1)"></span><span class="hm-dot" style="background:var(--hm-2)"></span><span class="hm-dot" style="background:var(--hm-3)"></span><span class="hm-dot" style="background:var(--hm-4)"></span><span>高</span></div></div>
+    </section>
+
+    <!-- 3. 7x24 Matrix Heatmap -->
+    <section class="viz-card" data-cat="heat">
+      <div class="viz-head"><div><h2 class="viz-title">3. 7×24h 时段密度矩阵热力图</h2><p class="viz-sub" id="matReadout">完整一周 7 天 × 12 时段，适用负载、电价高峰与活跃度</p></div><span class="mono" style="color:var(--accent)">周三 14:00 峰值</span></div>
+      <div class="mat-wrap"><div class="mat-days mono"><span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span></div><div class="mat-rows" id="matRows"></div></div>
+      <div style="display:flex;justify-content:space-between;padding-left:42px;font-size:10.5px;color:var(--muted);" class="mono"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>22:00</span></div>
+    </section>
+
+    <!-- 4. Bullet Bar -->
+    <section class="viz-card" data-cat="trend">
+      <div class="viz-head"><div><h2 class="viz-title">4. 目标基准子弹条图（Bullet Bar）</h2><p class="viz-sub">带目标刻线与达标偏差值（+9% / -7%）</p></div><span class="mono" style="color:var(--green)">3/4 达标</span></div>
+      <div class="svg-box"><svg id="svgBullet" viewBox="0 0 520 175"></svg></div>
+    </section>
+
+    <!-- 5. Waterfall -->
+    <section class="viz-card" data-cat="flow">
+      <div class="viz-head"><div><h2 class="viz-title">5. 级联增减瀑布图（Waterfall）</h2><p class="viz-sub">虚线级联引导线，拆解期初 → 增减项 → 期末净值</p></div><span class="viz-kpi">+¥3.2M</span></div>
+      <div class="svg-box"><svg id="svgWaterfall" viewBox="0 0 520 180"></svg></div>
+    </section>
+
+    <!-- 6. Interactive Donut -->
+    <section class="viz-card" data-cat="flow">
+      <div class="viz-head"><div><h2 class="viz-title">6. 交互式极细圆环占比（Donut）</h2><p class="viz-sub">悬停右侧任意条目，中心大数字与圆环高亮联动</p></div><span class="mono" style="color:var(--muted)">3 核心分组</span></div>
+      <div class="donut-layout"><svg id="svgDonut" viewBox="0 0 156 156" width="156" height="156"></svg><div class="donut-list" id="donutLegend"></div></div>
+    </section>
+
+    <!-- 7. Sankey -->
+    <section class="viz-card" data-cat="flow">
+      <div class="viz-head"><div><h2 class="viz-title">7. 资金 / 能源流向桑基图（Sankey）</h2><p class="viz-sub" id="sankeyReadout">悬停任意贝塞尔流向带查看精确流转金额与占比</p></div><span class="mono" style="color:var(--accent)">¥1,482万</span></div>
+      <div class="svg-box"><svg id="svgSankey" viewBox="0 0 520 185"></svg></div>
+    </section>
+
+    <!-- 8. Funnel -->
+    <section class="viz-card" data-cat="flow">
+      <div class="viz-head"><div><h2 class="viz-title">8. 阶梯转化漏斗图（Funnel）</h2><p class="viz-sub">单色透明度递进 + 相邻环节转化率标注</p></div><span class="viz-kpi">11.4% 终转</span></div>
+      <div id="funnelBox" style="padding-top:4px;"></div>
+    </section>
+
+    <!-- 9. Radar -->
+    <section class="viz-card" data-cat="eval">
+      <div class="viz-head"><div><h2 class="viz-title">9. 多维能力雷达图（Radar）</h2><p class="viz-sub">实线：当前方案（v2.0） · 虚线：基准对照（v1.0）</p></div><span class="mono" style="color:var(--green)">综合 92 分</span></div>
+      <div class="svg-box"><svg id="svgRadar" viewBox="0 0 520 190"></svg></div>
+    </section>
+
+    <!-- 10. Dumbbell -->
+    <section class="viz-card" data-cat="eval">
+      <div class="viz-head"><div><h2 class="viz-title">10. 区间波动哑铃图（Dumbbell Range）</h2><p class="viz-sub">直观展示 P50 均值与 P99 尾延迟跨度（或报价区间）</p></div><span class="mono" style="color:var(--muted)">单位：ms</span></div>
+      <div class="svg-box"><svg id="svgDumbbell" viewBox="0 0 520 175"></svg></div>
+    </section>
+
+    <!-- 11. Scatter -->
+    <section class="viz-card" data-cat="eval">
+      <div class="viz-head"><div><h2 class="viz-title">11. 二维象限散点图（带最优甜点区）</h2><p class="viz-sub">右上阴影区标注 Pareto 最优带，直接标注实体名称</p></div><span class="mono" style="color:var(--accent)">质量 vs 性价比</span></div>
+      <div class="svg-box"><svg id="svgScatter" viewBox="0 0 520 175"></svg></div>
+    </section>
+
+    <!-- 12. Sparklines -->
+    <section class="viz-card" data-cat="trend">
+      <div class="viz-head"><div><h2 class="viz-title">12. 精修表格微趋势线（Sparklines）</h2><p class="viz-sub">极淡底面渐变、终点圆点与涨跌幅度列</p></div><span class="mono" style="color:var(--muted)">近 14 天</span></div>
+      <div id="sparkContainer"></div>
+    </section>
+
+    <!-- 13. NEW: Treemap -->
+    <section class="viz-card" data-cat="flow">
+      <div class="viz-head"><div><h2 class="viz-title">13. 权重面积矩形树图（Treemap · 新增）</h2><p class="viz-sub" id="treeReadout">单色明度分层替代杂乱饼图，悬停区块查看精确占比</p></div><span class="mono" style="color:var(--accent)">6 类预算分布</span></div>
+      <div class="svg-box"><svg id="svgTreemap" viewBox="0 0 520 175"></svg></div>
+    </section>
+
+    <!-- 14. NEW: Candlestick / Price Band -->
+    <section class="viz-card" data-cat="trend">
+      <div class="viz-head"><div><h2 class="viz-title">14. 现货电价 / 金融 K 线图（Candlestick · 新增）</h2><p class="viz-sub" id="candleReadout">悬停任意 K 线查看开盘 / 收盘 / 高低影线（元/MWh）</p></div><span class="viz-kpi">¥418</span></div>
+      <div class="svg-box"><svg id="svgCandle" viewBox="0 0 520 175"></svg></div>
+    </section>
+
+    <!-- 15. NEW: Precision Gauge Arc -->
+    <section class="viz-card" data-cat="eval">
+      <div class="viz-head"><div><h2 class="viz-title">15. 极简半圆仪表盘（Precision Gauge · 新增）</h2><p class="viz-sub">适用储能 SOC、系统健康度、风险评分（克制无拟物指针）</p></div><span class="mono" style="color:var(--green)">健康优良</span></div>
+      <div class="svg-box"><svg id="svgGauge" viewBox="0 0 520 170"></svg></div>
+    </section>
+
+    <!-- 16. NEW: 100% Stacked Area -->
+    <section class="viz-card" data-cat="trend">
+      <div class="viz-head"><div><h2 class="viz-title">16. 结构演进堆叠面积图（Stacked Area · 新增）</h2><p class="viz-sub">展示光伏 / 储能 / 市电三类能源占比随时间迁移</p></div><span class="mono" style="color:var(--accent)">绿电 74%</span></div>
+      <div class="svg-box"><svg id="svgStacked" viewBox="0 0 520 175"></svg></div>
+    </section>
+  </div>
+</main>
+
+<script>
+const V = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const PAL_NOTES = {
+  "codex-matte": "Codex Matte · 纯中性雾面（AI 对话与开发工作台）",
+  "neutral-core": "Neutral Core · 原版克制紫（通用 B 端后台与控制台）",
+  "apple-clarity": "Apple Clarity · 光学通透蓝（经营分析与消费效率）",
+  "mercury-emerald": "Mercury Emerald · 沉稳金融绿（企业司库与财务对账）",
+  "warm-editorial": "Warm Editorial · 温润杂志纸（知识库与研究报告）",
+  "nordic-teal": "Nordic Teal · 北欧冷矿青（医疗健康、绿能与科研）",
+  "amber-forge": "Amber Forge · 工业琥珀（制造、供应链与电力调度）",
+  "rose-quartz": "Rose Quartz · 莫兰迪玫瑰（品牌增长与内容运营）"
+};
+
+function drawLine() {
+  const acc = V("--accent"), ctx = V("--ctx"), grid = V("--grid"), muted = V("--muted");
+  const pts = [[14,126,196],[98,108,218],[182,114,224],[266,78,258],[350,58,282],[434,36,304]];
+  const prev = [[14,140,174],[98,132,182],[182,126,188],[266,118,196],[350,108,210],[434,102,218]];
+  const labels = ["W1","W2","W3","W4","W5","W6"];
+  const sm = p => p.reduce((d,c,i)=> i===0 ? `M${c[0]},${c[1]}` : `${d} C${(p[i-1][0]+c[0])/2},${p[i-1][1]} ${(p[i-1][0]+c[0])/2},${c[1]} ${c[0]},${c[1]}`, "");
+  const mD = sm(pts), pD = sm(prev), aD = `${mD} L434,152 L14,152 Z`;
+  const svg = document.getElementById("svgLine");
+  svg.innerHTML = `<defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${acc}" stop-opacity="0.22"/><stop offset="100%" stop-color="${acc}" stop-opacity="0"/></linearGradient></defs>
+    <line x1="14" y1="36" x2="438" y2="36" stroke="${grid}"/><line x1="14" y1="94" x2="438" y2="94" stroke="${grid}"/><line x1="14" y1="152" x2="438" y2="152" stroke="${grid}"/>
+    <path d="${pD}" fill="none" stroke="${ctx}" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <path d="${aD}" fill="url(#lg1)"/><path d="${mD}" fill="none" stroke="${acc}" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="446" y="40" font-size="12" font-weight="600" fill="${acc}">本期 304</text><text x="446" y="106" font-size="11.5" fill="${muted}">同期 218</text>
+    ${pts.map((p,i)=>`<text x="${p[0]}" y="170" font-size="11" fill="${muted}" text-anchor="middle">${labels[i]}</text>
+      <g class="lh" data-i="${i}" style="cursor:pointer"><line x1="${p[0]}" y1="22" x2="${p[0]}" y2="152" stroke="${acc}" stroke-dasharray="3 3" opacity="0" class="lc"/>
+      <circle cx="${p[0]}" cy="${p[1]}" r="14" fill="transparent"/><circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${acc}" opacity="${i===5?1:0}" class="ld"/></g>`).join("")}`;
+  const tip = document.getElementById("tipLine");
+  svg.querySelectorAll(".lh").forEach(g => {
+    g.addEventListener("mouseenter", () => { const i = Number(g.dataset.i); g.querySelector(".lc").setAttribute("opacity","0.45"); g.querySelector(".ld").setAttribute("opacity","1"); tip.textContent = `${labels[i]} · 本期 ${pts[i][2]}（同期 ${prev[i][2]}）`; tip.classList.add("show"); });
+    g.addEventListener("mouseleave", () => { const i = Number(g.dataset.i); g.querySelector(".lc").setAttribute("opacity","0"); if(i!==5) g.querySelector(".ld").setAttribute("opacity","0"); tip.classList.remove("show"); });
+  });
+}
+
+const CAL = Array.from({length:126},(_,i)=> { const v=(i*7+(i%5)*3)%11; return v<3?0:v<5?1:v<7?2:v<9?3:4; });
+function drawCalendar() {
+  const g = document.getElementById("calGrid"); let h = "";
+  for (let w=0;w<18;w++){ h+=`<div class="cal-col">`; for(let d=0;d<7;d++){ const lv=CAL[w*7+d]; h+=`<div class="cal-cell" data-w="${w+1}" data-d="${d+1}" data-lv="${lv}" style="background:var(--hm-${lv})"></div>`; } h+=`</div>`; }
+  g.innerHTML = h;
+  const out = document.getElementById("calReadout");
+  g.querySelectorAll(".cal-cell").forEach(c => c.addEventListener("mouseenter", () => { out.textContent = `第 ${c.dataset.w} 周 · 周${c.dataset.d}：完成 ${[0,2,5,9,14][Number(c.dataset.lv)]} 次记录`; }));
+}
+
+const MAT = [[0,0,1,2,3,4,4,3,2,2,1,0],[0,0,1,3,3,4,3,3,2,1,1,0],[0,1,2,3,4,4,4,3,2,2,1,0],[0,0,1,2,3,4,3,3,2,1,1,0],[0,0,2,3,4,3,3,4,3,2,1,1],[0,0,0,1,2,3,2,2,1,1,0,0],[0,0,0,1,2,2,2,1,1,1,0,0]];
+function drawMatrix() {
+  const days = ["周一","周二","周三","周四","周五","周六","周日"], el = document.getElementById("matRows");
+  el.innerHTML = MAT.map((row,r)=>`<div class="mat-row">${row.map((lv,c)=>`<div class="mat-cell" data-r="${days[r]}" data-h="${String(c*2).padStart(2,'0')}:00" data-v="${lv*21+12}" style="background:var(--hm-${lv})"></div>`).join("")}</div>`).join("");
+  const out = document.getElementById("matReadout");
+  el.querySelectorAll(".mat-cell").forEach(c => c.addEventListener("mouseenter", () => { out.textContent = `${c.dataset.r} ${c.dataset.h}：实时负载强度 ${c.dataset.v}%`; }));
+}
+
+function drawBullet() {
+  const acc = V("--accent"), green = V("--green"), red = V("--red"), sub = V("--subtle"), ink = V("--ink"), muted = V("--muted");
+  const rows = [{name:"企业直签",val:94,t:85},{name:"SaaS 续费",val:88,t:80},{name:"渠道分销",val:68,t:75},{name:"储能套利",val:100,t:90}];
+  document.getElementById("svgBullet").innerHTML = rows.map((r,i)=>{
+    const y=14+i*41, w=Math.round((r.val/108)*310), tx=86+Math.round((r.t/108)*310), df=r.val-r.t, ok=df>=0;
+    return `<text x="0" y="${y+15}" font-size="12.5" fill="${ink}">${r.name}</text><rect x="86" y="${y+4}" width="310" height="14" rx="4" fill="${sub}"/><rect x="86" y="${y+4}" width="${w}" height="14" rx="4" fill="${ok?acc:muted}" opacity="0.9"/><line x1="${tx}" y1="${y}" x2="${tx}" y2="${y+22}" stroke="${ink}" stroke-width="2"/><text x="410" y="${y+15}" font-size="12" font-family="JetBrains Mono, monospace" fill="${ink}">${r.val}%</text><text x="462" y="${y+15}" font-size="11.5" font-family="JetBrains Mono, monospace" fill="${ok?green:red}">${ok?"+":""}${df}%</text>`;
+  }).join("");
+}
+
+function drawWaterfall() {
+  const acc = V("--accent"), green = V("--green"), red = V("--red"), muted = V("--muted"), grid = V("--grid");
+  const bars = [{l:"期初",y:74,h:78,col:muted,t:"45.4M",ny:74},{l:"直签流入",y:38,h:36,col:green,t:"+3.6M",ny:38},{l:"续费流入",y:20,h:18,col:green,t:"+1.8M",ny:20},{l:"货款流出",y:20,h:22,col:red,t:"-2.2M",ny:42},{l:"期末净额",y:42,h:110,col:acc,t:"48.6M",ny:null}];
+  let conn = "";
+  for(let i=0;i<bars.length-1;i++){ conn+=`<line x1="${80+i*96}" y1="${bars[i].ny}" x2="${26+(i+1)*96}" y2="${bars[i].ny}" stroke="${muted}" stroke-dasharray="3 3" opacity="0.55"/>`; }
+  document.getElementById("svgWaterfall").innerHTML = `<line x1="10" y1="152" x2="510" y2="152" stroke="${grid}"/>${conn}${bars.map((b,i)=>{const x=26+i*96; return `<rect x="${x}" y="${b.y}" width="54" height="${b.h}" rx="4" fill="${b.col}" opacity="0.88"/><text x="${x+27}" y="${b.y-6}" font-size="11.5" font-family="JetBrains Mono, monospace" fill="${b.col}" text-anchor="middle">${b.t}</text><text x="${x+27}" y="170" font-size="11.5" fill="${muted}" text-anchor="middle">${b.l}</text>`;}).join("")}`;
+}
+
+const DONUT_DATA = [{name:"活期结算资金",pct:52,val:"¥2,528万",c:"--accent"},{name:"协定通知存款",pct:30,val:"¥1,458万",c:"--accent-2"},{name:"外币离岸备付",pct:18,val:"¥876万",c:"--ctx"}];
+let dAct = -1;
+function drawDonut() {
+  const ink = V("--ink"), muted = V("--muted"), c = 2*Math.PI*58; let off = 0;
+  const arcs = DONUT_DATA.map((d,i)=>{ const len=c*(d.pct/100); const el=`<circle cx="78" cy="78" r="58" fill="none" stroke="${V(d.c)}" stroke-width="${dAct===i?13:10}" opacity="${dAct===-1||dAct===i?1:0.25}" stroke-dasharray="${(len-2).toFixed(1)} ${c.toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 78 78)"/>`; off+=len; return el; }).join("");
+  document.getElementById("svgDonut").innerHTML = `${arcs}<text x="78" y="75" font-size="17" font-weight="700" fill="${ink}" text-anchor="middle">${dAct===-1?"¥4,862万":DONUT_DATA[dAct].val}</text><text x="78" y="93" font-size="10.5" fill="${muted}" text-anchor="middle">${dAct===-1?"总可动用资金":DONUT_DATA[dAct].name}</text>`;
+  const leg = document.getElementById("donutLegend");
+  leg.innerHTML = DONUT_DATA.map((d,i)=>`<div class="donut-item ${dAct===i?"active":""}" data-i="${i}"><span><span style="color:${V(d.c)}">●</span> ${d.name}</span><span class="mono" style="font-weight:600">${d.pct}% · ${d.val}</span></div>`).join("");
+  leg.querySelectorAll(".donut-item").forEach(r => { r.addEventListener("mouseenter",()=>{dAct=Number(r.dataset.i);drawDonut();}); r.addEventListener("mouseleave",()=>{dAct=-1;drawDonut();}); });
+}
+
+function drawSankey() {
+  const acc = V("--accent"), green = V("--green"), muted = V("--muted"), ink = V("--ink"), ctx = V("--ctx");
+  const flows = [
+    {d:"M76,32 C160,32 160,54 242,54",w:28,col:acc,info:"企业直签 → 净收入池：¥682万 (46%)"},
+    {d:"M76,92 C160,92 160,94 242,94",w:20,col:acc,info:"SaaS 订阅 → 净收入池：¥460万 (31%)"},
+    {d:"M76,144 C160,144 160,126 242,126",w:14,col:ctx,info:"储能与生态 → 净收入池：¥340万 (23%)"},
+    {d:"M254,54 C340,54 340,40 426,40",w:26,col:green,info:"净收入池 → 留存净利：¥622万 (42%)"},
+    {d:"M254,96 C340,96 340,96 426,96",w:22,col:acc,info:"净收入池 → 研发投入：¥518万 (35%)"},
+    {d:"M254,132 C340,132 340,148 426,148",w:14,col:ctx,info:"净收入池 → 运维与交付：¥342万 (23%)"}
+  ];
+  const svg = document.getElementById("svgSankey");
+  svg.innerHTML = `${flows.map(f=>`<path d="${f.d}" fill="none" stroke="${f.col}" stroke-width="${f.w}" opacity="0.28" class="sk" data-info="${f.info}" style="cursor:pointer"/>`).join("")}
+    <rect x="64" y="14" width="12" height="44" rx="3" fill="${acc}"/><text x="58" y="40" font-size="11.5" fill="${ink}" text-anchor="end">企业直签</text>
+    <rect x="64" y="76" width="12" height="34" rx="3" fill="${acc}" opacity="0.75"/><text x="58" y="96" font-size="11.5" fill="${ink}" text-anchor="end">SaaS</text>
+    <rect x="64" y="128" width="12" height="28" rx="3" fill="${ctx}"/><text x="58" y="146" font-size="11.5" fill="${muted}" text-anchor="end">储能生态</text>
+    <rect x="242" y="34" width="12" height="114" rx="3" fill="${ink}"/>
+    <rect x="426" y="22" width="12" height="40" rx="3" fill="${green}"/><text x="444" y="46" font-size="11.5" fill="${green}" font-weight="600">留存净利</text>
+    <rect x="426" y="78" width="12" height="36" rx="3" fill="${acc}"/><text x="444" y="100" font-size="11.5" fill="${ink}">研发投入</text>
+    <rect x="426" y="132" width="12" height="28" rx="3" fill="${ctx}"/><text x="444" y="150" font-size="11.5" fill="${muted}">运维交付</text>`;
+  const out = document.getElementById("sankeyReadout");
+  svg.querySelectorAll(".sk").forEach(p=>{ p.addEventListener("mouseenter",()=>{p.setAttribute("opacity","0.68");out.textContent=p.dataset.info;}); p.addEventListener("mouseleave",()=>{p.setAttribute("opacity","0.28");}); });
+}
+
+function drawFunnel() {
+  const steps = [{n:"访问触达",v:"12,400",p:100,c:"基准"},{n:"注册试用",v:"4,712",p:76,c:"38.0% ↓"},{n:"深度激活",v:"2,260",p:52,c:"48.0% ↓"},{n:"正式付费",v:"1,414",p:34,c:"62.5% ↓"}];
+  document.getElementById("funnelBox").innerHTML = steps.map((s,i)=>`<div class="funnel-row"><span style="font-size:12.5px;color:var(--ink-2)">${s.n}</span><div><div class="funnel-bar mono" style="width:${s.p}%;background:var(--accent);opacity:${1-i*0.16}">${s.v}</div></div><span class="mono" style="text-align:right;color:${i===3?'var(--green)':'var(--muted)'}">${s.c}</span></div>`).join("");
+}
+
+function drawRadar() {
+  const acc = V("--accent"), ctx = V("--ctx"), grid = V("--grid"), ink = V("--ink");
+  const cx=260, cy=98, r=68, dims=["排版层级","色彩克制","图表叙事","微交互","三端适配"], v2=[0.94,0.92,0.96,0.90,0.92], v1=[0.68,0.78,0.48,0.62,0.88];
+  const pt = (val,i)=>{ const a=-Math.PI/2+(i*2*Math.PI)/5; return [Math.round((cx+Math.cos(a)*r*val)*10)/10, Math.round((cy+Math.sin(a)*r*val)*10)/10]; };
+  const poly = arr => arr.map((v,i)=>pt(v,i).join(",")).join(" ");
+  document.getElementById("svgRadar").innerHTML = `${[0.33,0.66,1].map(lv=>`<polygon fill="none" stroke="${grid}" points="${poly([lv,lv,lv,lv,lv])}"/>`).join("")}${dims.map((d,i)=>{const [x,y]=pt(1,i),[lx,ly]=pt(1.26,i); return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${grid}"/><text x="${lx}" y="${ly+4}" font-size="11.5" fill="${ink}" text-anchor="middle">${d}</text>`;}).join("")}<polygon fill="${ctx}" fill-opacity="0.12" stroke="${ctx}" stroke-width="1.4" stroke-dasharray="3 3" points="${poly(v1)}"/><polygon fill="${acc}" fill-opacity="0.18" stroke="${acc}" stroke-width="2.2" points="${poly(v2)}"/>${v2.map((v,i)=>{const [x,y]=pt(v,i); return `<circle cx="${x}" cy="${y}" r="3.5" fill="${acc}"/>`;}).join("")}`;
+}
+
+function drawDumbbell() {
+  const acc = V("--accent"), green = V("--green"), muted = V("--muted"), grid = V("--grid"), ink = V("--ink");
+  const rows = [{n:"GPT-6.2",a:320,b:610},{n:"DeepSeek-V4",a:290,b:540},{n:"GLM-5.3",a:360,b:690},{n:"Qwen4-Local",a:410,b:820}];
+  const mx = v => 105 + Math.round(((v-200)/700)*365);
+  document.getElementById("svgDumbbell").innerHTML = `<line x1="105" y1="150" x2="475" y2="150" stroke="${grid}"/>${[300,500,700].map(t=>`<text x="${mx(t)}" y="167" font-size="11" fill="${muted}" text-anchor="middle">${t}ms</text>`).join("")}${rows.map((r,i)=>{const y=26+i*35,x1=mx(r.a),x2=mx(r.b); return `<text x="0" y="${y+4}" font-size="12" font-family="JetBrains Mono, monospace" fill="${ink}">${r.n}</text><line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${acc}" stroke-width="3" opacity="0.55" stroke-linecap="round"/><circle cx="${x1}" cy="${y}" r="5" fill="${green}"/><circle cx="${x2}" cy="${y}" r="5" fill="${acc}"/><text x="${x2+10}" y="${y+4}" font-size="11" font-family="JetBrains Mono, monospace" fill="${muted}">${r.a}–${r.b}</text>`;}).join("")}`;
+}
+
+function drawScatter() {
+  const acc = V("--accent"), green = V("--green"), muted = V("--muted"), grid = V("--grid"), ink = V("--ink");
+  const pts = [{x:396,y:38,n:"GPT-6.2",c:acc},{x:350,y:56,n:"DeepSeek-V4",c:green},{x:255,y:86,n:"GLM-5.3",c:ink},{x:162,y:116,n:"Qwen4-Local",c:muted}];
+  document.getElementById("svgScatter").innerHTML = `<rect x="265" y="16" width="225" height="68" rx="6" fill="${green}" opacity="0.08"/><text x="480" y="30" font-size="10.5" fill="${green}" text-anchor="end">Pareto 最优甜点区</text><line x1="40" y1="84" x2="490" y2="84" stroke="${grid}" stroke-dasharray="3 3"/><line x1="265" y1="16" x2="265" y2="148" stroke="${grid}" stroke-dasharray="3 3"/><line x1="40" y1="148" x2="490" y2="148" stroke="${grid}"/><text x="488" y="166" font-size="11" fill="${muted}" text-anchor="end">推理速度 / 性价比 →</text><text x="40" y="14" font-size="11" fill="${muted}">↑ 综合质量得分</text>${pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="5.5" fill="${p.c}"/><text x="${p.x+10}" y="${p.y+4}" font-size="11.5" font-weight="500" fill="${p.c}">${p.n}</text>`).join("")}`;
+}
+
+function drawSparks() {
+  const acc = V("--accent"), green = V("--green"), amber = V("--amber");
+  const items = [{n:"API 请求量",v:"184.2K",d:"+12.4%",c:acc,pts:"2,22 20,19 38,20 56,14 74,11 92,6 110,4",e:[110,4]},{n:"储能自给率",v:"94.6%",d:"+3.1%",c:green,pts:"2,18 20,16 38,14 56,15 74,9 92,7 110,5",e:[110,5]},{n:"P95 延迟",v:"42 ms",d:"-8 ms",c:amber,pts:"2,8 20,11 38,9 56,14 74,16 92,15 110,19",e:[110,19]}];
+  document.getElementById("sparkContainer").innerHTML = items.map(it=>`<div class="spark-row"><span style="font-weight:500">${it.n}</span><span class="mono" style="font-weight:600">${it.v}</span><span class="mono" style="color:${it.c}">${it.d}</span><svg viewBox="0 0 118 28" width="118" height="28"><polygon fill="${it.c}" opacity="0.12" points="${it.pts} 110,26 2,26"/><polyline fill="none" stroke="${it.c}" stroke-width="2" stroke-linecap="round" points="${it.pts}"/><circle cx="${it.e[0]}" cy="${it.e[1]}" r="2.8" fill="${it.c}"/></svg></div>`).join("");
+}
+
+// 13. NEW: Treemap
+function drawTreemap() {
+  const hm4 = V("--hm-4"), hm3 = V("--hm-3"), hm2 = V("--hm-2"), hm1 = V("--hm-1"), hm0 = V("--hm-0"), ink = V("--ink");
+  const rects = [
+    {x:4,y:4,w:236,h:166,bg:hm4,fg:"#fff",t:"核心研发算力",p:"38% · ¥560万"},
+    {x:246,y:4,w:152,h:98,bg:hm3,fg:"#fff",t:"储能硬件采购",p:"24% · ¥355万"},
+    {x:404,y:4,w:112,h:98,bg:hm2,fg:ink,t:"云基础设施",p:"16% · ¥238万"},
+    {x:246,y:108,w:114,h:62,bg:hm2,fg:ink,t:"安全合规",p:"10% · ¥148万"},
+    {x:366,y:108,w:84,h:62,bg:hm1,fg:ink,t:"渠道市场",p:"7% · ¥104万"},
+    {x:456,y:108,w:60,h:62,bg:hm0,fg:ink,t:"备用",p:"5%"}
+  ];
+  const svg = document.getElementById("svgTreemap");
+  svg.innerHTML = rects.map(r=>`
+    <g class="tm-g" data-info="${r.t}：${r.p}" style="cursor:pointer">
+      <rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="7" fill="${r.bg}"/>
+      <text x="${r.x+10}" y="${r.y+22}" font-size="12" font-weight="600" fill="${r.fg}">${r.t}</text>
+      <text x="${r.x+10}" y="${r.y+38}" font-size="11" font-family="JetBrains Mono, monospace" fill="${r.fg}" opacity="0.85">${r.p}</text>
+    </g>`).join("");
+  const out = document.getElementById("treeReadout");
+  svg.querySelectorAll(".tm-g").forEach(g => g.addEventListener("mouseenter", () => { out.textContent = g.dataset.info; }));
+}
+
+// 14. NEW: Candlestick Chart
+function drawCandle() {
+  const green = V("--green"), red = V("--red"), grid = V("--grid"), muted = V("--muted");
+  const data = [
+    {d:"11/14",o:380,c:398,h:408,l:372},{d:"11/15",o:398,c:388,h:406,l:380},
+    {d:"11/16",o:388,c:405,h:414,l:384},{d:"11/17",o:405,c:412,h:422,l:396},
+    {d:"11/18",o:412,c:402,h:418,l:394},{d:"11/19",o:402,c:415,h:424,l:398},
+    {d:"11/20",o:415,c:426,h:434,l:408},{d:"11/21",o:426,c:418,h:432,l:410}
+  ];
+  const mapY = v => Math.round(148 - ((v - 365) / 75) * 126);
+  const svg = document.getElementById("svgCandle");
+  svg.innerHTML = `
+    <line x1="16" y1="36" x2="504" y2="36" stroke="${grid}"/><line x1="16" y1="92" x2="504" y2="92" stroke="${grid}"/><line x1="16" y1="148" x2="504" y2="148" stroke="${grid}"/>
+    ${data.map((k,i)=>{
+      const x=46+i*60, up=k.c>=k.o, col=up?green:red, yTop=mapY(Math.max(k.o,k.c)), yBot=mapY(Math.min(k.o,k.c)), bh=Math.max(4,yBot-yTop);
+      return `<g class="ck" data-info="${k.d} · 开 ¥${k.o} / 收 ¥${k.c} / 高 ¥${k.h} / 低 ¥${k.l}" style="cursor:pointer">
+        <line x1="${x}" y1="${mapY(k.h)}" x2="${x}" y2="${mapY(k.l)}" stroke="${col}" stroke-width="1.6"/>
+        <rect x="${x-10}" y="${yTop}" width="20" height="${bh}" rx="3" fill="${col}" opacity="0.9"/>
+        <text x="${x}" y="166" font-size="10.5" fill="${muted}" text-anchor="middle">${k.d}</text>
+      </g>`;
+    }).join("")}`;
+  const out = document.getElementById("candleReadout");
+  svg.querySelectorAll(".ck").forEach(g => g.addEventListener("mouseenter", () => { out.textContent = g.dataset.info; }));
+}
+
+// 15. NEW: Precision Semi-Circle Gauge
+function drawGauge() {
+  const acc = V("--accent"), green = V("--green"), sub = V("--subtle"), ink = V("--ink"), muted = V("--muted");
+  const gauges = [
+    { cx: 135, val: 78, lbl: "储能 SOC", unit: "%", col: green },
+    { cx: 385, val: 92, lbl: "系统健康度", unit: "分", col: acc }
+  ];
+  const r = 64, halfC = Math.PI * r;
+  document.getElementById("svgGauge").innerHTML = gauges.map(g => {
+    const dash = (halfC * (g.val / 100)).toFixed(1);
+    return `
+      <path d="M ${g.cx - r} 122 A ${r} ${r} 0 0 1 ${g.cx + r} 122" fill="none" stroke="${sub}" stroke-width="12" stroke-linecap="round"/>
+      <path d="M ${g.cx - r} 122 A ${r} ${r} 0 0 1 ${g.cx + r} 122" fill="none" stroke="${g.col}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${dash} ${halfC.toFixed(1)}"/>
+      <text x="${g.cx}" y="108" font-size="26" font-weight="700" fill="${ink}" text-anchor="middle">${g.val}<tspan font-size="13" fill="${muted}">${g.unit}</tspan></text>
+      <text x="${g.cx}" y="136" font-size="12" fill="${muted}" text-anchor="middle">${g.lbl}</text>
+    `;
+  }).join("");
+}
+
+// 16. NEW: 100% Stacked Area Chart
+function drawStacked() {
+  const acc = V("--accent"), green = V("--green"), ctx = V("--ctx"), muted = V("--muted");
+  const xs = [16,104,192,280,368,450];
+  const pv = [32,36,40,45,48,50], bess = [18,20,22,23,24,24];
+  const topY = 20, botY = 150, h = botY - topY;
+  const yPv = pv.map(v => Math.round(botY - (v/100)*h));
+  const yBess = pv.map((v,i) => Math.round(botY - ((v+bess[i])/100)*h));
+  const polyPv = `${xs.map((x,i)=>`${x},${yPv[i]}`).join(" ")} 450,${botY} 16,${botY}`;
+  const polyBess = `${xs.map((x,i)=>`${x},${yBess[i]}`).join(" ")} ${xs.slice().reverse().map((x,i)=>`${x},${yPv[xs.length-1-i]}`).join(" ")}`;
+  const polyGrid = `16,${topY} 450,${topY} ${xs.slice().reverse().map((x,i)=>`${x},${yBess[xs.length-1-i]}`).join(" ")}`;
+
+  document.getElementById("svgStacked").innerHTML = `
+    <polygon fill="${ctx}" opacity="0.24" points="${polyGrid}"/>
+    <polygon fill="${green}" opacity="0.34" points="${polyBess}"/>
+    <polygon fill="${acc}" opacity="0.45" points="${polyPv}"/>
+    <text x="458" y="38" font-size="11.5" fill="${muted}">市电 26%</text>
+    <text x="458" y="76" font-size="11.5" fill="${green}" font-weight="600">储能 24%</text>
+    <text x="458" y="124" font-size="11.5" fill="${acc}" font-weight="600">光伏 50%</text>
+    ${["6月","7月","8月","9月","10月","11月"].map((m,i)=>`<text x="${xs[i]}" y="168" font-size="11" fill="${muted}" text-anchor="middle">${m}</text>`).join("")}
+  `;
+}
+
+function drawAll() {
+  drawLine(); drawCalendar(); drawMatrix(); drawBullet();
+  drawWaterfall(); drawDonut(); drawSankey(); drawFunnel();
+  drawRadar(); drawDumbbell(); drawScatter(); drawSparks();
+  drawTreemap(); drawCandle(); drawGauge(); drawStacked();
+}
+
+document.querySelectorAll("#catBar .cat-chip").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#catBar .cat-chip").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  const c = b.dataset.c;
+  document.querySelectorAll(".viz-card").forEach(card => card.classList.toggle("hidden", c !== "all" && card.dataset.cat !== c));
+}));
+
+document.querySelectorAll("#palBar .pal-chip").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#palBar .pal-chip").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  document.documentElement.setAttribute("data-palette", b.dataset.p);
+  document.getElementById("palNote").textContent = PAL_NOTES[b.dataset.p];
+  drawAll();
+}));
+
+document.getElementById("themeBtn").addEventListener("click", e => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  e.currentTarget.textContent = dark ? "切换深色" : "切换浅色";
+  drawAll();
+});
+
+drawAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex × Magpie · 纯中性雾面极简工作台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+/* =========================================================
+   PURE NEUTRAL MATTE CHARCOAL (Faithful to Codex Desktop + Magpie)
+   Zero blue cast · Zero neon · 98% calm monochrome
+   ========================================================= */
+:root, [data-theme="dark"] {
+  --rail: #171717;
+  --sidebar: #171717;
+  --canvas: #1c1c1c;
+  --composer-top: #212121;
+  --composer: #262626;
+  --surface: #222222;
+  --hover: #252525;
+  --active: #2a2a2a;
+  --hairline: rgba(255, 255, 255, 0.065);
+  --hairline-strong: rgba(255, 255, 255, 0.11);
+
+  --ink: #ececec;
+  --ink-2: #b8b8b8;
+  --muted: #7e7e7e;
+  --faint: #5c5c5c;
+
+  /* Micro semantic signals only — never loud */
+  --dot-blue: #3b82f6;
+  --amber: #d9822b;
+  --amber-soft: rgba(217, 130, 43, 0.12);
+  --green: #4ade80;
+  --green-soft: rgba(74, 222, 128, 0.10);
+  --red: #f87171;
+  --red-soft: rgba(248, 113, 113, 0.10);
+
+  --send-bg: #ececec;
+  --send-fg: #171717;
+  --code-bg: #151515;
+  --popover-bg: rgba(34, 34, 34, 0.96);
+  --popover-shadow: 0 18px 44px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.09);
+  --user-bubble: #262626;
+}
+
+[data-theme="light"] {
+  --rail: #f4f4f5;
+  --sidebar: #f4f4f5;
+  --canvas: #ffffff;
+  --composer-top: #f2f2f4;
+  --composer: #f7f7f8;
+  --surface: #f7f7f8;
+  --hover: #ececee;
+  --active: #e6e6e9;
+  --hairline: rgba(0, 0, 0, 0.07);
+  --hairline-strong: rgba(0, 0, 0, 0.12);
+
+  --ink: #18181b;
+  --ink-2: #4a4a52;
+  --muted: #76767f;
+  --faint: #a1a1aa;
+
+  --dot-blue: #2563eb;
+  --amber: #b45309;
+  --amber-soft: rgba(180, 83, 9, 0.10);
+  --green: #15803d;
+  --green-soft: rgba(21, 128, 61, 0.10);
+  --red: #b91c1c;
+  --red-soft: rgba(185, 28, 28, 0.10);
+
+  --send-bg: #18181b;
+  --send-fg: #ffffff;
+  --code-bg: #f4f4f5;
+  --popover-bg: rgba(255, 255, 255, 0.96);
+  --popover-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --user-bubble: #f2f2f4;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.58;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11.8px; }
+
+/* ==================== DOUBLE-RAIL CODEX SHELL ==================== */
+.app {
+  display: grid;
+  grid-template-columns: 46px 236px minmax(0, 1fr) 0px;
+  height: 100vh;
+  overflow: hidden;
+  transition: grid-template-columns 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.app.drawer-open {
+  grid-template-columns: 46px 236px minmax(0, 1fr) 360px;
+}
+
+/* 1. Far-left 46px Icon Rail */
+.icon-rail {
+  background: var(--rail);
+  border-right: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.rail-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.rail-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease, color 120ms ease;
+}
+.rail-btn:hover { background: var(--hover); color: var(--ink); }
+.rail-btn.active { background: var(--active); color: var(--ink); }
+
+/* 2. Quiet Borderless Thread Sidebar */
+.thread-rail {
+  background: var(--sidebar);
+  border-right: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tr-head {
+  height: 44px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.tr-brand {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tr-head-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.icon-sm {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-sm:hover { background: var(--hover); color: var(--ink); }
+
+.new-chat-row {
+  margin: 2px 8px 10px;
+  height: 32px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+.new-chat-row:hover { background: var(--hover); color: var(--ink); }
+.new-chat-row.active { background: var(--active); color: var(--ink); }
+
+.tr-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 16px;
+}
+
+.tr-sec-lbl {
+  font-size: 11.5px;
+  color: var(--muted);
+  padding: 10px 10px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.t-btn {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 6.5px 10px;
+  border-radius: 7px;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 12.8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: background 110ms ease, color 110ms ease;
+}
+.t-btn:hover { background: var(--hover); color: var(--ink); }
+.t-btn.active { background: var(--active); color: var(--ink); font-weight: 500; }
+
+.t-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unread-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dot-blue);
+  flex-shrink: 0;
+}
+
+/* 3. Serene Main Canvas */
+.main-stage {
+  background: var(--canvas);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+}
+
+.stage-view { display: none; flex-direction: column; height: 100%; min-height: 0; }
+.stage-view.active { display: flex; }
+
+/* Ultra-quiet top bar (almost zero chrome!) */
+.quiet-top {
+  height: 44px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.quiet-title {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Empty / Home Codex Welcome State (exact match to screenshot) */
+.codex-home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.codex-mark {
+  width: 34px;
+  height: 34px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  opacity: 0.8;
+}
+
+.codex-prompt-heading {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.codex-prompt-heading span {
+  text-decoration: underline;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 5px;
+  cursor: pointer;
+}
+
+/* Active Conversation Stream */
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 24px 28px;
+}
+
+.chat-col {
+  max-width: 740px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.msg-u {
+  align-self: flex-end;
+  max-width: 78%;
+  background: var(--user-bubble);
+  padding: 10px 15px;
+  border-radius: 16px 16px 4px 16px;
+  color: var(--ink);
+  font-size: 13.8px;
+}
+
+.msg-a {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.thought-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.thought-line:hover { color: var(--ink-2); }
+
+.thought-detail {
+  border-left: 1.5px solid var(--hairline-strong);
+  padding: 2px 0 2px 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+  display: none;
+}
+.thought-detail.open { display: block; }
+
+.prose p { margin: 0 0 11px; color: var(--ink-2); font-size: 14px; line-height: 1.68; }
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  background: var(--surface);
+  padding: 1px 5px;
+  border-radius: 5px;
+  color: var(--ink);
+}
+
+.quiet-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.quiet-table th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 8px 10px 8px 0;
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.quiet-table td {
+  padding: 8px 10px 8px 0;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-2);
+}
+
+.quiet-code {
+  background: var(--code-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.quiet-code-head {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+.quiet-code pre {
+  margin: 0;
+  padding: 11px 13px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.62;
+  color: var(--ink-2);
+  overflow-x: auto;
+}
+
+.copy-mini {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.copy-mini:hover { color: var(--ink); }
+
+.diff-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+.diff-pill:hover { background: var(--hover); color: var(--ink); }
+
+/* ==================== ICONIC TWO-TIER CODEX FLOATING COMPOSER ==================== */
+.composer-zone {
+  padding: 0 24px 20px;
+  flex-shrink: 0;
+}
+
+.composer-stack {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Upper tucked context bar */
+.composer-context {
+  width: calc(100% - 24px);
+  margin: 0 auto;
+  background: var(--composer-top);
+  border: 1px solid var(--hairline);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ctx-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* Lower rounded composer card */
+.composer-card {
+  background: var(--composer);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 16px;
+  padding: 12px 14px 10px;
+}
+
+.composer-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  min-height: 36px;
+}
+.composer-input::placeholder { color: var(--faint); }
+
+.composer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.cb-left, .cb-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cb-ghost {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 4px 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.cb-ghost:hover { background: var(--hover); color: var(--ink); }
+.cb-ghost.amber { color: var(--amber); }
+
+.send-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--send-bg);
+  color: var(--send-fg);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  transition: opacity 120ms ease;
+}
+.send-circle:hover { opacity: 0.85; }
+
+/* Custom Searchable Magpie/Codex Popover */
+.pop-wrap { position: relative; display: inline-block; }
+
+.pop-panel {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  width: 296px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--popover-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--popover-shadow);
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 130ms ease, transform 140ms ease;
+}
+.pop-panel.align-left { right: auto; left: 0; width: 244px; }
+.pop-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+.pop-search {
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--canvas);
+  color: var(--ink);
+  border-radius: 7px;
+  padding: 0 9px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  margin-bottom: 6px;
+}
+
+.pop-opt {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 7px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+}
+.pop-opt:hover { background: var(--hover); }
+.pop-opt.sel { background: var(--active); }
+.pop-t { font-size: 12.5px; font-weight: 500; color: var(--ink); }
+.pop-d { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ==================== MAGPIE VIEW (Clean Matte Quota & Routing) ==================== */
+.magpie-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 32px 40px;
+}
+.magpie-col {
+  max-width: 840px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.m-head h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.m-head p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+
+.quota-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.m-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 15px 16px;
+}
+
+.m-bar-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--hover);
+  margin: 10px 0 6px;
+  overflow: hidden;
+}
+.m-bar-fill { height: 100%; border-radius: 999px; background: var(--ink); }
+
+.m-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.3fr 0.8fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.m-row:last-child { border-bottom: none; padding-bottom: 2px; }
+
+.matte-switch {
+  position: relative;
+  width: 34px;
+  height: 19px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--canvas);
+  cursor: pointer;
+  padding: 0;
+}
+.matte-switch.on { background: var(--ink); border-color: var(--ink); }
+.matte-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--canvas);
+  transition: transform 140ms ease;
+}
+.matte-switch:not(.on)::after { background: var(--muted); }
+.matte-switch.on::after { transform: translateX(15px); }
+
+/* ==================== RIGHT ON-DEMAND DRAWER ==================== */
+.right-drawer {
+  background: var(--sidebar);
+  border-left: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rd-head {
+  height: 44px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rd-tabs { display: flex; gap: 4px; }
+.rd-tabs button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.rd-tabs button.active { background: var(--active); color: var(--ink); }
+
+.rd-body { flex: 1; overflow-y: auto; padding: 14px; }
+.rd-pane { display: none; flex-direction: column; gap: 12px; }
+.rd-pane.active { display: flex; }
+
+.d-add { display: block; background: var(--green-soft); color: var(--green); padding: 0 4px; }
+.d-del { display: block; background: var(--red-soft); color: var(--red); padding: 0 4px; }
+
+@media (max-width: 980px) {
+  .app, .app.drawer-open { grid-template-columns: 46px minmax(0, 1fr); }
+  .thread-rail, .right-drawer { display: none; }
+  .quota-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="appRoot">
+
+  <!-- 1. FAR-LEFT 46PX ICON RAIL (Codex Desktop exact feel) -->
+  <nav class="icon-rail" aria-label="主导航">
+    <div class="rail-stack">
+      <button class="rail-btn active" data-rail="chat" title="Codex 对话" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z"/></svg>
+      </button>
+      <button class="rail-btn" data-rail="magpie" title="Magpie 路由与配额" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </button>
+      <button class="rail-btn" data-rail="privacy" title="隐私脱敏与插件" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"/></svg>
+      </button>
+    </div>
+    <div class="rail-stack">
+      <button class="rail-btn" id="themeBtn" title="切换深浅模式" type="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 2. QUIET BORDERLESS THREAD LIST -->
+  <aside class="thread-rail">
+    <div class="tr-head">
+      <span class="tr-brand">Codex <span style="color:var(--muted);font-size:11px;">⌄</span></span>
+      <div class="tr-head-actions">
+        <button class="icon-sm" id="quickNewBtn" title="新聊天" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="new-chat-row" id="newChatRow" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>新聊天</span>
+    </button>
+
+    <div class="tr-scroll">
+      <div class="tr-sec-lbl">置顶</div>
+      <div id="pinnedList"></div>
+      <div class="tr-sec-lbl"><span>项目</span><span>›</span></div>
+      <div class="tr-sec-lbl">最近</div>
+      <div id="recentList"></div>
+    </div>
+  </aside>
+
+  <!-- 3. MAIN STAGE -->
+  <main class="main-stage">
+
+    <!-- VIEW 1: CODEX CHAT (HOME + ACTIVE THREAD) -->
+    <section class="stage-view active" id="sv-chat">
+      <header class="quiet-top">
+        <span class="quiet-title" id="topThreadTitle">重构 universal-ui v2.0 与 Codex 雾面灰阶对齐</span>
+        <button class="icon-sm" id="drawerToggleBtn" title="展开/收起右侧 Diff 与遥测" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="15" y1="4" x2="15" y2="20"/></svg>
+        </button>
+      </header>
+
+      <!-- Codex Blank Home State (visible when clicking 新聊天) -->
+      <div class="codex-home" id="codexHome" style="display:none;">
+        <svg class="codex-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 3c2.4 0 4.2 1.2 5.2 2.9 1.9.7 3.3 2.5 3.3 4.6 0 2.2-1.4 4-3.4 4.7-.9 1.7-2.8 2.8-5.1 2.8s-4.2-1.1-5.1-2.8C4.9 14.5 3.5 12.7 3.5 10.5c0-2.1 1.4-3.9 3.3-4.6C7.8 4.2 9.6 3 12 3z"/>
+          <path d="M9.5 10l2 1.5-2 1.5M13 13h2.5"/>
+        </svg>
+        <h1 class="codex-prompt-heading">你想让我们在 <span id="homeProjectLink">AI爬虫内容解析</span> 中构建什么？</h1>
+      </div>
+
+      <!-- Active Serene Conversation Stream -->
+      <div class="chat-scroll" id="chatScroll">
+        <div class="chat-col" id="chatCol"></div>
+      </div>
+
+      <!-- ICONIC TWO-TIER FLOATING COMPOSER -->
+      <footer class="composer-zone">
+        <div class="composer-stack">
+          <div class="composer-context">
+            <span class="ctx-item">📁 <span id="ctxRepo">AI爬虫内容解析</span></span>
+            <span class="ctx-item">💻 本地</span>
+            <span class="ctx-item">⎇ master</span>
+          </div>
+          <div class="composer-card">
+            <textarea class="composer-input" id="msgInput" placeholder="输入指令或继续对话…"></textarea>
+            <div class="composer-bottom">
+              <div class="cb-left">
+                <button class="cb-ghost" id="attachBtn" title="添加上下文文件" type="button">+</button>
+
+                <!-- Permission Popover -->
+                <div class="pop-wrap" id="popPerm">
+                  <button class="cb-ghost amber" type="button" aria-expanded="false">
+                    <span>🛡</span><span class="p-val">完全访问</span>
+                  </button>
+                  <div class="pop-panel align-left">
+                    <button class="pop-opt sel" data-v="完全访问" type="button">
+                      <div><div class="pop-t">完全访问</div><div class="pop-d">允许在本地工作区读写与执行命令</div></div>
+                      <span class="mono">✓</span>
+                    </button>
+                    <button class="pop-opt" data-v="写盘前审批" type="button">
+                      <div><div class="pop-t">写盘前审批</div><div class="pop-d">读取自动执行，修改文件前需确认</div></div>
+                      <span class="mono"></span>
+                    </button>
+                    <button class="pop-opt" data-v="只读分析" type="button">
+                      <div><div class="pop-t">只读分析</div><div class="pop-d">仅检索与回答，禁止任何写入</div></div>
+                      <span class="mono"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cb-right">
+                <!-- Magpie Searchable Routing Group Popover -->
+                <div class="pop-wrap" id="popRoute">
+                  <button class="cb-ghost" type="button" aria-expanded="false">
+                    <span class="p-val">开发工作流 · 极简版 · routing group</span>
+                    <span style="font-size:10px;">⌄</span>
+                  </button>
+                  <div class="pop-panel">
+                    <input class="pop-search" id="routeSearch" type="text" placeholder="搜索路由组或模型…">
+                    <div id="routeOptions"></div>
+                  </div>
+                </div>
+
+                <button class="send-circle" id="sendCircle" title="发送" type="button">↑</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </section>
+
+    <!-- VIEW 2: MAGPIE ROUTING & QUOTA -->
+    <section class="stage-view" id="sv-magpie">
+      <header class="quiet-top">
+        <span class="quiet-title">Magpie · 跨 Agent 统一路由与配额</span>
+      </header>
+      <div class="magpie-scroll">
+        <div class="magpie-col">
+          <div class="m-head">
+            <h1>Every agent's model. One place.</h1>
+            <p>参考 yetone/magpie：统一管理 Codex、Claude Code、DeepSeek Harness 与 OpenCode 的后端路由与配额。</p>
+          </div>
+
+          <div class="quota-grid">
+            <div class="m-card">
+              <div style="font-size:12px;color:var(--muted)">今日网关消耗</div>
+              <div style="font-size:20px;font-weight:600;margin-top:4px;">$4.82 <span style="font-size:12px;color:var(--muted);font-weight:400">/ $20</span></div>
+              <div class="m-bar-track"><div class="m-bar-fill" style="width:24%"></div></div>
+              <div class="mono" style="color:var(--muted)">24% · 节奏平稳</div>
+            </div>
+            <div class="m-card">
+              <div style="font-size:12px;color:var(--muted)">活跃路由组</div>
+              <div style="font-size:20px;font-weight:600;margin-top:4px;">4 / 5</div>
+              <div class="m-bar-track"><div class="m-bar-fill" style="width:80%"></div></div>
+              <div class="mono" style="color:var(--muted)">加权 TTFT 358ms</div>
+            </div>
+            <div class="m-card">
+              <div style="font-size:12px;color:var(--muted)">搜索 API 额度 (Tavily)</div>
+              <div style="font-size:20px;font-weight:600;margin-top:4px;">312 / 1K</div>
+              <div class="m-bar-track"><div class="m-bar-fill" style="width:31%"></div></div>
+              <div class="mono" style="color:var(--muted)">多 Key 轮询已开启</div>
+            </div>
+          </div>
+
+          <div class="m-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong style="font-size:13.5px;">已接管 Agent 路由绑定</strong>
+              <span class="mono" style="color:var(--muted)">127.0.0.1:3425</span>
+            </div>
+            <div id="magpieRows"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: PRIVACY MASKING & PLUGINS -->
+    <section class="stage-view" id="sv-privacy">
+      <header class="quiet-top">
+        <span class="quiet-title">Magpie 隐私脱敏与本地插件</span>
+      </header>
+      <div class="magpie-scroll">
+        <div class="magpie-col">
+          <div class="m-head">
+            <h1>隐私脱敏与中间件</h1>
+            <p>请求离开本机前自动将 <code>.env</code> 密钥替换为 <code>{{API_KEY_…}}</code> 占位符，返回时本机还原。</p>
+          </div>
+          <div class="m-card" id="privacyRows"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 4. RIGHT ON-DEMAND DRAWER (Collapsed by default) -->
+  <aside class="right-drawer">
+    <div class="rd-head">
+      <div class="rd-tabs" id="rdTabs">
+        <button data-rp="diff" class="active" type="button">Diff</button>
+        <button data-rp="usage" type="button">用量</button>
+      </div>
+      <button class="icon-sm" id="closeDrawerBtn" type="button">✕</button>
+    </div>
+    <div class="rd-body">
+      <div class="rd-pane active" id="rp-diff">
+        <div class="quiet-code" style="margin:0;">
+          <div class="quiet-code-head"><span>tokens-matte.css</span><span>+24 -12</span></div>
+          <pre><span class="d-del">- --canvas: #0b0c0f; /* 偏蓝暗灰 */</span>
+<span class="d-add">+ --sidebar: #171717; /* 纯中性雾面 */</span>
+<span class="d-add">+ --canvas:  #1c1c1c;</span>
+<span class="d-add">+ --composer:#262626;</span></pre>
+        </div>
+      </div>
+      <div class="rd-pane" id="rp-usage">
+        <div class="m-card" style="padding:12px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="color:var(--muted)">上下文窗口</span><span class="mono">14.2K / 128K</span>
+          </div>
+          <div class="m-bar-track"><div class="m-bar-fill" style="width:11%"></div></div>
+          <div style="font-size:11.5px;color:var(--muted)">纯中性低噪进度条，不抢主对话视线</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+// ==================== THEME & RAIL NAVIGATION ====================
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+});
+
+function switchStage(view) {
+  document.querySelectorAll(".rail-btn[data-rail]").forEach(b => b.classList.toggle("active", b.dataset.rail === view));
+  document.querySelectorAll(".stage-view").forEach(v => v.classList.toggle("active", v.id === `sv-${view}`));
+}
+document.querySelectorAll(".rail-btn[data-rail]").forEach(b => b.addEventListener("click", () => switchStage(b.dataset.rail)));
+
+// Right Drawer Toggle
+const appRoot = document.getElementById("appRoot");
+function toggleDrawer(forceOpen) {
+  const open = typeof forceOpen === "boolean" ? forceOpen : !appRoot.classList.contains("drawer-open");
+  appRoot.classList.toggle("drawer-open", open);
+}
+document.getElementById("drawerToggleBtn").addEventListener("click", () => toggleDrawer());
+document.getElementById("closeDrawerBtn").addEventListener("click", () => toggleDrawer(false));
+document.querySelectorAll("#rdTabs button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#rdTabs button").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    document.querySelectorAll(".rd-pane").forEach(p => p.classList.toggle("active", p.id === `rp-${b.dataset.rp}`));
+  });
+});
+
+// ==================== SIDEBAR THREADS (Faithful to your screenshot) ====================
+const PINNED = [
+  { id: "p1", title: "重构 universal-ui v2.0 与 Codex 雾面灰阶对齐", repo: "yd-skills" },
+  { id: "p2", title: "LLM 自动化生成测试用例", repo: "learn-claude-code-java" },
+  { id: "p3", title: "配置 Magpie 的 Gemini Web 授权", repo: "yd-skills" }
+];
+const RECENT = [
+  { id: "r1", title: "制作骑辆自行车的 SVG 动画", repo: "AI爬虫内容解析", unread: true },
+  { id: "r2", title: "Fork deepseek-harness 项目", repo: "deepseek-harness" },
+  { id: "r3", title: "上传 WorkBuddy 技能至 yd-skills", repo: "yd-skills" },
+  { id: "r4", title: "调研企业 RAG 知识库优化与测评", repo: "AI爬虫内容解析" }
+];
+
+let activeThread = "p1";
+let isHome = false;
+
+function renderThreads() {
+  document.getElementById("newChatRow").classList.toggle("active", isHome);
+  const render = (arr, target) => {
+    const el = document.getElementById(target);
+    el.innerHTML = arr.map(t => `
+      <button class="t-btn ${!isHome && activeThread === t.id ? "active" : ""}" data-id="${t.id}" data-repo="${t.repo}" data-title="${t.title}" type="button">
+        <span class="t-label">${t.title}</span>
+        ${t.unread ? '<span class="unread-dot"></span>' : ''}
+      </button>
+    `).join("");
+    el.querySelectorAll(".t-btn").forEach(b => {
+      b.addEventListener("click", () => {
+        isHome = false;
+        activeThread = b.dataset.id;
+        document.getElementById("topThreadTitle").textContent = b.dataset.title;
+        document.getElementById("ctxRepo").textContent = b.dataset.repo;
+        document.getElementById("codexHome").style.display = "none";
+        document.getElementById("chatScroll").style.display = "block";
+        switchStage("chat");
+        renderThreads();
+      });
+    });
+  };
+  render(PINNED, "pinnedList");
+  render(RECENT, "recentList");
+}
+
+function showHome() {
+  isHome = true;
+  document.getElementById("topThreadTitle").textContent = "";
+  document.getElementById("ctxRepo").textContent = "AI爬虫内容解析";
+  document.getElementById("codexHome").style.display = "flex";
+  document.getElementById("chatScroll").style.display = "none";
+  switchStage("chat");
+  renderThreads();
+}
+document.getElementById("newChatRow").addEventListener("click", showHome);
+document.getElementById("quickNewBtn").addEventListener("click", showHome);
+
+// ==================== SERENE CONVERSATION RENDERING ====================
+const THREAD_MSGS = [
+  { role: "u", text: "复刻 Codex 桌面端这种纯中性雾面灰阶和零冗余顶栏的克制感，同时把 Magpie 的路由组选择器和隐私脱敏融合进来。" },
+  {
+    role: "a",
+    thought: "已提取截图中的中性灰阶与外壳比例：侧栏 #171717、主画布 #1c1c1c、底部双层悬浮输入框 #212121/#262626，去掉顶部多余徽章与高饱和霓虹色，仅保留单一暖琥珀权限标识与极轻未读圆点。",
+    html: `
+      <div class="prose">
+        <p>已完全按你截图中的 <strong>Codex 桌面端</strong> 比例与色彩克制度重构：拿掉了所有偏蓝暗灰与彩色状态徽章，整屏回归 <strong>98% 纯中性雾面灰阶</strong>，只在左侧 46px 窄图标栏保留了 <strong>Magpie 路由配额</strong> 与 <strong>隐私脱敏</strong> 入口。</p>
+        <table class="quiet-table">
+          <thead><tr><th>层级</th><th>旧版问题</th><th>Codex × Magpie 雾面基准</th></tr></thead>
+          <tbody>
+            <tr><td><strong>灰阶色相</strong></td><td>带蓝调的暗灰 + 激光青霓虹</td><td>纯中性雾面灰（<code>#171717</code> / <code>#1c1c1c</code> / <code>#262626</code>）</td></tr>
+            <tr><td><strong>顶栏重量</strong></td><td>7 个状态胶囊与按钮挤满顶栏</td><td>近乎留白，仅保留右侧 1 个极简面板切换图标</td></tr>
+            <tr><td><strong>输入区结构</strong></td><td>单层卡片</td><td>上层缩进上下文条（项目·本地·分支）+ 下层圆角输入卡</td></tr>
+          </tbody>
+        </table>
+        <div class="quiet-code">
+          <div class="quiet-code-head">
+            <span>tokens-codex-matte.css</span>
+            <button class="copy-mini" data-copy="--rail:#171717; --canvas:#1c1c1c; --composer:#262626; --ink:#ececec;" type="button">复制</button>
+          </div>
+          <pre>:root[data-theme="dark"] {
+  --rail: #171717;      /* 左侧双栏纯中性底 */
+  --canvas: #1c1c1c;    /* 中央雾面主画布 */
+  --composer: #262626;  /* 悬浮输入卡片 */
+  --ink: #ececec;       /* 柔和主字色 */
+}</pre>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="diff-pill open-diff" type="button"><span>tokens-matte.css</span><span style="color:var(--green)">+24</span><span style="color:var(--red)">-12</span></button>
+        </div>
+      </div>
+    `
+  }
+];
+
+function renderMessages(scrollBottom = false) {
+  const col = document.getElementById("chatCol");
+  col.innerHTML = THREAD_MSGS.map((m, i) => {
+    if (m.role === "u") return `<div class="msg-u">${m.text}</div>`;
+    return `
+      <div class="msg-a">
+        <button class="thought-line" data-th="td-${i}" type="button">已思考 2.4 秒 ⌄</button>
+        <div class="thought-detail" id="td-${i}">${m.thought}</div>
+        ${m.html}
+      </div>
+    `;
+  }).join("");
+
+  col.querySelectorAll(".thought-line").forEach(b => {
+    b.addEventListener("click", () => {
+      const d = document.getElementById(b.dataset.th);
+      if (d) d.classList.toggle("open");
+    });
+  });
+  col.querySelectorAll(".open-diff").forEach(b => b.addEventListener("click", () => toggleDrawer(true)));
+  col.querySelectorAll(".copy-mini").forEach(b => {
+    b.addEventListener("click", () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.dataset.copy).catch(() => {});
+      b.textContent = "已复制";
+      setTimeout(() => { b.textContent = "复制"; }, 1200);
+    });
+  });
+  if (scrollBottom) {
+    const sc = document.getElementById("chatScroll");
+    sc.scrollTop = sc.scrollHeight;
+  }
+}
+
+// ==================== CUSTOM SEARCHABLE POPOVERS ====================
+const ROUTE_GROUPS = [
+  { name: "开发工作流 · 极简版 · routing group", sub: "DeepSeek-V4 + GLM-5.3 自动降级" },
+  { name: "架构评审 · 旗舰组 · routing group", sub: "GPT-6.2 Responses API" },
+  { name: "Codex on DeepSeek · direct", sub: "127.0.0.1:3425 · 340ms" },
+  { name: "Claude Code on GLM · direct", sub: "Anthropic Messages 协议" }
+];
+let selectedRoute = ROUTE_GROUPS[0].name;
+
+function renderRouteOptions(q = "") {
+  const el = document.getElementById("routeOptions");
+  const filtered = ROUTE_GROUPS.filter(r => r.name.toLowerCase().includes(q.toLowerCase()) || r.sub.toLowerCase().includes(q.toLowerCase()));
+  el.innerHTML = filtered.map(r => `
+    <button class="pop-opt ${r.name === selectedRoute ? "sel" : ""}" data-v="${r.name}" type="button">
+      <div><div class="pop-t">${r.name}</div><div class="pop-d">${r.sub}</div></div>
+      <span class="mono">${r.name === selectedRoute ? "✓" : ""}</span>
+    </button>
+  `).join("");
+  el.querySelectorAll(".pop-opt").forEach(opt => {
+    opt.addEventListener("click", e => {
+      e.stopPropagation();
+      selectedRoute = opt.dataset.v;
+      document.querySelector("#popRoute .p-val").textContent = selectedRoute;
+      closePops();
+      renderRouteOptions(document.getElementById("routeSearch").value);
+    });
+  });
+}
+
+function closePops() {
+  document.querySelectorAll(".pop-panel").forEach(p => p.classList.remove("open"));
+}
+
+["popPerm", "popRoute"].forEach(id => {
+  const wrap = document.getElementById(id);
+  const trigger = wrap.querySelector("button");
+  const panel = wrap.querySelector(".pop-panel");
+  trigger.addEventListener("click", e => {
+    e.stopPropagation();
+    const isOpen = panel.classList.contains("open");
+    closePops();
+    if (!isOpen) panel.classList.add("open");
+  });
+});
+
+document.querySelectorAll("#popPerm .pop-opt").forEach(opt => {
+  opt.addEventListener("click", e => {
+    e.stopPropagation();
+    document.querySelectorAll("#popPerm .pop-opt").forEach(o => { o.classList.remove("sel"); o.querySelector(".mono").textContent = ""; });
+    opt.classList.add("sel");
+    opt.querySelector(".mono").textContent = "✓";
+    document.querySelector("#popPerm .p-val").textContent = opt.dataset.v;
+    closePops();
+  });
+});
+
+document.getElementById("routeSearch").addEventListener("click", e => e.stopPropagation());
+document.getElementById("routeSearch").addEventListener("input", e => renderRouteOptions(e.target.value));
+document.addEventListener("click", closePops);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closePops(); });
+
+// Send message
+function sendMessage() {
+  const inp = document.getElementById("msgInput");
+  const txt = inp.value.trim();
+  if (!txt) return;
+  if (isHome) {
+    isHome = false;
+    document.getElementById("codexHome").style.display = "none";
+    document.getElementById("chatScroll").style.display = "block";
+    document.getElementById("topThreadTitle").textContent = txt.slice(0, 26);
+    renderThreads();
+  }
+  THREAD_MSGS.push({ role: "u", text: txt });
+  THREAD_MSGS.push({
+    role: "a",
+    thought: `当前路由：${selectedRoute} · 权限：${document.querySelector("#popPerm .p-val").textContent}。`,
+    html: `<div class="prose"><p>已收到「${txt}」。当前以纯中性雾面排版渲染回复，你可以点击左侧 <strong>新聊天</strong> 随时查看空白首页，或点击左侧时钟图标切换到 <strong>Magpie 路由与配额</strong>。</p></div>`
+  });
+  inp.value = "";
+  renderMessages(true);
+}
+document.getElementById("sendCircle").addEventListener("click", sendMessage);
+document.getElementById("attachBtn").addEventListener("click", () => {
+  const inp = document.getElementById("msgInput");
+  inp.value = (inp.value ? inp.value + " " : "") + "@tokens-matte.css ";
+  inp.focus();
+});
+
+// ==================== MAGPIE & PRIVACY DATA ====================
+const MAGPIE_AGENTS = [
+  { id: "m1", name: "Codex Desktop", route: "deepseek/deepseek-v4-pro", proto: "Responses", on: true },
+  { id: "m2", name: "Claude Code", route: "zhipu/glm-5.3", proto: "Messages", on: true },
+  { id: "m3", name: "DeepSeek Harness (dsh)", route: "deepseek/deepseek-flash", proto: "Messages", on: true },
+  { id: "m4", name: "OpenCode", route: "openai/gpt-6.2", proto: "Completions", on: true },
+  { id: "m5", name: "Gemini CLI", route: "google/gemini-3-pro", proto: "Native", on: false }
+];
+
+function renderMagpieRows() {
+  const el = document.getElementById("magpieRows");
+  el.innerHTML = MAGPIE_AGENTS.map(a => `
+    <div class="m-row" style="opacity:${a.on ? 1 : 0.45}">
+      <div style="font-weight:500">${a.name}</div>
+      <div class="mono" style="color:var(--ink-2)">${a.route}</div>
+      <div class="mono" style="color:var(--muted)">${a.proto}</div>
+      <button class="matte-switch ${a.on ? "on" : ""}" data-id="${a.id}" type="button"></button>
+    </div>
+  `).join("");
+  el.querySelectorAll(".matte-switch").forEach(b => b.addEventListener("click", () => {
+    const it = MAGPIE_AGENTS.find(x => x.id === b.dataset.id);
+    if (it) { it.on = !it.on; renderMagpieRows(); }
+  }));
+}
+
+const PRIVACY_ITEMS = [
+  { id: "pr1", title: "Privacy Masking（本地密钥脱敏）", desc: "自动将 .env 与日志中的 API Key 替换为 {{API_KEY_…}}", on: true },
+  { id: "pr2", title: "MCP 联网搜索代理（Tavily / SearXNG）", desc: "为无联网能力的模型统一挂载 web_search 与 web_fetch", on: true },
+  { id: "pr3", title: "Gateway Middleware 钩子", desc: "允许本地 Bun 插件在 onRequest / onResponse 阶段拦截改写", on: false }
+];
+
+function renderPrivacy() {
+  const el = document.getElementById("privacyRows");
+  el.innerHTML = PRIVACY_ITEMS.map(p => `
+    <div class="m-row" style="grid-template-columns:1fr auto;">
+      <div><div style="font-weight:500">${p.title}</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">${p.desc}</div></div>
+      <button class="matte-switch ${p.on ? "on" : ""}" data-id="${p.id}" type="button"></button>
+    </div>
+  `).join("");
+  el.querySelectorAll(".matte-switch").forEach(b => b.addEventListener("click", () => {
+    const it = PRIVACY_ITEMS.find(x => x.id === b.dataset.id);
+    if (it) { it.on = !it.on; renderPrivacy(); }
+  }));
+}
+
+renderThreads();
+renderMessages(false);
+renderRouteOptions();
+renderMagpieRows();
+renderPrivacy();
+</script>
+</body>
+</html>

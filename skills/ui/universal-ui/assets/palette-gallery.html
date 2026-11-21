@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-palette="codex-matte">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>universal-ui v2.0 · 6 大克制色盘与多领域样张库</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --canvas: #f7f7f9; --sidebar: #efeff2; --surface: #ffffff; --surface-subtle: #f1f1f4;
+  --line: rgba(28, 27, 34, 0.09); --line-strong: rgba(28, 27, 34, 0.15);
+  --ink: #1c1b22; --ink-2: #4b4956; --muted: #6e6c7a;
+  --action: #2b2932; --action-fg: #ffffff;
+  --accent: #7055b4; --accent-soft: rgba(112, 85, 180, 0.11);
+  --success: #16794c; --success-soft: rgba(22, 121, 76, 0.10);
+  --warn: #b25c00; --warn-soft: rgba(178, 92, 0, 0.11);
+  --shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 20px rgba(0,0,0,0.03);
+  --specular: none;
+  --viz-context: #b4b6bf;
+  --viz-grid: rgba(28, 27, 34, 0.07);
+}
+[data-theme="dark"] {
+  --canvas: #1b1b1e; --sidebar: #141417; --surface: #232327; --surface-subtle: #202024;
+  --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.14);
+  --ink: #eeedf1; --ink-2: #b9b7c2; --muted: #8b8996;
+  --action: #eeedf1; --action-fg: #1b1b1e;
+  --accent: #c3b5f5; --accent-soft: rgba(195, 181, 245, 0.14);
+  --success: #4ade80; --success-soft: rgba(74, 222, 128, 0.13);
+  --warn: #fbbf24; --warn-soft: rgba(251, 191, 36, 0.13);
+  --shadow: 0 8px 26px rgba(0,0,0,0.36);
+  --specular: inset 0 1px 0 rgba(255,255,255,0.06);
+  --viz-context: #5c5c66;
+  --viz-grid: rgba(255,255,255,0.06);
+}
+
+[data-palette="codex-matte"] {
+  --canvas: #ffffff; --sidebar: #f4f4f5; --surface: #f8f8f9; --surface-subtle: #efefef;
+  --ink: #18181b; --ink-2: #4a4a52; --muted: #76767f;
+  --action: #18181b; --action-fg: #ffffff;
+  --accent: #2563eb; --accent-soft: rgba(37, 99, 235, 0.10);
+}
+[data-palette="codex-matte"][data-theme="dark"] {
+  --canvas: #1c1c1c; --sidebar: #171717; --surface: #242424; --surface-subtle: #212121;
+  --line: rgba(255,255,255,0.065); --line-strong: rgba(255,255,255,0.11);
+  --ink: #ececec; --ink-2: #b8b8b8; --muted: #7e7e7e;
+  --action: #ececec; --action-fg: #171717;
+  --accent: #3b82f6; --accent-soft: rgba(59, 130, 246, 0.14);
+}
+
+[data-palette="apple-clarity"] {
+  --canvas: #f5f5f7; --sidebar: #efeff2; --surface: #ffffff; --surface-subtle: #ebebf0;
+  --ink: #1d1d1f; --ink-2: #48484c; --muted: #6e6e73;
+  --action: #1d1d1f; --action-fg: #ffffff;
+  --accent: #0066cc; --accent-soft: rgba(0, 102, 204, 0.10);
+}
+[data-palette="apple-clarity"][data-theme="dark"] {
+  --canvas: #0c0d10; --sidebar: #111216; --surface: #16171b; --surface-subtle: #212329;
+  --ink: #f5f5f7; --ink-2: #c7c7cc; --muted: #8e8e93;
+  --action: #f5f5f7; --action-fg: #0c0d10;
+  --accent: #2997ff; --accent-soft: rgba(41, 151, 255, 0.15);
+}
+
+[data-palette="mercury-emerald"] {
+  --canvas: #f6f7f6; --sidebar: #eff2f0; --surface: #ffffff; --surface-subtle: #edf0ee;
+  --ink: #151917; --ink-2: #404a44; --muted: #67726b;
+  --action: #151917; --action-fg: #ffffff;
+  --accent: #15803d; --accent-soft: rgba(21, 128, 61, 0.10);
+}
+[data-palette="mercury-emerald"][data-theme="dark"] {
+  --canvas: #141716; --sidebar: #101312; --surface: #1b1f1d; --surface-subtle: #222725;
+  --ink: #edf2ef; --ink-2: #b4bfb9; --muted: #7c8882;
+  --action: #edf2ef; --action-fg: #101312;
+  --accent: #34d399; --accent-soft: rgba(52, 211, 153, 0.14);
+}
+
+[data-palette="warm-editorial"] {
+  --canvas: #f8f6f2; --sidebar: #f1eee8; --surface: #fffefb; --surface-subtle: #edeae3;
+  --ink: #1e1c1a; --ink-2: #4e4943; --muted: #787168;
+  --action: #1e1c1a; --action-fg: #fffefb;
+  --accent: #9a4a2a; --accent-soft: rgba(154, 74, 42, 0.10);
+}
+[data-palette="warm-editorial"][data-theme="dark"] {
+  --canvas: #191816; --sidebar: #141311; --surface: #211f1c; --surface-subtle: #282622;
+  --ink: #f1ede6; --ink-2: #c2bbb0; --muted: #8a8277;
+  --action: #f1ede6; --action-fg: #141311;
+  --accent: #e08e68; --accent-soft: rgba(224, 142, 104, 0.15);
+}
+
+[data-palette="swiss-slate"] {
+  --canvas: #f1f4f7; --sidebar: #e9edf2; --surface: #ffffff; --surface-subtle: #e5eaf0;
+  --ink: #0f172a; --ink-2: #334155; --muted: #64748b;
+  --action: #0f172a; --action-fg: #ffffff;
+  --accent: #0284c7; --accent-soft: rgba(2, 132, 199, 0.10);
+}
+[data-palette="swiss-slate"][data-theme="dark"] {
+  --canvas: #0e1116; --sidebar: #0a0d12; --surface: #151a22; --surface-subtle: #1c222d;
+  --ink: #f1f5f9; --ink-2: #cbd5e1; --muted: #8492a6;
+  --action: #f1f5f9; --action-fg: #0a0d12;
+  --accent: #38bdf8; --accent-soft: rgba(56, 189, 248, 0.14);
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.mono { font-family: var(--font-mono); font-size: 12px; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--sidebar);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 24px;
+}
+
+.topbar-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.palette-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pal-btn {
+  height: 31px;
+  padding: 0 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 130ms ease;
+}
+.pal-btn:hover { background: var(--surface-subtle); color: var(--ink); }
+.pal-btn.active {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+.btn-flat {
+  height: 31px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-solid {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--action);
+  color: var(--action-fg);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+.head-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.head-row h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.head-row p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow), var(--specular);
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.kpi-cell { padding: 16px 20px; border-right: 1px solid var(--line); }
+.kpi-cell:last-child { border-right: none; }
+.kpi-lbl { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.kpi-num { font-size: 24px; font-weight: 600; letter-spacing: -0.028em; margin-bottom: 6px; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.8px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.pill.acc { background: var(--accent-soft); color: var(--accent); }
+.pill.ok { background: var(--success-soft); color: var(--success); }
+.pill.neu { background: var(--surface-subtle); color: var(--ink-2); }
+
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.95fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow), var(--specular);
+}
+
+.card-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.card-h h2 { margin: 0; font-size: 15.5px; font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 500;
+  padding: 8px 8px 8px 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+td {
+  height: 44px;
+  padding: 0 8px 0 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+}
+tr:last-child td { border-bottom: none; }
+
+@media (max-width: 900px) {
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  .main-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="palette-bar" id="paletteBar">
+      <button class="pal-btn" data-p="neutral-core" type="button"><span class="sw" style="background:#7055b4"></span>Neutral Core 原版紫</button>
+      <button class="pal-btn active" data-p="codex-matte" type="button"><span class="sw" style="background:#7e7e7e"></span>Codex Matte 雾面灰</button>
+      <button class="pal-btn" data-p="apple-clarity" type="button"><span class="sw" style="background:#0066cc"></span>Apple Clarity 光学蓝</button>
+      <button class="pal-btn" data-p="mercury-emerald" type="button"><span class="sw" style="background:#15803d"></span>Mercury 司库绿</button>
+      <button class="pal-btn" data-p="warm-editorial" type="button"><span class="sw" style="background:#9a4a2a"></span>Warm Editorial 杂志纸</button>
+      <button class="pal-btn" data-p="swiss-slate" type="button"><span class="sw" style="background:#0284c7"></span>Swiss Slate 瑞士石板</button>
+    </div>
+    <button class="btn-flat" id="themeBtn" type="button">切换浅色</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="head-row">
+    <div>
+      <h1 id="palTitle">Codex Matte · 纯中性雾面灰阶</h1>
+      <p id="palDesc">对标 Codex Desktop &amp; Magpie · 零蓝偏雾面底、极致文字克制，适合 AI Agent 对话与配置工作台</p>
+    </div>
+    <button class="btn-solid" id="copyTokenBtn" type="button">复制当前色盘属性</button>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi-cell">
+      <div class="kpi-lbl">活跃服务可用率</div>
+      <div class="kpi-num">99.98%</div>
+      <span class="pill ok">全链路正常</span>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-lbl">本月净资金流入</div>
+      <div class="kpi-num">¥1,482万</div>
+      <span class="pill acc">同比 +14.2%</span>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-lbl">加权平均首字延迟</div>
+      <div class="kpi-num">348 ms</div>
+      <span class="pill neu">4 节点在线</span>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-lbl">视觉验收得分</div>
+      <div class="kpi-num">94 / 100</div>
+      <span class="pill ok">60 工程 + 34 审美</span>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-h">
+        <h2>焦噪分离趋势图（随顶部 6 套色盘实时换肤）</h2>
+        <span class="mono" style="color:var(--accent)">+18.4%</span>
+      </div>
+      <svg id="demoChart" viewBox="0 0 600 180" width="100%"></svg>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <h2>多色盘场景映射速查</h2>
+        <span class="mono" style="color:var(--muted)">tokens.css</span>
+      </div>
+      <table>
+        <thead><tr><th>色盘 ID</th><th>核心气质</th><th>推荐场景</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">neutral-core</td><td>柔和克制紫</td><td>通用 B 端后台</td></tr>
+          <tr><td class="mono">codex-matte</td><td>纯中性雾面</td><td>AI Agent / 路由</td></tr>
+          <tr><td class="mono">apple-clarity</td><td>通透光学层</td><td>经营分析 / 健康</td></tr>
+          <tr><td class="mono">mercury-emerald</td><td>沉稳零焦虑</td><td>企业司库 / 财务</td></tr>
+          <tr><td class="mono">warm-editorial</td><td>温润阅读纸</td><td>知识库 / 发布页</td></tr>
+          <tr><td class="mono">swiss-slate</td><td>冷峻精密感</td><td>IoT / VPP 监控</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+const META = {
+  "neutral-core":    { t: "Neutral Core · 原版克制灰紫", d: "完整保留你原有 universal-ui 基线 · 柔和中性画布 + 石墨主操作 + 紫色轻强调，适合通用 B 端后台" },
+  "codex-matte":     { t: "Codex Matte · 纯中性雾面灰阶", d: "对标 Codex Desktop & Magpie · 零蓝偏雾面底、极致文字克制，适合 AI Agent 对话与配置工作台" },
+  "apple-clarity":   { t: "Apple Clarity · 光学通透冷白", d: "对标 Apple HIG & Things 3 · 柔灰画布 + 轻光学浮影 + 单一功能蓝，适合经营分析与个人效率" },
+  "mercury-emerald": { t: "Mercury Emerald · 沉稳司库绿", d: "对标 Mercury & Stripe · 零焦虑色彩纪律与等宽货币对齐，适合企业司库、财务与交易账单" },
+  "warm-editorial":  { t: "Warm Editorial · 杂志温润纸", d: "对标 Notion & Craft · 温润暖石底色与舒适长文排版，适合知识库、研究报告与内容门户" },
+  "swiss-slate":     { t: "Swiss Slate · 瑞士冷石板", d: "对标 Vercel Observability & Tesla Energy · 冷石板精密层次，适合工业 IoT 与 VPP 遥测" }
+};
+
+function drawChart() {
+  const st = getComputedStyle(document.documentElement);
+  const acc = st.getPropertyValue("--accent").trim();
+  const ctx = st.getPropertyValue("--viz-context").trim();
+  const grid = st.getPropertyValue("--viz-grid").trim();
+  const muted = st.getPropertyValue("--muted").trim();
+
+  document.getElementById("demoChart").innerHTML = `
+    <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${acc}" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="${acc}" stop-opacity="0"/>
+    </linearGradient></defs>
+    <line x1="12" y1="30" x2="510" y2="30" stroke="${grid}" stroke-width="1"/>
+    <line x1="12" y1="90" x2="510" y2="90" stroke="${grid}" stroke-width="1"/>
+    <line x1="12" y1="150" x2="510" y2="150" stroke="${grid}" stroke-width="1"/>
+    <polyline fill="none" stroke="${ctx}" stroke-width="1.5" stroke-dasharray="4 4" points="16,132 114,124 212,118 310,112 408,104 506,96"/>
+    <polygon fill="url(#cg)" points="16,118 114,102 212,108 310,76 408,58 506,36 506,150 16,150"/>
+    <polyline fill="none" stroke="${acc}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="16,118 114,102 212,108 310,76 408,58 506,36"/>
+    <circle cx="506" cy="36" r="4" fill="${acc}"/>
+    <text x="518" y="40" font-size="12" font-weight="600" fill="${acc}">本期 304</text>
+    <text x="518" y="100" font-size="11.5" fill="${muted}">基线 218</text>
+    <text x="16" y="170" font-size="11.5" fill="${muted}">W1</text>
+    <text x="212" y="170" font-size="11.5" fill="${muted}">W3</text>
+    <text x="494" y="170" font-size="11.5" fill="${muted}">W6</text>
+  `;
+}
+
+let curPal = "codex-matte";
+document.querySelectorAll("#paletteBar .pal-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#paletteBar .pal-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    curPal = btn.dataset.p;
+    document.documentElement.setAttribute("data-palette", curPal);
+    document.getElementById("palTitle").textContent = META[curPal].t;
+    document.getElementById("palDesc").textContent = META[curPal].d;
+    drawChart();
+  });
+});
+
+document.getElementById("themeBtn").addEventListener("click", e => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  e.currentTarget.textContent = dark ? "切换深色" : "切换浅色";
+  drawChart();
+});
+
+document.getElementById("copyTokenBtn").addEventListener("click", e => {
+  const txt = `data-palette="${curPal}" data-theme="${document.documentElement.getAttribute("data-theme")}"`;
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).catch(() => {});
+  e.currentTarget.textContent = "已复制属性";
+  setTimeout(() => { e.currentTarget.textContent = "复制当前色盘属性"; }, 1200);
+});
+
+drawChart();
+</script>
+</body>
+</html>

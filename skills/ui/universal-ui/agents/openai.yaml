@@ -1,4 +1,4 @@
 interface:
   display_name: "Universal UI"
-  short_description: "复用已确认组件，或为新工具推导布局并推荐可选风格"
-  default_prompt: "使用 $universal-ui。先判断我是要局部复用组件，还是做新页面或小工具；读取当前项目 DESIGN.md 和我的全局 UI Profile，给出信息架构、布局方案和三个风格候选，确认后再实现。保留当前技术栈、导航和业务数据。"
+  short_description: "调研标杆 → 锁定色盘与密度 → 按硬规范实现，并在三端双主题实测验收"
+  default_prompt: "使用 $universal-ui。先判断我是要局部精修已有区块，还是设计新页面；新页面先调研该领域 2–3 个标杆产品，给出三个可区分的色盘候选并锁定一个，再按硬规范实现，最后在 1440/1024/390px 与浅深双主题下打分验收。保留当前技术栈、导航和真实数据。"
